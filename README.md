@@ -84,6 +84,44 @@ Run the demo script `examples/example_lic.py` which demonstrates how the LIC cod
 python3 examples/example_lic.py
 ```
 
+## Quick start
+
+`compute_lic_with_postprocessing` handles all of the internal calls necessary to compute a LIC, and it includes optional postprocessing steps for filtering and intensity equalization. In practice, this is the only function you will need to call within this package. Here is an example of how to use it:
+
+
+```python
+import matplotlib.pyplot as plt
+from line_integral_convolutions import lic
+from line_integral_convolutions import fields, utils # for demo-ing
+
+## generate a sample vector field
+size         = 500
+dict_field   = fields.vfield_swirls(size)
+vfield       = dict_field["vfield"]
+streamlength = dict_field["streamlength"]
+bounds_rows  = dict_field["bounds_rows"]
+bounds_cols  = dict_field["bounds_cols"]
+
+## apply the LIC a few times: equivelant to painting over with a few brush strokes
+sfield = lic.compute_lic_with_postprocessing(
+    vfield          = vfield,
+    streamlength    = streamlength,
+    num_iterations  = 3,
+    num_repetitions = 3,
+    bool_filter     = True,
+    filter_sigma    = 3.0,
+    bool_equalize   = True,
+)
+
+utils.plot_lic(
+    sfield      = sfield,
+    vfield      = vfield,
+    bounds_rows = bounds_rows,
+    bounds_cols = bounds_cols,
+)
+plt.show()
+```
+
 ## Acknowledgements
 
 Special thanks to Dr. James Beattie ([@AstroJames](https://github.com/AstroJames)) for highlighting that iteration, high-pass filtering, and histogram normalisation improves the final result. Also, thanks to Dr. Philip Mocz ([@pmocz](https://github.com/pmocz)) for his helpful suggestions in restructuring and improving the codebase.
@@ -96,14 +134,14 @@ line-integral-convolutions/            # Root (project) directory
 │   └── line_integral_convolutions/    # Python package
 │       ├── __init__.py                # Initialization file for the package
 │       ├── fields.py                  # Example vector fields
-│       ├── lic.py                     # Core of Line Integral Convolution (LIC) package
+│       ├── lic.py                     # Core of the Line Integral Convolution (LIC) package
 │       ├── utils.py                   # Utility functions
 │       └── visualization.py           # Code for plotting LIC
 ├── examples/
-│   └── example_lic.py                 # An example script showing how to run LIC computations
+│   └── example_lic.py                 # An example script
 ├── gallary/
 │   └── example high-resolution LICs
-├── requirements.txt                   # Lists of dependencies required to run the project
+├── requirements.txt                   # Lists of dependencies
 ├── setup.py                           # Script to install and package-up the project
 ├── LICENSE                            # Terms of use for the project
 └── README.md                          # This file
