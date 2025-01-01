@@ -50,7 +50,9 @@ python3 -m venv venv
 source venv/bin/activate # on Windows: venv\Scripts\activate
 ```
 
-Once the virtual environment is activated, you can run the code or use the package. When you're done, deactivate the environment by running:
+Once activated, you will install the dependencies and the LIC package inside this environment, keeping them isolated from the rest of your system.
+
+When you are done working on or using the LIC code, deactivate the virtual environment by running:
 
 ```bash
 deactivate
