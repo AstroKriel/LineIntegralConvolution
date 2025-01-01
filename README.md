@@ -14,14 +14,34 @@ Here is an example of the LIC code applied to two different vector fields:
 
 ## Installation
 
-### 1. Clone the repository:
+You can now install the LIC package directly from PyPI or clone the repository if you'd like to play around with the source code.
+
+### Option 1: Install from PyPI (for general use)
+
+If you only need to use the package, you can install it via pip:
+
+```bash
+pip install line-integral-convolutions
+```
+
+After installing, import the main LIC implementation as follows:
+
+```bash
+from line_integral_convolutions import lic
+```
+
+Inside this module, you will want to use the `compute_lic_with_postprocessing` function. See its documentation for more details on how to use it.
+
+### Option 2: Clone the repository (for development)
+
+#### 1. Clone the repository:
 
 ```bash
 git clone git@github.com:AstroKriel/line-integral-convolutions.git
 cd line-integral-convolutions
 ```
 
-### 2. Set up a virtual environment (optional but recommended):
+#### 2. Set up a virtual environment (optional but recommended):
 
 It is recommended to use a virtual environment to manage the project's dependencies. Before running any code or installing dependencies, activate the virtual environment via the following commands:
 
@@ -36,13 +56,13 @@ Once the virtual environment is activated, you can run the code or use the packa
 deactivate
 ```
 
-### 3. Install dependencies:
+#### 3. Install dependencies:
 
 ```bash
 pip install -r requirements.txt
 ```
 
-### 4. Install the LIC package (optional, for using as a library):
+#### 4. Install the LIC package (optional, for using as a library):
 
 To install the package locally for development or use in other Python scripts, run the following command:
 
@@ -52,7 +72,7 @@ pip install -e .
 
 This will install the package in "editable" mode, allowing you to make changes to the code and have them reflected without needing to reinstall the package each time.
 
-### 5. Try out the demo-script
+#### 5. Try out the demo-script
 
 Run the demo script `examples/example_lic.py` which demonstrates how the LIC code can be applied to a vector field (the example file uses the Lotka-Volterra system). You can experiment by modifying the script or play around by adding your own vector fields!
 
