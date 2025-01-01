@@ -27,8 +27,6 @@ def main(
     bool_debug: bool = False,
 ):
     print("Started running demo script...")
-    fig, _ = plt.subplots(figsize=(6, 6))
-    print("Initialising quantities...")
     dict_field = func_vfield(size)
     vfield = dict_field["vfield"]
     streamlength = dict_field["streamlength"]
