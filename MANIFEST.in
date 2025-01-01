@@ -4,4 +4,4 @@ include requirements.txt
 
 recursive-include src/line_integral_convolutions *.py
 recursive-include examples *
-recursive-include gallary *
+recursive-include gallery *
