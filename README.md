@@ -7,8 +7,10 @@ Here is an example of the LIC code applied to two different vector fields:
 - Right: Gaussian random vector field
 
 <div style="display: flex; justify-content: space-between;">
-  <img src="./gallery/lic_lotka_volterra.png" width="49%" />
-  <img src="./gallery/lic_gaussian_random.png" width="49%" />
+  <!-- <img src="./gallery/lic_lotka_volterra.png" width="49%" /> -->
+  <!-- <img src="./gallery/lic_gaussian_random.png" width="49%" /> -->
+  <img src="https://raw.githubusercontent.com/AstroKriel/line-integral-convolutions/refs/heads/main/gallery/lic_lotka_volterra.png" width="49%" />
+  <img src="https://raw.githubusercontent.com/AstroKriel/line-integral-convolutions/refs/heads/main/gallery/lic_gaussian_random.png" width="49%" />
 </div>
 
 
