@@ -18,7 +18,7 @@ You can now install the LIC package directly from PyPI or clone the repository i
 
 ### Option 1: Install from PyPI (for general use)
 
-If you only need to use the package, you can install it via pip:
+If you only need to use the package, you can install it via `pip`:
 
 ```bash
 pip install line-integral-convolutions
@@ -30,7 +30,7 @@ After installing, import the main LIC implementation as follows:
 from line_integral_convolutions import lic
 ```
 
-Inside this module, you will want to use the `compute_lic_with_postprocessing` function. See its documentation for more details on how to use it.
+Inside this module, you will want to use the `compute_lic_with_postprocessing` function. See its documentation for more details on how to get the most out of it.
 
 ### Option 2: Clone the repository (for development)
 
