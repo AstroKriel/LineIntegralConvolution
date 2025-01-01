@@ -12,7 +12,7 @@ Here is an example of the LIC code applied to two different vector fields:
 </div>
 
 
-## Getting Setup
+## Getting setup
 
 You can now install the LIC package directly from PyPI or clone the repository if you'd like to play around with the source code.
 
