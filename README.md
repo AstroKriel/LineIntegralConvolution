@@ -39,8 +39,8 @@ Inside this module, you will want to use the `compute_lic_with_postprocessing` f
 #### 1. Clone the repository:
 
 ```bash
-git clone git@github.com:AstroKriel/line-integral-convolutions.git
-cd line-integral-convolutions
+git clone git@github.com:AstroKriel/LineIntegralConvolutions.git
+cd LineIntegralConvolutions
 ```
 
 #### 2. Set up a virtual environment (optional but recommended):
