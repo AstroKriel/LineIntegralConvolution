@@ -129,7 +129,7 @@ Special thanks to Dr. James Beattie ([@AstroJames](https://github.com/AstroJames
 ## File structure
 
 ```bash
-line-integral-convolutions/            # Root (project) directory
+LineIntegralConvolutions/              # Root (project) directory
 ├── src/
 │   └── line_integral_convolutions/    # Python package
 │       ├── __init__.py                # Initialization file for the package
