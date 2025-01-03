@@ -81,7 +81,8 @@ This will install the package in "editable" mode, allowing you to make changes t
 Run the demo script `examples/example_lic.py` which demonstrates how the LIC code can be applied to a vector field (the example file uses the Lotka-Volterra system). You can experiment by modifying the script or play around by adding your own vector fields!
 
 ```bash
-python3 examples/example_lic.py
+cd examples
+python3 example_lic.py
 ```
 
 ## Quick start
