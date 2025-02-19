@@ -16,7 +16,7 @@ Here is an example of the LIC code applied to two different vector fields:
 
 ## Getting setup
 
-You can now install the LIC package directly from PyPI or clone the repository if you'd like to play around with the source code.
+You can now install the LIC package directly from [PyPI](https://pypi.org/project/line-integral-convolutions/) or clone the [Github](https://github.com/AstroKriel/LineIntegralConvolutions/) repository if you'd like to play around with the source code.
 
 ### Option 1: Install from PyPI (for general use)
 
@@ -34,7 +34,7 @@ from line_integral_convolutions import lic
 
 Inside this module, you will want to use the `compute_lic_with_postprocessing` function. See its documentation for more details on how to get the most out of it.
 
-### Option 2: Clone the repository (for development)
+### Option 2: Clone the GitHub repository (for development)
 
 #### 1. Clone the repository:
 
