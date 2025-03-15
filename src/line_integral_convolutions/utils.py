@@ -4,12 +4,11 @@
 
 
 ## ###############################################################
-## IMPORT MODULES
+## DEPENDENCIES
 ## ###############################################################
 import time
-import numpy as np
-import matplotlib.pyplot as plt
-
+import numpy
+import matplotlib.pyplot as mplplot
 from scipy import ndimage
 from matplotlib.colors import to_rgba
 from skimage.exposure import equalize_adapthist
@@ -25,18 +24,15 @@ def time_func(func):
         time_elapsed = time.time() - time_start
         print(f"{func.__name__}() took {time_elapsed:.3f} seconds to execute.")
         return result
-
     return wrapper
 
-
-def filter_highpass(sfield: np.ndarray, sigma: float = 3.0):
+def filter_highpass(sfield: numpy.ndarray, sigma: float = 3.0):
     lowpass = ndimage.gaussian_filter(sfield, sigma)
     gauss_highpass = sfield - lowpass
     return gauss_highpass
 
-
 def rescaled_equalize(
-    sfield: np.ndarray,
+    sfield: numpy.ndarray,
     num_subregions_rows: int = 8,
     num_subregions_cols: int = 8,
     clip_intensity_gradient: float = 0.01,
@@ -58,15 +54,14 @@ def rescaled_equalize(
         sfield = sfield * (max_val - min_val) + min_val
     return sfield
 
-
 def plot_lic(
-    sfield: np.ndarray,
-    vfield: np.ndarray,
+    sfield: numpy.ndarray,
+    vfield: numpy.ndarray,
     bounds_rows=None,
     bounds_cols=None,
     bool_debug=False,
 ):
-    fig, ax = plt.subplots(figsize=(6, 6))
+    fig, ax = mplplot.subplots(figsize=(6, 6))
     ax.imshow(
         sfield,
         cmap="bone",
@@ -74,9 +69,9 @@ def plot_lic(
         extent=[bounds_rows[0], bounds_rows[1], bounds_cols[0], bounds_cols[1]],
     )
     if bool_debug:
-        coords_row = np.linspace(bounds_rows[0], bounds_rows[1], sfield.shape[0])
-        coords_col = np.linspace(bounds_cols[0], bounds_cols[1], sfield.shape[1])
-        mg_x, mg_y = np.meshgrid(coords_col, coords_row, indexing="xy")
+        coords_row = numpy.linspace(bounds_rows[0], bounds_rows[1], sfield.shape[0])
+        coords_col = numpy.linspace(bounds_cols[0], bounds_cols[1], sfield.shape[1])
+        mg_x, mg_y = numpy.meshgrid(coords_col, coords_row, indexing="xy")
         color = to_rgba("green", alpha=0.75)
         ax.streamplot(
             mg_x,

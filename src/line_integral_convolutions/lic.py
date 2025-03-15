@@ -4,12 +4,10 @@
 
 
 ## ###############################################################
-## IMPORT MODULES
+## DEPENDENCIES
 ## ###############################################################
-import numpy as np
-
+import numpy
 from numba import njit, prange
-
 from . import utils
 
 
@@ -34,18 +32,17 @@ def taper_pixel_contribution(streamlength: int, step_index: int) -> float:
     float
         Weighting value bound between 0 and 1.
     """
-    return 0.5 * (1 + np.cos(np.pi * step_index / streamlength))
-
+    return 0.5 * (1 + numpy.cos(numpy.pi * step_index / streamlength))
 
 @njit
 def interpolate_bilinear(
-    vfield: np.ndarray, row: float, col: float
+    vfield: numpy.ndarray, row: float, col: float
 ) -> tuple[float, float]:
     """
     Bilinear interpolation on the vector field at a non-integer position (row, col).
     """
-    row_low = int(np.floor(row))
-    col_low = int(np.floor(col))
+    row_low = int(numpy.floor(row))
+    col_low = int(numpy.floor(col))
     row_high = min(row_low + 1, vfield.shape[1] - 1)
     col_high = min(col_low + 1, vfield.shape[2] - 1)
     ## weight based on distance from pixel edge
@@ -68,11 +65,10 @@ def interpolate_bilinear(
     ## remember (x,y) -> (col, row)
     return interpolated_vfield_comp_col, interpolated_vfield_comp_row
 
-
 @njit
 def advect_streamline(
-    vfield: np.ndarray,
-    sfield_in: np.ndarray,
+    vfield: numpy.ndarray,
+    sfield_in: numpy.ndarray,
     start_row: int,
     start_col: int,
     dir_sgn: int,
@@ -96,8 +92,8 @@ def advect_streamline(
     row_float, col_float = start_row, start_col
     num_rows, num_cols = vfield.shape[1], vfield.shape[2]
     for step in range(streamlength):
-        row_int = int(np.floor(row_float))
-        col_int = int(np.floor(col_float))
+        row_int = int(numpy.floor(row_float))
+        col_int = int(numpy.floor(col_float))
         # ## nearest neighbor interpolation
         # vfield_comp_col = dir_sgn * vfield[0, row_int, col_int]  # x
         # vfield_comp_row = dir_sgn * vfield[1, row_int, col_int]  # y
@@ -114,17 +110,17 @@ def advect_streamline(
             break
         ## compute how long the streamline advects before it leaves the current cell region (divided by cell-centers)
         if vfield_comp_row > 0.0:
-            delta_time_row = (np.floor(row_float) + 1 - row_float) / vfield_comp_row
+            delta_time_row = (numpy.floor(row_float) + 1 - row_float) / vfield_comp_row
         elif vfield_comp_row < 0.0:
-            delta_time_row = (np.ceil(row_float) - 1 - row_float) / vfield_comp_row
+            delta_time_row = (numpy.ceil(row_float) - 1 - row_float) / vfield_comp_row
         else:
-            delta_time_row = np.inf
+            delta_time_row = numpy.inf
         if vfield_comp_col > 0.0:
-            delta_time_col = (np.floor(col_float) + 1 - col_float) / vfield_comp_col
+            delta_time_col = (numpy.floor(col_float) + 1 - col_float) / vfield_comp_col
         elif vfield_comp_col < 0.0:
-            delta_time_col = (np.ceil(col_float) - 1 - col_float) / vfield_comp_col
+            delta_time_col = (numpy.ceil(col_float) - 1 - col_float) / vfield_comp_col
         else:
-            delta_time_col = np.inf
+            delta_time_col = numpy.inf
         ## equivelant to a CFL condition
         time_step = min(delta_time_col, delta_time_row)
         ## advect the streamline to the next cell region
@@ -143,17 +139,16 @@ def advect_streamline(
         total_weight += contribution_weight
     return weighted_sum, total_weight
 
-
 @njit(parallel=True)
 def _compute_lic(
-    vfield: np.ndarray,
-    sfield_in: np.ndarray,
-    sfield_out: np.ndarray,
+    vfield: numpy.ndarray,
+    sfield_in: numpy.ndarray,
+    sfield_out: numpy.ndarray,
     streamlength: int,
     num_rows: int,
     num_cols: int,
     bool_periodic_BCs: bool,
-) -> np.ndarray:
+) -> numpy.ndarray:
     """
     Computes the Line Integral Convolution (LIC) over the entire domain by advecting streamlines from each pixel in both forward and backward directions along the vector field.
     """
@@ -185,15 +180,14 @@ def _compute_lic(
                 sfield_out[row, col] = 0.0
     return sfield_out
 
-
 @utils.time_func
 def compute_lic(
-    vfield: np.ndarray,
-    sfield_in: np.ndarray = None,
+    vfield: numpy.ndarray,
+    sfield_in: numpy.ndarray = None,
     streamlength: int = None,
     seed_sfield: int = 42,
     bool_periodic_BCs: bool = True,
-) -> np.ndarray:
+) -> numpy.ndarray:
     """
     Computes the Line Integral Convolution (LIC) for a given vector field.
 
@@ -203,10 +197,10 @@ def compute_lic(
 
     Parameters:
     -----------
-    vfield : np.ndarray
+    vfield : numpy.ndarray
         3D array storing a 2D vector field with shape (num_vcomps=2, num_rows, num_cols). The first dimension holds the vector components (x,y), and the remaining two dimensions define the domain size. For 3D fields, provide a 2D slice.
 
-    sfield_in : np.ndarray, optional, default=None
+    sfield_in : numpy.ndarray, optional, default=None
         2D scalar field to be used for the LIC. If None, a random scalar field is generated.
 
     streamlength : int, optional, default=None
@@ -220,7 +214,7 @@ def compute_lic(
 
     Returns:
     --------
-    np.ndarray
+    numpy.ndarray
         A 2D array storing the output LIC image with shape (num_rows, num_cols).
     """
     assert vfield.ndim == 3, f"vfield must have 3 dimensions, but got {vfield.ndim}."
@@ -228,11 +222,11 @@ def compute_lic(
     assert (
         num_vcomps == 2
     ), f"vfield must have 2 components (in the first dimension), but got {num_vcomps}."
-    sfield_out = np.zeros((num_rows, num_cols), dtype=np.float32)
+    sfield_out = numpy.zeros((num_rows, num_cols), dtype=numpy.float32)
     if sfield_in is None:
         if seed_sfield is not None:
-            np.random.seed(seed_sfield)
-        sfield_in = np.random.rand(num_rows, num_cols).astype(np.float32)
+            numpy.random.seed(seed_sfield)
+        sfield_in = numpy.random.rand(num_rows, num_cols).astype(numpy.float32)
     else:
         assert sfield_in.shape == (num_rows, num_cols), (
             f"sfield_in must have dimensions ({num_rows}, {num_cols}), "
@@ -250,10 +244,9 @@ def compute_lic(
         bool_periodic_BCs=bool_periodic_BCs,
     )
 
-
 def compute_lic_with_postprocessing(
-    vfield: np.ndarray,
-    sfield_in: np.ndarray = None,
+    vfield: numpy.ndarray,
+    sfield_in: numpy.ndarray = None,
     streamlength: int = None,
     seed_sfield: int = 42,
     bool_periodic_BCs: bool = True,
@@ -262,16 +255,16 @@ def compute_lic_with_postprocessing(
     bool_filter: bool = True,
     filter_sigma: float = 3.0,
     bool_equalize: bool = True,
-) -> np.ndarray:
+) -> numpy.ndarray:
     """
     Iteratively computes the Line Integral Convolutions (LICs) for a given vector field with optional postprocessing steps (i.e., filtering and intensity binning). See the `compute_lic` function for more details on the core LIC computation.
 
     Parameters:
     -----------
-    vfield : np.ndarray
+    vfield : numpy.ndarray
         3D array storing a 2D vector field with shape (num_vcomps=2, num_rows, num_cols). For 3D fields, provide a 2D slice.
 
-    sfield_in : np.ndarray, optional, default=None
+    sfield_in : numpy.ndarray, optional, default=None
         2D scalar field to be used for the LIC. If None, a random scalar field is generated.
 
     streamlength : int, optional, default=None
@@ -300,7 +293,7 @@ def compute_lic_with_postprocessing(
 
     Returns:
     --------
-    np.ndarray
+    numpy.ndarray
         The post-processed LIC image.
     """
     for _ in range(num_repetitions):

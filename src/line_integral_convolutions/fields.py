@@ -4,9 +4,9 @@
 
 
 ## ###############################################################
-## IMPORT MODULES
+## DEPENDENCIES
 ## ###############################################################
-import numpy as np
+import numpy
 
 
 ## ###############################################################
@@ -15,15 +15,15 @@ import numpy as np
 def vfield_lotka_volterra(size: int):
     bounds_rows = (-5, 10)
     bounds_cols = (-5, 10)
-    coords_row = np.linspace(bounds_rows[0], bounds_rows[1], size)
-    coords_col = np.linspace(bounds_cols[0], bounds_cols[1], size)
-    mg_x, mg_y = np.meshgrid(coords_col, coords_row, indexing="xy")
+    coords_row = numpy.linspace(bounds_rows[0], bounds_rows[1], size)
+    coords_col = numpy.linspace(bounds_cols[0], bounds_cols[1], size)
+    mg_x, mg_y = numpy.meshgrid(coords_col, coords_row, indexing="xy")
     x_capacity = 8
     y_growth = 3
     y_decay = 2
     vcomp_rows = mg_x * (1 - mg_x / x_capacity) - mg_y * mg_x / (1 + mg_x)
     vcomp_cols = y_growth * mg_y * mg_x / (1 + mg_x) - y_decay * mg_y
-    vfield = np.array([vcomp_rows, vcomp_cols])
+    vfield = numpy.array([vcomp_rows, vcomp_cols])
     return {
         "name": "lotka_volterra",
         "vfield": vfield,
@@ -38,12 +38,12 @@ def vfield_lotka_volterra(size: int):
 def vfield_flowers(size: int):
     bounds_rows = (-10, 10)
     bounds_cols = (-10, 10)
-    coords_row = np.linspace(bounds_rows[0], bounds_rows[1], size)
-    coords_col = np.linspace(bounds_cols[0], bounds_cols[1], size)
-    mg_x, mg_y = np.meshgrid(coords_col, coords_row, indexing="xy")
-    vcomp_rows = np.cos(mg_x / 2)
-    vcomp_cols = np.cos(mg_y / 2)
-    vfield = np.array([vcomp_rows, vcomp_cols])
+    coords_row = numpy.linspace(bounds_rows[0], bounds_rows[1], size)
+    coords_col = numpy.linspace(bounds_cols[0], bounds_cols[1], size)
+    mg_x, mg_y = numpy.meshgrid(coords_col, coords_row, indexing="xy")
+    vcomp_rows = numpy.cos(mg_x / 2)
+    vcomp_cols = numpy.cos(mg_y / 2)
+    vfield = numpy.array([vcomp_rows, vcomp_cols])
     return {
         "name": "flowers",
         "vfield": vfield,
@@ -58,12 +58,12 @@ def vfield_flowers(size: int):
 def vfield_circles(size: int):
     bounds_rows = (-10, 10)
     bounds_cols = (-10, 10)
-    coords_row = np.linspace(bounds_rows[0], bounds_rows[1], size)
-    coords_col = np.linspace(bounds_cols[0], bounds_cols[1], size)
-    mg_x, mg_y = np.meshgrid(coords_col, coords_row, indexing="xy")
-    vcomp_rows = np.cos(mg_y / 2)
-    vcomp_cols = np.cos(mg_x / 2)
-    vfield = np.array([vcomp_rows, vcomp_cols])
+    coords_row = numpy.linspace(bounds_rows[0], bounds_rows[1], size)
+    coords_col = numpy.linspace(bounds_cols[0], bounds_cols[1], size)
+    mg_x, mg_y = numpy.meshgrid(coords_col, coords_row, indexing="xy")
+    vcomp_rows = numpy.cos(mg_y / 2)
+    vcomp_cols = numpy.cos(mg_x / 2)
+    vfield = numpy.array([vcomp_rows, vcomp_cols])
     return {
         "name": "circles",
         "vfield": vfield,
@@ -78,12 +78,12 @@ def vfield_circles(size: int):
 def vfield_swirls(size: int):
     bounds_rows = (-10, 10)
     bounds_cols = (-10, 10)
-    coords_row = np.linspace(bounds_rows[0], bounds_rows[1], size)
-    coords_col = np.linspace(bounds_cols[0], bounds_cols[1], size)
-    mg_x, mg_y = np.meshgrid(coords_col, coords_row, indexing="xy")
-    vcomp_rows = np.sin((mg_y + mg_x) / 3)
-    vcomp_cols = np.cos((mg_x - mg_y) / 3)
-    vfield = np.array([vcomp_rows, vcomp_cols])
+    coords_row = numpy.linspace(bounds_rows[0], bounds_rows[1], size)
+    coords_col = numpy.linspace(bounds_cols[0], bounds_cols[1], size)
+    mg_x, mg_y = numpy.meshgrid(coords_col, coords_row, indexing="xy")
+    vcomp_rows = numpy.sin((mg_y + mg_x) / 3)
+    vcomp_cols = numpy.cos((mg_x - mg_y) / 3)
+    vfield = numpy.array([vcomp_rows, vcomp_cols])
     return {
         "name": "swirls",
         "vfield": vfield,

@@ -4,11 +4,10 @@
 
 
 ## ###############################################################
-## MODULES
+## DEPENDENCIES
 ## ###############################################################
 import sys
-import matplotlib.pyplot as plt
-
+import matplotlib.pyplot as mplplot
 from line_integral_convolutions import fields, lic, utils
 
 
@@ -55,9 +54,9 @@ def main(
     )
     ## save and close the figure
     print("Saving figure...")
-    fig_name = f"example_lic_{vfield_name}.png"
+    fig_name = f"lic_{vfield_name}.png"
     fig.savefig(fig_name, dpi=300, bbox_inches="tight")
-    plt.close(fig)
+    mplplot.close(fig)
     print("Saved:", fig_name)
 
 
