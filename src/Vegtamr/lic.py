@@ -1,4 +1,4 @@
-## This file is part of the "line-integral-convolutions" project.
+## This file is part of the "Vegtamr" project.
 ## Copyright (c) 2024 Neco Kriel.
 ## Licensed under the MIT License. See LICENSE for details.
 
@@ -34,7 +34,7 @@ def taper_pixel_contribution(streamlength: int, step_index: int) -> float:
     """
     return 0.5 * (1 + numpy.cos(numpy.pi * step_index / streamlength))
 
-@njit
+# @njit
 def interpolate_bilinear(
     vfield: numpy.ndarray, row: float, col: float
 ) -> tuple[float, float]:
@@ -65,7 +65,7 @@ def interpolate_bilinear(
     ## remember (x,y) -> (col, row)
     return interpolated_vfield_comp_col, interpolated_vfield_comp_row
 
-@njit
+# @njit(nopython=False)
 def advect_streamline(
     vfield: numpy.ndarray,
     sfield_in: numpy.ndarray,
@@ -135,11 +135,14 @@ def advect_streamline(
                 break
         ## weight the contribution of the current pixel based on its distance from the start of the streamline
         contribution_weight = taper_pixel_contribution(streamlength, step)
+        ## ensure indices are integers before accessing the array
+        row_int = int(row_int)
+        col_int = int(col_int)
         weighted_sum += contribution_weight * sfield_in[row_int, col_int]
         total_weight += contribution_weight
     return weighted_sum, total_weight
 
-@njit(parallel=True)
+# @njit(parallel=True)
 def _compute_lic(
     vfield: numpy.ndarray,
     sfield_in: numpy.ndarray,

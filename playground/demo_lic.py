@@ -1,4 +1,4 @@
-## This file is part of the "line-integral-convolutions" project.
+## This file is part of the "Vegtamr" project.
 ## Copyright (c) 2024 Neco Kriel.
 ## Licensed under the MIT License. See LICENSE for details.
 
@@ -8,7 +8,7 @@
 ## ###############################################################
 import sys
 import matplotlib.pyplot as mplplot
-from line_integral_convolutions import fields, lic, utils
+from Vegtamr import fields, lic, utils
 
 
 ## ###############################################################
@@ -65,7 +65,7 @@ def main(
 ## ###############################################################
 if __name__ == "__main__":
     main(
-        size=500,
+        size=100,
         func_vfield=fields.vfield_swirls,  # pass function reference (not a function call): without brackets
         num_iterations=3,
         num_repetitions=3,

@@ -1,7 +1,6 @@
 include README.md
 include LICENSE
-include requirements.txt
 
-recursive-include src/line_integral_convolutions *.py
-recursive-include examples *
+recursive-include src/Vegtamr *.py
+recursive-include playground *
 recursive-include gallery *

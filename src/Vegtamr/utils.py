@@ -1,4 +1,4 @@
-## This file is part of the "line-integral-convolutions" project.
+## This file is part of the "Vegtamr" project.
 ## Copyright (c) 2024 Neco Kriel.
 ## Licensed under the MIT License. See LICENSE for details.
 

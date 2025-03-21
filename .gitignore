@@ -3,11 +3,11 @@ venv/
 
 ## build artifacts and metadata
 dist/
-line_integral_convolutions.egg-info/
+**.egg-info/
 
-## extraneous files produced on Mac
+## extraneous files
 .DS_Store
 __pycache__/
 
 ## plots saved by the demo script
-examples/*.png
+**.png
