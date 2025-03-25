@@ -1,4 +1,4 @@
-# Vegtamr (Line Integral Convolution Library)
+# Line Integral Convolution
 
 Line Integral Convolutions (LICs) are an amazing way to visualise 2D vector fields, and are widely used in many different fields (e.g., weather modelling, plasma physics, etc.), however I couldn't find a simple, up-to-date implementation, so I wrote my own. I hope it can now also help you on your own vector field fueled journey!
 
@@ -9,21 +9,21 @@ Here is an example of the LIC code applied to two different vector fields:
 <div style="display: flex; justify-content: space-between;">
   <!-- <img src="./gallery/lic_lotka_volterra.png" width="49%" /> -->
   <!-- <img src="./gallery/lic_gaussian_random.png" width="49%" /> -->
-  <img src="https://raw.githubusercontent.com/AstroKriel/Vegtamr/refs/heads/main/gallery/lic_lotka_volterra.png" width="49%" />
-  <img src="https://raw.githubusercontent.com/AstroKriel/Vegtamr/refs/heads/main/gallery/lic_gaussian_random.png" width="49%" />
+  <img src="https://raw.githubusercontent.com/AstroKriel/LineIntegralConvolution/refs/heads/main/gallery/lic_lotka_volterra.png" width="49%" />
+  <img src="https://raw.githubusercontent.com/AstroKriel/LineIntegralConvolution/refs/heads/main/gallery/lic_gaussian_random.png" width="49%" />
 </div>
 
 
 ## Getting setup
 
-You can now install the LIC package directly from [PyPI](https://pypi.org/project/Vegtamr/) or clone the [Github](https://github.com/AstroKriel/LineIntegralConvolutions/) repository if you'd like to play around with the source code.
+You can now install the LIC package directly from [PyPI](https://pypi.org/project/line-integral-convolutions/) or clone the [Github](https://github.com/AstroKriel/LineIntegralConvolutions/) repository if you'd like to play around with the source code.
 
 ### Option 1: Install from PyPI (for general use)
 
 If you only need to use the package, you can install it via `pip`:
 
 ```bash
-pip install Vegtamr
+pip install line-integral-convolutions
 ```
 
 After installing, import the main LIC implementation as follows:
