@@ -8,7 +8,7 @@
 ## ###############################################################
 import sys
 import matplotlib.pyplot as mplplot
-from Vegtamr import fields, lic, utils
+from vegtamr import fields, lic, utils
 
 
 ## ###############################################################
