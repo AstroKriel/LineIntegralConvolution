@@ -9,6 +9,7 @@
 import numpy
 from numba import njit, prange
 from . import utils
+import rlic
 
 
 ## ###############################################################
@@ -285,18 +286,49 @@ def compute_lic_with_postprocessing(
   numpy.ndarray
     The post-processed LIC image.
   """
+  dtype = vfield.dtype
+  shape = vfield.shape[1:]
+  if sfield_in is None:
+    if seed_sfield is not None:
+      numpy.random.seed(seed_sfield)
+    sfield_in = numpy.random.rand(*shape).astype(dtype)
+  if streamlength is None:
+    streamlength = min(shape) // 4
+
+  if use_periodic_BCs:
+    # this constraint can be lifted later
+    #assert streamlength < min(shape)
+    sfield_in = numpy.pad(
+      sfield_in,
+      pad_width=streamlength,
+      mode="wrap"
+    )
+    vfield = numpy.pad(
+      vfield,
+      pad_width=((0, 0), (streamlength, streamlength), (streamlength, streamlength)),
+      mode="wrap"
+    )
+
+  kernel = (0.5 * (1 + numpy.cos(numpy.pi * numpy.arange(-streamlength+1, streamlength) / streamlength, dtype=dtype)))
   for _ in range(num_repetitions):
-    for _ in range(num_iterations):
-      sfield = compute_lic(
-        vfield           = vfield,
-        sfield_in        = sfield_in,
-        streamlength     = streamlength,
-        seed_sfield      = seed_sfield,
-        use_periodic_BCs = use_periodic_BCs,
-      )
-      sfield_in = sfield
-    if use_filter: sfield = utils.filter_highpass(sfield, sigma=filter_sigma)
-  if use_equalize: sfield = utils.rescaled_equalize(sfield)
+    sfield = rlic.convolve(
+      sfield_in,
+      vfield[0],
+      vfield[1],
+      kernel=kernel,
+      iterations=num_iterations,
+    )
+    # proxy normalization
+    sfield /= numpy.max(numpy.abs(sfield))
+    sfield_in = sfield
+    if use_filter:
+      sfield = utils.filter_highpass(sfield, sigma=filter_sigma)
+
+  if use_periodic_BCs:
+    sfield = sfield[streamlength:-streamlength, streamlength:-streamlength]
+
+  if use_equalize:
+    sfield = utils.rescaled_equalize(sfield)
   return sfield
 
 
