@@ -28,7 +28,7 @@ def main(
   print("Started running demo script...")
   vfield_dict  = func_vfield(size)
   vfield       = vfield_dict["vfield"]
-  streamlength = vfield_dict["streamlength"]
+  streamlength = 32 # vfield_dict["streamlength"]
   bounds_rows  = vfield_dict["bounds_rows"]
   bounds_cols  = vfield_dict["bounds_cols"]
   vfield_name  = vfield_dict["name"]
@@ -66,7 +66,7 @@ def main(
 if __name__ == "__main__":
   main(
     func_vfield     = vfields.vfield_swirls, # pass function reference (not a function call): without brackets
-    size            = 100,
+    size            = 256,
     num_iterations  = 3,
     num_repetitions = 3,
     use_filter      = True,
