@@ -8,7 +8,6 @@
 ## ###############################################################
 import numpy
 import rlic
-from multiprocessing import Pool, shared_memory, cpu_count
 from . import utils
 
 
