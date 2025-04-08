@@ -8,7 +8,7 @@
 ## ###############################################################
 import time
 import numpy
-import matplotlib.pyplot as mplplot
+import matplotlib.pyplot as mpl_plot
 from scipy import ndimage
 from matplotlib.colors import to_rgba
 from skimage.exposure import equalize_adapthist
@@ -57,13 +57,13 @@ def rescaled_equalize(
   return sfield
 
 def plot_lic(
-    sfield      : numpy.ndarray,
-    vfield      : numpy.ndarray,
-    bounds_rows : tuple[float, float] = None,
-    bounds_cols : tuple[float, float] = None,
-    debug_mode  : bool = False,
+    sfield              : numpy.ndarray,
+    vfield              : numpy.ndarray,
+    bounds_rows         : tuple[float, float] = None,
+    bounds_cols         : tuple[float, float] = None,
+    overlay_streamlines : bool = False,
   ):
-  fig, ax = mplplot.subplots(figsize=(6, 6))
+  fig, ax = mpl_plot.subplots(figsize=(6, 6))
   ax.imshow(
     sfield,
     cmap   = "bone",
@@ -73,15 +73,14 @@ def plot_lic(
       bounds_cols[0], bounds_cols[1]
     ],
   )
-  if debug_mode:
+  if overlay_streamlines:
     coords_row = numpy.linspace(bounds_rows[0], bounds_rows[1], sfield.shape[0])
     coords_col = numpy.linspace(bounds_cols[0], bounds_cols[1], sfield.shape[1])
     mg_x, mg_y = numpy.meshgrid(coords_col, coords_row, indexing="xy")
-    color = to_rgba("green", alpha=0.75)
     ax.streamplot(
       mg_x, mg_y,
       vfield[0], vfield[1],
-      color              = color,
+      color              = "white",
       arrowstyle         = "->",
       linewidth          = 1.0,
       density            = 0.5,
