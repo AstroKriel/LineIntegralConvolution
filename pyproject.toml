@@ -1,7 +1,7 @@
 [project]
 name = "vegtamr"
 version = "0.1.0"
-description = "vegtamr (line integral convolution) library"
+description = "vegtamr: a line integral convolution library"
 readme = "README.md"
 authors = [
     { name = "Neco Kriel", email = "necokriel@gmail.com" }
