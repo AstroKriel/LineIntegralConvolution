@@ -34,7 +34,6 @@ def vfield_lotka_volterra(size: int) -> dict:
     "bounds_cols"  : bounds_cols,
   }
 
-
 def vfield_flowers(size: int) -> dict:
   bounds_rows = (-10, 10)
   bounds_cols = (-10, 10)
@@ -54,7 +53,6 @@ def vfield_flowers(size: int) -> dict:
     "bounds_cols"  : bounds_cols,
   }
 
-
 def vfield_circles(size: int) -> dict:
   bounds_rows = (-10, 10)
   bounds_cols = (-10, 10)
@@ -73,7 +71,6 @@ def vfield_circles(size: int) -> dict:
     "bounds_rows"  : bounds_rows,
     "bounds_cols"  : bounds_cols,
   }
-
 
 def vfield_swirls(size: int) -> dict:
   bounds_rows = (-10, 10)

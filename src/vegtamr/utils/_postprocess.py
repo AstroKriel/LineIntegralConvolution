@@ -6,26 +6,14 @@
 ## ###############################################################
 ## DEPENDENCIES
 ## ###############################################################
-import time
 import numpy
-import matplotlib.pyplot as mpl_plot
 from scipy import ndimage
-from matplotlib.colors import to_rgba
 from skimage.exposure import equalize_adapthist
 
 
 ## ###############################################################
 ## START OF UTILITY FUNCTIONS
 ## ###############################################################
-def time_func(func):
-  def wrapper(*args, **kwargs):
-    time_start = time.time()
-    result = func(*args, **kwargs)
-    time_elapsed = time.time() - time_start
-    print(f"{func.__name__}() took {time_elapsed:.3f} seconds to execute.")
-    return result
-  return wrapper
-
 def filter_highpass(
     sfield : numpy.ndarray,
     sigma  : float = 3.0
@@ -55,43 +43,6 @@ def rescaled_equalize(
   ## rescale field back to its original value range
   if is_rescale_needed: sfield = sfield * (max_val - min_val) + min_val
   return sfield
-
-def plot_lic(
-    sfield              : numpy.ndarray,
-    vfield              : numpy.ndarray,
-    bounds_rows         : tuple[float, float] = None,
-    bounds_cols         : tuple[float, float] = None,
-    overlay_streamlines : bool = False,
-  ):
-  fig, ax = mpl_plot.subplots(figsize=(6, 6))
-  ax.imshow(
-    sfield,
-    cmap   = "bone",
-    origin = "lower",
-    extent = [
-      bounds_rows[0], bounds_rows[1],
-      bounds_cols[0], bounds_cols[1]
-    ],
-  )
-  if overlay_streamlines:
-    coords_row = numpy.linspace(bounds_rows[0], bounds_rows[1], sfield.shape[0])
-    coords_col = numpy.linspace(bounds_cols[0], bounds_cols[1], sfield.shape[1])
-    mg_x, mg_y = numpy.meshgrid(coords_col, coords_row, indexing="xy")
-    ax.streamplot(
-      mg_x, mg_y,
-      vfield[0], vfield[1],
-      color              = "white",
-      arrowstyle         = "->",
-      linewidth          = 1.0,
-      density            = 0.5,
-      arrowsize          = 0.5,
-      broken_streamlines = False,
-    )
-  ax.set_xticks([])
-  ax.set_yticks([])
-  ax.set_xlim(bounds_rows)
-  ax.set_ylim(bounds_cols)
-  return fig, ax
 
 
 ## END OF UTILITY FUNCTIONS
