@@ -235,7 +235,7 @@ def compute_lic_with_postprocessing(
   Iteratively compute a Line Integral Convolution (LIC) for a given vector field with optional post-processing steps,
   including filtering and intensity equalisation. This supports both a native Python backend and a pre-compiled, Rust-accelerated
   backend, which can be up to 100 times faster. The Rust backend is powered by `rLIC`, a minimal and optimised LIC implementation
-  authored by @tlorach (https://github.com/tlorach/rLIC), and is used by default for performance.
+  authored by @neutrinoceros (https://github.com/neutrinoceros/rLIC), and is used by default for performance.
 
   Parameters:
   -----------
