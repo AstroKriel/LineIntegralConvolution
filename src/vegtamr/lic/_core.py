@@ -1,5 +1,5 @@
-## This file is part of the "Vegtamr" project.
-## Copyright (c) 2024 Neco Kriel.
+## This file is part of the "LineIntegralConvolution" project.
+## Copyright (c) 2025 Neco Kriel.
 ## Licensed under the MIT License. See LICENSE for details.
 
 
@@ -113,4 +113,4 @@ def advect_streamline(
   return weighted_sum, total_weight
 
 
-## END OF LIC IMPLEMENTATION
+## END OF MODULE

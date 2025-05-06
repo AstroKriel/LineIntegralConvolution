@@ -1,5 +1,5 @@
-## This file is part of the "Vegtamr" project.
-## Copyright (c) 2024 Neco Kriel.
+## This file is part of the "LineIntegralConvolution" project.
+## Copyright (c) 2025 Neco Kriel.
 ## Licensed under the MIT License. See LICENSE for details.
 
 
@@ -92,4 +92,4 @@ def vfield_swirls(size: int) -> dict:
   }
 
 
-## END OF EXAMPLE VECTOR FIELDS
+## END OF MODULE

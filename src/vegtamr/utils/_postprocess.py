@@ -1,5 +1,5 @@
-## This file is part of the "Vegtamr" project.
-## Copyright (c) 2024 Neco Kriel.
+## This file is part of the "LineIntegralConvolution" project.
+## Copyright (c) 2025 Neco Kriel.
 ## Licensed under the MIT License. See LICENSE for details.
 
 
@@ -12,7 +12,7 @@ from skimage.exposure import equalize_adapthist
 
 
 ## ###############################################################
-## START OF UTILITY FUNCTIONS
+## FUNCTIONS
 ## ###############################################################
 def filter_highpass(
     sfield : numpy.ndarray,
@@ -45,4 +45,4 @@ def rescaled_equalize(
   return sfield
 
 
-## END OF UTILITY FUNCTIONS
+## END OF MODULE

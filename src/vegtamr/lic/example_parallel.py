@@ -1,7 +1,15 @@
+## This file is part of the "LineIntegralConvolution" project.
+## Copyright (c) 2025 Neco Kriel.
+## Licensed under the MIT License. See LICENSE for details.
+
+
+## ###############################################################
+## DEPENDENCIES
+## ###############################################################
 import numpy
 import logging
 from multiprocessing import Pool, shared_memory, cpu_count
-from vegtamr.lic import _core  # Assuming this is your C extension
+from vegtamr.lic import _core
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)

@@ -1,8 +1,20 @@
+## This file is part of the "LineIntegralConvolution" project.
+## Copyright (c) 2025 Neco Kriel.
+## Licensed under the MIT License. See LICENSE for details.
+
+
+## ###############################################################
+## DEPENDENCIES
+## ###############################################################
 import numpy
 import rlic
 from vegtamr.lic import _serial, _parallel
 from vegtamr.utils import _postprocess
 
+
+## ###############################################################
+## PERFORM LIC ON ITS OWN
+## ###############################################################
 def compute_lic(
     vfield           : numpy.ndarray,
     sfield_in        : numpy.ndarray = None,
@@ -78,6 +90,10 @@ def compute_lic(
       use_periodic_BCs = use_periodic_BCs,
     )
 
+
+## ###############################################################
+## PERFORM LIC + POSTPROCESSING
+## ###############################################################
 def compute_lic_with_postprocessing(
     vfield                 : numpy.ndarray,
     sfield_in              : numpy.ndarray = None,
@@ -178,3 +194,5 @@ def compute_lic_with_postprocessing(
     return sfield
   else: raise ValueError(f"Unsupported backend: `{backend}`.")
 
+
+## END OF MODULE
