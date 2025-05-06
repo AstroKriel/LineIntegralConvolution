@@ -153,8 +153,6 @@ def _process_block(
     shm_vfield.close()
     shm_sfield.close()
 
-
-
 def compute_lic(vfield, sfield_in, sfield_out, streamlength, use_periodic_BCs):
   """
   Compute Line Integral Convolution with automatic parallelization strategy.

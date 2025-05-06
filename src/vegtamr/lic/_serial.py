@@ -18,14 +18,13 @@ def compute_lic(
     sfield_in        : numpy.ndarray,
     sfield_out       : numpy.ndarray,
     streamlength     : int,
-    num_rows         : int,
-    num_cols         : int,
     use_periodic_BCs : bool,
   ) -> numpy.ndarray:
   """
   Perform a Line Integral Convolution (LIC) over the entire domain by tracing streamlines from each pixel in both
   forward and backward directions along the vector field.
   """
+  _, num_rows, num_cols = vfield.shape
   for row_index in range(num_rows):
     for col_index in range(num_cols):
       forward_sum, forward_total = _core.advect_streamline(

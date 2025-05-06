@@ -78,19 +78,15 @@ def compute_lic(
         sfield_in        = sfield_in,
         sfield_out       = sfield_out,
         streamlength     = streamlength,
-        num_rows         = num_rows,
-        num_cols         = num_cols,
         use_periodic_BCs = use_periodic_BCs,
       )
     elif chunking_type.lower() in ["block", "blocks"]:
       print("Running in parallel (block chunking)...")
-      return _parallel_by_row.compute_lic(
+      return _parallel_by_block.compute_lic(
         vfield           = vfield,
         sfield_in        = sfield_in,
         sfield_out       = sfield_out,
         streamlength     = streamlength,
-        num_rows         = num_rows,
-        num_cols         = num_cols,
         use_periodic_BCs = use_periodic_BCs,
       )
     else: raise ValueError(f"`chunking_type` = {chunking_type} is invalid. Choose from: `row` or `block`.")
@@ -101,8 +97,6 @@ def compute_lic(
       sfield_in        = sfield_in,
       sfield_out       = sfield_out,
       streamlength     = streamlength,
-      num_rows         = num_rows,
-      num_cols         = num_cols,
       use_periodic_BCs = use_periodic_BCs,
     )
 

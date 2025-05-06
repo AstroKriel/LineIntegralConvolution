@@ -57,10 +57,9 @@ def compute_lic(
   sfield_in        : numpy.ndarray,
   sfield_out       : numpy.ndarray,
   streamlength     : int,
-  num_rows         : int,
-  num_cols         : int,
   use_periodic_BCs : bool,
 ) -> numpy.ndarray:
+  _, num_rows, _ = vfield.shape
   shm_vfield = shared_memory.SharedMemory(create=True, size=vfield.nbytes)
   shm_vfield_arr = numpy.ndarray(vfield.shape, dtype=vfield.dtype, buffer=shm_vfield.buf)
   numpy.copyto(shm_vfield_arr, vfield)
