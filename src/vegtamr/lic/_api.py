@@ -8,7 +8,7 @@
 ## ###############################################################
 import numpy
 import rlic
-from vegtamr.lic import _serial, _parallel
+from vegtamr.lic import _serial, _parallel_by_row, _parallel_by_block
 from vegtamr.utils import _postprocess
 
 
@@ -21,7 +21,8 @@ def compute_lic(
     streamlength     : int = None,
     seed_sfield      : int = 42,
     use_periodic_BCs : bool = True,
-    use_parallel     : bool = True,
+    run_in_parallel  : bool = True,
+    chunking_type    : str = "block",
   ) -> numpy.ndarray:
   """
   Computes the Line Integral Convolution (LIC) for a given vector field.
@@ -69,17 +70,32 @@ def compute_lic(
       f"but received it with dimensions {sfield_in.shape}."
     )
   if streamlength is None: streamlength = min(num_rows, num_cols) // 4
-  if use_parallel:
-    return _parallel.compute_lic(
-      vfield           = vfield,
-      sfield_in        = sfield_in,
-      sfield_out       = sfield_out,
-      streamlength     = streamlength,
-      num_rows         = num_rows,
-      num_cols         = num_cols,
-      use_periodic_BCs = use_periodic_BCs,
-    )
+  if run_in_parallel:
+    if chunking_type.lower() in ["row", "rows"]:
+      print("Running in parallel (row chunking)...")
+      return _parallel_by_row.compute_lic(
+        vfield           = vfield,
+        sfield_in        = sfield_in,
+        sfield_out       = sfield_out,
+        streamlength     = streamlength,
+        num_rows         = num_rows,
+        num_cols         = num_cols,
+        use_periodic_BCs = use_periodic_BCs,
+      )
+    elif chunking_type.lower() in ["block", "blocks"]:
+      print("Running in parallel (block chunking)...")
+      return _parallel_by_row.compute_lic(
+        vfield           = vfield,
+        sfield_in        = sfield_in,
+        sfield_out       = sfield_out,
+        streamlength     = streamlength,
+        num_rows         = num_rows,
+        num_cols         = num_cols,
+        use_periodic_BCs = use_periodic_BCs,
+      )
+    else: raise ValueError(f"`chunking_type` = {chunking_type} is invalid. Choose from: `row` or `block`.")
   else:
+    print("Running in serial...")
     return _serial.compute_lic(
       vfield           = vfield,
       sfield_in        = sfield_in,
@@ -98,6 +114,7 @@ def compute_lic_with_postprocessing(
     vfield                 : numpy.ndarray,
     sfield_in              : numpy.ndarray = None,
     streamlength           : int = None,
+    *,
     seed_sfield            : int = 42,
     use_periodic_BCs       : bool = True,
     num_lic_passes         : int = 3,
@@ -106,6 +123,8 @@ def compute_lic_with_postprocessing(
     filter_sigma           : float = 3.0,
     use_equalize           : bool = True,
     backend                : str = "rust",
+    run_in_parallel        : bool = True,
+    chunking_type          : str = "row",
   ) -> numpy.ndarray:
   """
   Iteratively compute a Line Integral Convolution (LIC) for a given vector field with optional post-processing steps,
@@ -173,6 +192,8 @@ def compute_lic_with_postprocessing(
           streamlength     = streamlength,
           seed_sfield      = seed_sfield,
           use_periodic_BCs = use_periodic_BCs,
+          run_in_parallel  = run_in_parallel,
+          chunking_type    = chunking_type,
         )
         sfield_in = sfield
       if use_filter: sfield = _postprocess.filter_highpass(sfield, sigma=filter_sigma)
