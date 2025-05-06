@@ -1,5 +1,5 @@
-## This file is part of the "Vegtamr" project.
-## Copyright (c) 2024 Neco Kriel.
+## This file is part of the "LineIntegralConvolution" project.
+## Copyright (c) 2025 Neco Kriel.
 ## Licensed under the MIT License. See LICENSE for details.
 
 
@@ -9,6 +9,7 @@
 import sys
 import numpy
 import matplotlib.pyplot as mpl_plot
+from pathlib import Path
 from vegtamr.lic import compute_lic_with_postprocessing
 from vegtamr.utils import vfields
 
@@ -57,6 +58,7 @@ def plot_lic(
 ## MAIN PROGRAM
 ## ###############################################################
 def main():
+  script_directory = Path(__file__).resolve().parent
   print("Started running demo script...")
   size         = 500
   vfield_dict  = vfields.vfield_flowers(size)
@@ -76,11 +78,11 @@ def main():
     use_filter             = False,
     filter_sigma           = 2.0, # rouhly the pixel-width of LIC tubes
     use_equalize           = False,
-    backend                = "rust",
+    backend                = "python",
   )
   print("Plotting data...")
   fig, ax = mpl_plot.subplots(figsize=(6, 6))
-  fig, _ = plot_lic(
+  plot_lic(
     ax                  = ax,
     sfield              = sfield,
     vfield              = vfield,
@@ -90,9 +92,10 @@ def main():
   )
   print("Saving figure...")
   fig_name = f"lic_{vfield_name}.png"
-  fig.savefig(fig_name, dpi=300, bbox_inches="tight")
+  fig_file_path = script_directory / fig_name
+  fig.savefig(fig_file_path, dpi=300, bbox_inches="tight")
   mpl_plot.close(fig)
-  print("Saved:", fig_name)
+  print("Saved:", fig_file_path)
 
 
 ## ###############################################################
