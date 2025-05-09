@@ -1,67 +1,32 @@
 import unittest
-import numpy as np
-from vegtamr.lic._parallel_by_block import _calculate_block_size, _split_into_blocks
+from vegtamr.lic._parallel_by_block import _estimate_L1_cache_capacity, _generate_blocks
+
 
 class TestBlockChunking(unittest.TestCase):
-  def setUp(self):
-    self.streamlength = 20
-    self.cache_size = 8 * 1024**2  # 8MB
 
-  def test_block_size_calculation(self):
-    # Test valid cases
-    with self.subTest("Medium array"):
-      self.assertEqual(_calculate_block_size((512, 512), 20), 884)
-    
-    with self.subTest("Small array"):
-      self.assertIsNone(_calculate_block_size((50, 50), 15))
-    
-    with self.subTest("Streamlength too large"):
-      self.assertIsNone(_calculate_block_size((100, 100), 30))
+  def test_each_block_fits_in_L1_cache(self):
+    # Domain size and LIC streamlength
+    num_rows = 512
+    num_cols = 512
+    streamlength = 15
+    # Get max block size per axis from cache estimate
+    max_cells_per_block_axis = _estimate_L1_cache_capacity(num_values_per_cell=1)
+    max_total_cells_in_L1 = max_cells_per_block_axis ** 2
+    # Generate blocks
+    block_info = _generate_blocks(num_rows, num_cols, streamlength, use_periodic=True)
+    data_ranges = block_info["data_ranges"]
+    # Check each data block
+    for (r0, r1, c0, c1) in data_ranges:
+      block_area = (r1 - r0) * (c1 - c0)
+      self.assertLessEqual(
+        block_area,
+        max_total_cells_in_L1,
+        f"Block {((r0, r1), (c0, c1))} exceeds L1 cache capacity: {block_area} > {max_total_cells_in_L1}"
+      )
 
-  def test_block_splitting(self):
-    # Test block generation logic
-    blocks = _split_into_blocks((256, 256), 20)
-    
-    with self.subTest("Block count"):
-      self.assertEqual(len(blocks), 16)  # (256/64)^2
-      
-    with self.subTest("Block coverage"):
-      covered = np.zeros((256, 256), bool)
-      for r, c, bs in blocks:
-        covered[r:r+bs, c:c+bs] = True
-      self.assertTrue(covered.all())
 
-    with self.subTest("Edge handling"):
-      blocks = _split_into_blocks((100, 100), 20)
-      last_block = blocks[-1]
-      self.assertEqual(last_block[0] + last_block[2], 100)
-
-class TestBlockProcessing(unittest.TestCase):
-  def test_block_padding(self):
-    from vegtamr.lic._parallel_by_block import _process_block
-    # Test padding extraction logic
-    vfield = np.random.rand(2, 100, 100).astype(np.float32)
-    sfield = np.random.rand(100, 100).astype(np.float32)
-    
-    # Mock shared memory
-    class MockShm:
-      def __init__(self, arr):
-        self.arr = arr
-      def buf(self):
-        return self.arr
-    
-    results = _process_block(
-      32, 32, 64,
-      None, vfield.shape, vfield.dtype,
-      None, sfield.shape, sfield.dtype,
-      20, True
-    )
-    
-    with self.subTest("Result keys"):
-      self.assertEqual(len(results), 64*64)
-      
-    with self.subTest("Normalization"):
-      self.assertTrue(0 <= results[(64,64)] <= 1.0)
-
-if __name__ == '__main__':
+if __name__ == "__main__":
   unittest.main()
+
+
+## END OF TEST SCRIPT
