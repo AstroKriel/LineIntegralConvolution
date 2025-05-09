@@ -1,6 +1,28 @@
+from collections import Counter
 import matplotlib.pyplot as mpl_plt
 import matplotlib.patches as mpl_patches
 from vegtamr.lic._parallel_by_block import _generate_blocks
+
+
+def print_block_shape_stats(block_type, block_ranges):
+  block_shapes = [
+    (
+      row_end - row_start,
+      col_end - col_start
+    )
+    for (row_start, row_end, col_start, col_end) in block_ranges
+  ]
+  shape_counts  = Counter(block_shapes)
+  sorted_shapes = sorted(
+    shape_counts.items(),
+    key = lambda x: (
+      x[0][0] * x[0][1],
+      x[0]
+    )
+  )
+  print(f"count of `{block_type}` block shapes:")
+  for (rows, cols), count in sorted_shapes:
+    print(f"\t- {rows}x{cols}: {count}")
 
 
 def plot_blocking(ax, block_ranges, *, color, lw=1, use_fill=False):
@@ -18,36 +40,35 @@ def plot_blocking(ax, block_ranges, *, color, lw=1, use_fill=False):
 
 
 def main():
-  length       = 325
+  num_cells    = 325
   streamlength = 10
-
+  ## generate blocks
+  block_info  = _generate_blocks(num_rows=num_cells, num_cols=num_cells, streamlength=streamlength)
+  iter_ranges = block_info["iter_ranges"]
+  data_ranges = block_info["data_ranges"]
+  ## print info
+  print(f"domain size: {num_cells}x{num_cells}")
+  print(f"streamlength: {streamlength}")
+  print(" ")
+  print(f"generated {len(iter_ranges)} cache-aware blocks.")
+  print_block_shape_stats("iter_ranges", iter_ranges)
+  print_block_shape_stats("data_ranges", data_ranges)
+  print(" ")
+  ## generate figure
   fig, ax = mpl_plt.subplots(figsize=(10, 10))
-  plot_bump = 0.1 * length
-  ax.set_xlim(-plot_bump, length + plot_bump)
-  ax.set_ylim(-plot_bump, length + plot_bump)
+  plot_padding = 0.1 * num_cells
+  ax.set_xlim(-plot_padding, num_cells + plot_padding)
+  ax.set_ylim(-plot_padding, num_cells + plot_padding)
   ax.set_aspect("equal")
   ax.invert_yaxis()
-  ax.set_title(f"Cache-Aware Blocks\nDomain: {length}x{length}, Streamlength: {streamlength}")
   ax.set_xlabel("columns")
   ax.set_ylabel("rows")
   ax.grid(True, color="black", linestyle="--", alpha=0.5)
-
-  block_info  = _generate_blocks(num_rows=length, num_cols=length, streamlength=streamlength)
-  iter_ranges = block_info["iter_ranges"]
-  data_ranges = block_info["data_ranges"]
-  iter_cells_per_block_axis = block_info["iter_cells_per_block_axis"]
-  tot_cells_per_block_axis  = block_info["tot_cells_per_block_axis"]
-
-  plot_blocking(ax, [(0, length, 0, length)], color="black", lw=2)
+  ## plot blocks
+  plot_blocking(ax, [(0, num_cells, 0, num_cells)], color="black", lw=2)
   plot_blocking(ax, iter_ranges, color="cornflowerblue")
   plot_blocking(ax, [data_ranges[6]], color="orangered", use_fill=True)
-
-  print(" ")
-  print(f"Generated {len(iter_ranges)} iteration blocks.")
-  print(f"Iteration block size: {iter_cells_per_block_axis}x{iter_cells_per_block_axis}")
-  print(f"Total block size (with halo): {tot_cells_per_block_axis}x{tot_cells_per_block_axis}")
-  print(" ")
-
+  ## show save
   fig.savefig("block_debug_plot.png", dpi=150)
   mpl_plt.show()
 
