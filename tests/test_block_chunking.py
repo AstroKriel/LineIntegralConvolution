@@ -10,53 +10,54 @@ class TestBlockChunking(unittest.TestCase):
     self.streamlength = 15
 
   def test_each_block_fits_in_L1_cache(self):
-    # Get max block size per axis from cache estimate
     max_cells_per_block_axis = _estimate_L1_cache_capacity(num_values_per_cell=1)
-    max_total_cells_in_L1 = max_cells_per_block_axis ** 2
-    # Generate blocks
-    block_info = _generate_blocks(self.num_rows, self.num_cols, self.streamlength, use_periodic=True)
-    data_ranges = block_info["data_ranges"]
-    # Check each data block
-    for (r0, r1, c0, c1) in data_ranges:
-      block_area = (r1 - r0) * (c1 - c0)
+    L1_cache_cell_capacity   = max_cells_per_block_axis * max_cells_per_block_axis
+    block_info               = _generate_blocks(self.num_rows, self.num_cols, self.streamlength, use_periodic=True)
+    data_ranges              = block_info["data_ranges"]
+    for (row_lo, row_hi, col_lo, col_hi) in data_ranges:
+      block_area = (row_hi - row_lo) * (col_hi - col_lo)
       self.assertLessEqual(
         block_area,
-        max_total_cells_in_L1,
-        f"Block {((r0, r1), (c0, c1))} exceeds L1 cache capacity: {block_area} > {max_total_cells_in_L1}"
+        L1_cache_cell_capacity,
+        f"Block {((row_lo, row_hi), (col_lo, col_hi))} exceeds L1 cache capacity: {block_area} > {L1_cache_cell_capacity}"
       )
 
   def test_iter_range_covers_entire_grid(self):
     blocks = _generate_blocks(self.num_rows, self.num_cols, self.streamlength, use_periodic=False)
     iter_ranges = blocks["iter_ranges"]
     covered_cells = set()
-    for r0, r1, c0, c1 in iter_ranges:
-      for r in range(r0, r1):
-        for c in range(c0, c1):
-          covered_cells.add((r, c))
-    expected_cells = set((r, c) for r in range(self.num_rows) for c in range(self.num_cols))
+    for (row_lo, row_hi, col_lo, col_hi) in iter_ranges:
+      for row_index in range(row_lo, row_hi):
+        for col_index in range(col_lo, col_hi):
+          covered_cells.add((row_index, col_index))
+    expected_cells = set(
+      (row_index, col_index)
+      for row_index in range(self.num_rows)
+      for col_index in range(self.num_cols)
+    )
     uncovered_cells = expected_cells - covered_cells
     self.assertEqual(len(uncovered_cells), 0, f"Uncovered cells in iteration range: {len(uncovered_cells)}")
 
   def test_data_range_stays_within_bounds_when_not_periodic(self):
     blocks = _generate_blocks(self.num_rows, self.num_cols, self.streamlength, use_periodic=False)
     data_ranges = blocks["data_ranges"]
-    for r0, r1, c0, c1 in data_ranges:
-      self.assertGreaterEqual(r0, 0)
-      self.assertLessEqual(r1, self.num_rows)
-      self.assertGreaterEqual(c0, 0)
-      self.assertLessEqual(c1, self.num_cols)
+    for (row_lo, row_hi, col_lo, col_hi) in data_ranges:
+      self.assertGreaterEqual(row_lo, 0)
+      self.assertLessEqual(row_hi, self.num_rows)
+      self.assertGreaterEqual(col_lo, 0)
+      self.assertLessEqual(col_hi, self.num_cols)
 
   def test_iter_range_is_subset_of_data_range(self):
     blocks = _generate_blocks(self.num_rows, self.num_cols, self.streamlength, use_periodic=False)
     iter_ranges = blocks["iter_ranges"]
     data_ranges = blocks["data_ranges"]
-    for iter_blk, data_blk in zip(iter_ranges, data_ranges):
-      r0_i, r1_i, c0_i, c1_i = iter_blk
-      r0_d, r1_d, c0_d, c1_d = data_blk
-      self.assertGreaterEqual(r0_i, r0_d)
-      self.assertLessEqual(r1_i, r1_d)
-      self.assertGreaterEqual(c0_i, c0_d)
-      self.assertLessEqual(c1_i, c1_d)
+    for iter_block, data_block in zip(iter_ranges, data_ranges):
+      (iter_row_lo, iter_row_hi, iter_col_lo, iter_col_hi) = iter_block
+      (data_row_lo, data_row_hi, data_col_lo, data_col_hi) = data_block
+      self.assertGreaterEqual(iter_row_lo, data_row_lo)
+      self.assertLessEqual(iter_row_hi, data_row_hi)
+      self.assertGreaterEqual(iter_col_lo, data_col_lo)
+      self.assertLessEqual(iter_col_hi, data_col_hi)
 
 
 if __name__ == "__main__":
