@@ -24,7 +24,7 @@ def _process_row(
   vfield     = numpy.ndarray(vfield_shape, dtype=vfield_dtype, buffer=shm_vfield.buf)
   shm_sfield = shared_memory.SharedMemory(name=shm_sfield_name)
   sfield_in  = numpy.ndarray(sfield_shape, dtype=sfield_dtype, buffer=shm_sfield.buf)
-  num_rows_total, num_cols_total = vfield_shape[1], vfield_shape[2]
+  _, num_cols_total = vfield_shape[1], vfield_shape[2]
   row_results = numpy.zeros(num_cols_total, dtype=numpy.float32)
   for col_index in range(num_cols_total):
     forward_sum, forward_total = _core.advect_streamline(
