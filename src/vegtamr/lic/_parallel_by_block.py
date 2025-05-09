@@ -12,6 +12,12 @@ import numpy
 ## ###############################################################
 ## FUNCTIONS
 ## ###############################################################
+def _estimate_L1_cache_capacity(num_values_per_cell):
+  L1_bytes_capacity         = 32 * 1024  # L1-cache size (32 KB)
+  bytes_per_cell            = 4 * num_values_per_cell # each value is a float32
+  max_cells_per_L1_cache    = L1_bytes_capacity // bytes_per_cell
+  return int(numpy.sqrt(max_cells_per_L1_cache))
+
 def _generate_block_ranges(num_cells_along_axis, streamlength, iter_cells_per_block_axis, use_periodic):
   iter_range = []
   data_range = []
@@ -29,16 +35,11 @@ def _generate_block_ranges(num_cells_along_axis, streamlength, iter_cells_per_bl
     cell_start_index += iter_cells_per_block_axis
   return iter_range, data_range
 
-
 def _generate_blocks(num_rows, num_cols, streamlength, use_periodic=True):
-  L1_bytes_capacity         = 32 * 1024  # L1-cache size (32 KB)
-  bytes_per_cell            = 4  # float32
-  max_cells_per_L1_cache    = L1_bytes_capacity // bytes_per_cell
-  max_cells_per_block_axis  = int(numpy.sqrt(max_cells_per_L1_cache))
+  max_cells_per_block_axis  = _estimate_L1_cache_capacity(1)
   min_cells_per_block_axis  = 10 # still to determine. arbitrary for now.
   data_cells_per_block_axis = 2 * streamlength
   iter_cells_per_block_axis = max(min_cells_per_block_axis, max_cells_per_block_axis - data_cells_per_block_axis)
-  tot_cells_per_block_axis  = iter_cells_per_block_axis + data_cells_per_block_axis
   iter_row_ranges, data_row_ranges = _generate_block_ranges(num_rows, streamlength, iter_cells_per_block_axis, use_periodic)
   iter_col_ranges, data_col_ranges = _generate_block_ranges(num_cols, streamlength, iter_cells_per_block_axis, use_periodic)
   iter_ranges = [
@@ -53,9 +54,7 @@ def _generate_blocks(num_rows, num_cols, streamlength, use_periodic=True):
   ]
   return {
     "iter_ranges": iter_ranges,
-    "data_ranges": data_ranges,
-    "iter_cells_per_block_axis": iter_cells_per_block_axis,
-    "tot_cells_per_block_axis": tot_cells_per_block_axis
+    "data_ranges": data_ranges
   }
 
 
