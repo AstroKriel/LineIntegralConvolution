@@ -7,6 +7,7 @@
 ## DEPENDENCIES
 ## ###############################################################
 import sys
+import time
 import numpy
 import matplotlib.pyplot as mpl_plot
 from pathlib import Path
@@ -69,17 +70,22 @@ def main():
   vfield_name  = vfield_dict["name"]
   print("Computing LIC...")
   ## apply the LIC multiple times: equivelant to applying several passes with a paint brush.
-  ## note: `backend` options include "python" (implemented in this project) or "rust" (2-10x faster; https://github.com/tlorach/rLIC)
+  ## note: `backend` options include "python" (this project) or "rust" (2-10x faster; https://github.com/tlorach/rLIC)
+  start_time = time.perf_counter()
   sfield = compute_lic_with_postprocessing(
     vfield                 = vfield,
     streamlength           = streamlength,
     num_lic_passes         = 1,
     num_postprocess_cycles = 1,
     use_filter             = False,
-    filter_sigma           = 2.0, # rouhly the pixel-width of LIC tubes
+    filter_sigma           = 2.0, # rouhly the width of LIC tubes in pixels
     use_equalize           = False,
     backend                = "python",
+    run_in_parallel        = True,
+    chunking_type          = "block",
   )
+  elapsed_time = time.perf_counter() - start_time
+  print(f"LIC execution took {elapsed_time:.3f} seconds.")
   print("Plotting data...")
   fig, ax = mpl_plot.subplots(figsize=(6, 6))
   plot_lic(
