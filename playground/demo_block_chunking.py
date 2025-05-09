@@ -7,10 +7,10 @@ from vegtamr.lic._parallel_by_block import _generate_blocks
 def print_block_shape_stats(block_type, block_ranges):
   block_shapes = [
     (
-      row_end - row_start,
-      col_end - col_start
+      row_stop - row_start,
+      col_stop - col_start
     )
-    for (row_start, row_end, col_start, col_end) in block_ranges
+    for (row_start, row_stop, col_start, col_stop) in block_ranges
   ]
   shape_counts  = Counter(block_shapes)
   sorted_shapes = sorted(
@@ -26,17 +26,17 @@ def print_block_shape_stats(block_type, block_ranges):
 
 
 def plot_blocking(ax, block_ranges, *, color, lw=1, use_fill=False):
-  for (row_start, row_end, col_start, col_end) in block_ranges:
-    rect = mpl_patches.Rectangle(
+  for (row_start, row_stop, col_start, col_stop) in block_ranges:
+    block = mpl_patches.Rectangle(
       (col_start, row_start),
-      col_end - col_start,
-      row_end - row_start,
+      col_stop - col_start,
+      row_stop - row_start,
       linewidth = lw,
       edgecolor = color,
       facecolor = color if use_fill else "none",
       alpha     = 0.5
     )
-    ax.add_patch(rect)
+    ax.add_patch(block)
 
 
 def main():
