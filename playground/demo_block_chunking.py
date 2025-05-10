@@ -61,8 +61,6 @@ def main():
   ax.set_ylim(-plot_padding, num_cells + plot_padding)
   ax.set_aspect("equal")
   ax.invert_yaxis()
-  ax.set_xlabel("columns")
-  ax.set_ylabel("rows")
   ax.grid(True, color="black", linestyle="--", alpha=0.5)
   ## plot blocks
   plot_blocking(ax, [(0, num_cells, 0, num_cells)], color="black", lw=2)
