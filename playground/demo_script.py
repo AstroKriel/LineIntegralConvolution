@@ -10,7 +10,7 @@ import sys
 import numpy
 import matplotlib.pyplot as mpl_plot
 from vegtamr.lic import compute_lic_with_postprocessing
-from vegtamr.utils import vfields
+from vegtamr import vfields
 
 
 ## ###############################################################
@@ -80,7 +80,7 @@ def main():
   )
   print("Plotting data...")
   fig, ax = mpl_plot.subplots(figsize=(6, 6))
-  fig, _ = plot_lic(
+  plot_lic(
     ax                  = ax,
     sfield              = sfield,
     vfield              = vfield,
