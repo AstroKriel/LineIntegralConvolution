@@ -70,7 +70,7 @@ def main():
   vfield_name  = vfield_dict["name"]
   print("Computing LIC...")
   ## apply the LIC multiple times: equivelant to applying several passes with a paint brush.
-  ## note: `backend` options include "python" (this project) or "rust" (2-10x faster; https://github.com/tlorach/rLIC)
+  ## note: `backend` options include "python" (this project) or "rust" (10x faster; https://github.com/tlorach/rLIC)
   start_time = time.perf_counter()
   sfield = compute_lic_with_postprocessing(
     vfield                 = vfield,
@@ -78,11 +78,11 @@ def main():
     num_lic_passes         = 1,
     num_postprocess_cycles = 1,
     use_filter             = False,
-    filter_sigma           = 2.0, # rouhly the width of LIC tubes in pixels
+    filter_sigma           = 2.0, # roughly the pixels-width of LIC tubes
     use_equalize           = False,
-    backend                = "python",
+    backend                = "rust",
     run_in_parallel        = True,
-    chunking_type          = "block",
+    chunking_type          = "row",
   )
   elapsed_time = time.perf_counter() - start_time
   print(f"LIC execution took {elapsed_time:.3f} seconds.")

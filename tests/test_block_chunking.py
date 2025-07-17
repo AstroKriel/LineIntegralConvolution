@@ -10,7 +10,7 @@ class TestBlockChunking(unittest.TestCase):
     self.streamlength = 15
 
   def test_each_block_fits_in_L1_cache(self):
-    max_cells_per_block_axis = _estimate_L1_cache_capacity(num_values_per_cell=1)
+    max_cells_per_block_axis = _estimate_L1_cache_capacity()
     L1_cache_cell_capacity   = max_cells_per_block_axis * max_cells_per_block_axis
     block_info               = _generate_blocks(self.num_rows, self.num_cols, self.streamlength, use_periodic=True)
     data_ranges              = block_info["data_ranges"]

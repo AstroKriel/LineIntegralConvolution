@@ -185,7 +185,7 @@ def compute_lic_with_postprocessing(
           sfield_in        = sfield_in,
           streamlength     = streamlength,
           seed_sfield      = seed_sfield,
-          use_periodic_BCs = use_periodic_BCs,
+          use_periodic_BCs = False,
           run_in_parallel  = run_in_parallel,
           chunking_type    = chunking_type,
         )

@@ -1,10 +1,11 @@
+from pathlib import Path
 from collections import Counter
 import matplotlib.pyplot as mpl_plt
 import matplotlib.patches as mpl_patches
 from vegtamr.lic._parallel_by_block import _generate_blocks
 
 
-def print_block_shape_stats(block_type, block_ranges):
+def print_blocking_stats(block_type, block_ranges):
   block_shapes = [
     (
       row_stop - row_start,
@@ -40,7 +41,7 @@ def plot_blocking(ax, block_ranges, *, color, lw=1, use_fill=False):
 
 
 def main():
-  num_cells    = 325
+  num_cells    = 315
   streamlength = 10
   ## generate blocks
   block_info  = _generate_blocks(num_rows=num_cells, num_cols=num_cells, streamlength=streamlength)
@@ -51,8 +52,8 @@ def main():
   print(f"streamlength: {streamlength}")
   print(" ")
   print(f"generated {len(iter_ranges)} cache-aware blocks.")
-  print_block_shape_stats("iter_ranges", iter_ranges)
-  print_block_shape_stats("data_ranges", data_ranges)
+  print_blocking_stats("iter_ranges", iter_ranges)
+  print_blocking_stats("data_ranges", data_ranges)
   print(" ")
   ## generate figure
   fig, ax = mpl_plt.subplots(figsize=(10, 10))
@@ -65,9 +66,13 @@ def main():
   ## plot blocks
   plot_blocking(ax, [(0, num_cells, 0, num_cells)], color="black", lw=2)
   plot_blocking(ax, iter_ranges, color="cornflowerblue")
-  plot_blocking(ax, [data_ranges[6]], color="orangered", use_fill=True)
+  plot_blocking(ax, [data_ranges[15]], color="orangered", use_fill=True)
   ## show save
-  fig.savefig("block_debug_plot.png", dpi=150)
+  directory = Path(__file__).resolve().parent
+  fig_name = "chunking_debug_plot.png"
+  file_path = directory / fig_name
+  mpl_plt.tight_layout()
+  fig.savefig(file_path, dpi=150)
   mpl_plt.show()
 
 
