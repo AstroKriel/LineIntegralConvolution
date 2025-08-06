@@ -6,9 +6,10 @@
 ## ###############################################################
 ## DEPENDENCIES
 ## ###############################################################
-import numpy
 import rlic
-from vegtamr.lic import _serial, _parallel_by_row, _parallel_by_block
+import numpy
+import warnings
+from vegtamr.lic import _serial, _parallel_by_row
 from vegtamr.utils import _postprocess
 
 
@@ -22,23 +23,22 @@ def compute_lic(
     seed_sfield      : int = 42,
     use_periodic_BCs : bool = True,
     run_in_parallel  : bool = True,
-    chunking_type    : str = "block",
   ) -> numpy.ndarray:
   """
   Computes the Line Integral Convolution (LIC) for a given vector field.
 
   This function generates a LIC image using the input vector field (`vfield`) and an optional background scalar field (`sfield_in`).
-  If no scalar field is provided, a random scalar field is generated, visualising the vector field on its own. If a background scalar
-  field is provided, the LIC is computed over it.
+  If no scalar field is provided, a random scalar field is generated. If a background scalar field is provided, the LIC is computed on top of it.
 
-  The `streamlength` parameter controls the length of the LIC streamlines. For best results, set it close to the correlation length of
+  The `streamlength` parameter controls the length of the LIC streamlines. For better results, set it close to the correlation length of
   the vector field (often known a priori). If not specified, it defaults to 1/4 of the smallest domain dimension.
 
   Parameters:
   -----------
   vfield : numpy.ndarray
-    3D array storing a 2D vector field with shape (num_vcomps=2, num_rows, num_cols). The first dimension holds the vector components (x,y),
-    and the remaining two dimensions define the domain size. For 3D fields, provide a 2D slice.
+    3D array storing a 2D vector field with shape (num_vcomps=2, num_rows, num_cols).
+    The first dimension holds the vector components (x,y), and the remaining two dimensions define the domain size.
+    For 3D vector fields, provide a 2D slice.
 
   sfield_in : numpy.ndarray, optional, default=None
     2D scalar field to be used for the LIC. If None, a random scalar field is generated.
@@ -57,41 +57,30 @@ def compute_lic(
   numpy.ndarray
     A 2D array storing the output LIC image with shape (num_rows, num_cols).
   """
-  assert vfield.ndim == 3, f"vfield must have 3 dimensions, but got {vfield.ndim}."
+  assert vfield.ndim == 3, f"`vfield` must have 3 dimensions, but got {vfield.ndim}."
   num_vcomps, num_rows, num_cols = vfield.shape
-  assert num_vcomps == 2, f"vfield must have 2 components (in the first dimension), but got {num_vcomps}."
+  assert num_vcomps == 2, f"`vfield` must have 2 components (in the first dimension), but got {num_vcomps}."
   sfield_out = numpy.zeros((num_rows, num_cols), dtype=numpy.float32)
   if sfield_in is None:
     if seed_sfield is not None: numpy.random.seed(seed_sfield)
     sfield_in = numpy.random.rand(num_rows, num_cols).astype(numpy.float32)
   else:
     assert sfield_in.shape == (num_rows, num_cols), (
-      f"sfield_in must have dimensions ({num_rows}, {num_cols}), "
-      f"but received it with dimensions {sfield_in.shape}."
+      f"`sfield_in` must have dimensions ({num_rows}, {num_cols}), "
+      f"but it has dimensions {sfield_in.shape}."
     )
   if streamlength is None: streamlength = min(num_rows, num_cols) // 4
   if run_in_parallel:
-    if chunking_type.lower() in ["row", "rows"]:
-      print("Running in parallel (row chunking)...")
-      return _parallel_by_row.compute_lic(
-        vfield           = vfield,
-        sfield_in        = sfield_in,
-        sfield_out       = sfield_out,
-        streamlength     = streamlength,
-        use_periodic_BCs = use_periodic_BCs,
-      )
-    elif chunking_type.lower() in ["block", "blocks"]:
-      print("Running in parallel (block chunking)...")
-      return _parallel_by_block.compute_lic(
-        vfield           = vfield,
-        sfield_in        = sfield_in,
-        sfield_out       = sfield_out,
-        streamlength     = streamlength,
-        use_periodic_BCs = use_periodic_BCs,
-      )
-    else: raise ValueError(f"`chunking_type` = {chunking_type} is invalid. Choose from: `row` or `block`.")
+    print("Running in parallel (Python backend)...")
+    return _parallel_by_row.compute_lic(
+      vfield           = vfield,
+      sfield_in        = sfield_in,
+      sfield_out       = sfield_out,
+      streamlength     = streamlength,
+      use_periodic_BCs = use_periodic_BCs,
+    )
   else:
-    print("Running in serial...")
+    print("Running in serial (Python backend)...")
     return _serial.compute_lic(
       vfield           = vfield,
       sfield_in        = sfield_in,
@@ -118,13 +107,13 @@ def compute_lic_with_postprocessing(
     use_equalize           : bool = True,
     backend                : str = "rust",
     run_in_parallel        : bool = True,
-    chunking_type          : str = "row",
   ) -> numpy.ndarray:
   """
-  Iteratively compute a Line Integral Convolution (LIC) for a given vector field with optional post-processing steps,
-  including filtering and intensity equalisation. This supports both a native Python backend and a pre-compiled, Rust-accelerated
-  backend, which can be up to 100 times faster. The Rust backend is powered by `rLIC`, a minimal and optimised LIC implementation
-  authored by @tlorach (https://github.com/tlorach/rLIC), and is used by default for performance.
+  Computes LIC with optional iterative post-processing, including high-pass filtering and histogram equalisation.
+  
+  This routine supports both a native Python backend (more accurate, but slower), and a Rust-accelerated backend
+  (less accurate, but significantly faster). By default, the Rust backend is used for performance and is powered
+  by the excellent `rLIC` implementation developed by @tlorach: https://github.com/tlorach/rLIC
 
   Parameters:
   -----------
@@ -178,6 +167,12 @@ def compute_lic_with_postprocessing(
   elif streamlength < 5: raise ValueError("`streamlength` should be at least 5 pixels.")
   if backend.lower() == "python":
     print("Using the native `python` backend. This is slower compared to the `rust` backend, which can be up to 100x faster.")
+    if not run_in_parallel:
+      warnings.warn(
+        "The serial Python backend is deprecated, but retained for completeness. "
+        "Consider using the parallel backend for better performance.",
+        DeprecationWarning
+      )
     for _ in range(num_postprocess_cycles):
       for _ in range(num_lic_passes):
         sfield = compute_lic(
@@ -187,7 +182,6 @@ def compute_lic_with_postprocessing(
           seed_sfield      = seed_sfield,
           use_periodic_BCs = False,
           run_in_parallel  = run_in_parallel,
-          chunking_type    = chunking_type,
         )
         sfield_in = sfield
       if use_filter: sfield = _postprocess.filter_highpass(sfield, sigma=filter_sigma)
