@@ -6,9 +6,9 @@
 ## ###############################################################
 ## DEPENDENCIES
 ## ###############################################################
+
 import rlic
 import numpy
-import warnings
 from vegtamr.lic import _serial, _parallel_by_row
 from vegtamr.utils import _postprocess
 
@@ -16,6 +16,7 @@ from vegtamr.utils import _postprocess
 ## ###############################################################
 ## PERFORM LIC ON ITS OWN
 ## ###############################################################
+
 def compute_lic(
     vfield           : numpy.ndarray,
     sfield_in        : numpy.ndarray = None,
@@ -93,6 +94,7 @@ def compute_lic(
 ## ###############################################################
 ## PERFORM LIC + POSTPROCESSING
 ## ###############################################################
+
 def compute_lic_with_postprocessing(
     vfield                 : numpy.ndarray,
     sfield_in              : numpy.ndarray = None,
@@ -166,12 +168,11 @@ def compute_lic_with_postprocessing(
   if streamlength is None: streamlength = min(shape) // 4
   elif streamlength < 5: raise ValueError("`streamlength` should be at least 5 pixels.")
   if backend.lower() == "python":
-    print("Using the native `python` backend. This is slower compared to the `rust` backend, which can be up to 100x faster.")
+    print("Using the native `python` backend. This is slower but more accurate than to the `rust` backend.")
     if not run_in_parallel:
-      warnings.warn(
+      print(
         "The serial Python backend is deprecated, but retained for completeness. "
-        "Consider using the parallel backend for better performance.",
-        DeprecationWarning
+        "Consider using the parallel backend (`run_in_parallel = True`) for better performance.",
       )
     for _ in range(num_postprocess_cycles):
       for _ in range(num_lic_passes):
@@ -188,6 +189,7 @@ def compute_lic_with_postprocessing(
     if use_equalize: sfield = _postprocess.rescaled_equalize(sfield)
     return sfield
   elif backend.lower() == "rust":
+    print("Using the `rust` backend. This is much faster but also less accurate than the `python` backend.")
     ## add padding to mimic periodic BCs
     if use_periodic_BCs:
       sfield_in = numpy.pad(sfield_in, pad_width=streamlength, mode="wrap")

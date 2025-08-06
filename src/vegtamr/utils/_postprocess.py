@@ -6,6 +6,7 @@
 ## ###############################################################
 ## DEPENDENCIES
 ## ###############################################################
+
 import numpy
 from scipy import ndimage
 from skimage.exposure import equalize_adapthist
@@ -14,6 +15,7 @@ from skimage.exposure import equalize_adapthist
 ## ###############################################################
 ## FUNCTIONS
 ## ###############################################################
+
 def filter_highpass(
     sfield : numpy.ndarray,
     sigma  : float = 3.0

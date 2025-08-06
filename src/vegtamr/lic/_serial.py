@@ -6,6 +6,7 @@
 ## ###############################################################
 ## DEPENDENCIES
 ## ###############################################################
+
 import numpy
 from vegtamr.lic import _core
 
@@ -13,6 +14,7 @@ from vegtamr.lic import _core
 ## ###############################################################
 ## LOOP THROUGH THE DOMAIN SERIALLY
 ## ###############################################################
+
 def compute_lic(
     vfield           : numpy.ndarray,
     sfield_in        : numpy.ndarray,

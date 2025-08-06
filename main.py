@@ -6,6 +6,7 @@
 ## ###############################################################
 ## DEPENDENCIES
 ## ###############################################################
+
 import sys
 import time
 import numpy
@@ -18,6 +19,7 @@ from vegtamr.utils import vfields
 ## ###############################################################
 ## HELPER FUNCTION
 ## ###############################################################
+
 def plot_lic(
     ax                  : mpl_plot.Axes,
     sfield              : numpy.ndarray,
@@ -58,10 +60,11 @@ def plot_lic(
 ## ###############################################################
 ## MAIN PROGRAM
 ## ###############################################################
+
 def main():
   script_directory = Path(__file__).resolve().parent
   print("Started running demo script...")
-  size         = 500
+  size         = 200
   vfield_dict  = vfields.vfield_flowers(size)
   vfield       = vfield_dict["vfield"]
   streamlength = vfield_dict["streamlength"]
@@ -82,7 +85,6 @@ def main():
     use_equalize           = False,
     backend                = "rust",
     run_in_parallel        = True,
-    chunking_type          = "row",
   )
   elapsed_time = time.perf_counter() - start_time
   print(f"LIC execution took {elapsed_time:.3f} seconds.")
@@ -107,6 +109,7 @@ def main():
 ## ###############################################################
 ## SCRIPT ENTRY POINT
 ## ###############################################################
+
 if __name__ == "__main__":
   main()
   sys.exit(0)

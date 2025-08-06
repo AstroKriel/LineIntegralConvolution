@@ -6,6 +6,7 @@
 ## ###############################################################
 ## DEPENDENCIES
 ## ###############################################################
+
 import numpy
 from vegtamr.lic import _core
 from multiprocessing import Pool, shared_memory, cpu_count
@@ -14,6 +15,7 @@ from multiprocessing import Pool, shared_memory, cpu_count
 ## ###############################################################
 ## LOOP THROUGH THE DOMAIN IN PARALLEL
 ## ###############################################################
+
 def _process_row(
     row_index,
     shm_vfield_name, vfield_shape, vfield_dtype,
