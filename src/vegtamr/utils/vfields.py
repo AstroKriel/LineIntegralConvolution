@@ -1,17 +1,19 @@
-## This file is part of the "Vegtamr" project.
-## Copyright (c) 2024 Neco Kriel.
+## This file is part of the "LineIntegralConvolution" project.
+## Copyright (c) 2025 Neco Kriel.
 ## Licensed under the MIT License. See LICENSE for details.
 
 
 ## ###############################################################
 ## DEPENDENCIES
 ## ###############################################################
+
 import numpy
 
 
 ## ###############################################################
 ## EXAMPLE VECTOR FIELDS
 ## ###############################################################
+
 def vfield_lotka_volterra(size: int) -> dict:
   bounds_rows = (-5, 10)
   bounds_cols = (-5, 10)
@@ -34,7 +36,6 @@ def vfield_lotka_volterra(size: int) -> dict:
     "bounds_cols"  : bounds_cols,
   }
 
-
 def vfield_flowers(size: int) -> dict:
   bounds_rows = (-10, 10)
   bounds_cols = (-10, 10)
@@ -54,7 +55,6 @@ def vfield_flowers(size: int) -> dict:
     "bounds_cols"  : bounds_cols,
   }
 
-
 def vfield_circles(size: int) -> dict:
   bounds_rows = (-10, 10)
   bounds_cols = (-10, 10)
@@ -73,7 +73,6 @@ def vfield_circles(size: int) -> dict:
     "bounds_rows"  : bounds_rows,
     "bounds_cols"  : bounds_cols,
   }
-
 
 def vfield_swirls(size: int) -> dict:
   bounds_rows = (-10, 10)
@@ -95,4 +94,4 @@ def vfield_swirls(size: int) -> dict:
   }
 
 
-## END OF EXAMPLE VECTOR FIELDS
+## END OF MODULE
