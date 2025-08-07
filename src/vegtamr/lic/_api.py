@@ -190,17 +190,19 @@ def compute_lic_with_postprocessing(
     return sfield
   elif backend.lower() == "rust":
     print("Using the `rust` backend. This is much faster but also less accurate than the `python` backend.")
-    ## add padding to mimic periodic BCs
-    if use_periodic_BCs:
-      sfield_in = numpy.pad(sfield_in, pad_width=streamlength, mode="wrap")
-      vfield    = numpy.pad(vfield, pad_width=((0, 0), (streamlength, streamlength), (streamlength, streamlength)), mode="wrap")
     kernel = 0.5 * (1 + numpy.cos(numpy.pi * numpy.arange(1-streamlength, streamlength) / streamlength, dtype=dtype))
     for _ in range(num_postprocess_cycles):
-      sfield  = rlic.convolve(sfield_in, vfield[0], vfield[1], kernel=kernel, iterations=num_lic_passes)
+      sfield  = rlic.convolve(
+        sfield_in,
+        vfield[0],
+        vfield[1],
+        kernel     = kernel,
+        boundaries = "periodic" if use_periodic_BCs else "closed",
+        iterations = num_lic_passes,
+      )
       sfield /= numpy.max(numpy.abs(sfield))
       sfield_in = sfield
       if use_filter: sfield = _postprocess.filter_highpass(sfield, sigma=filter_sigma)
-    if use_periodic_BCs: sfield = sfield[streamlength:-streamlength, streamlength:-streamlength]
     if use_equalize: sfield = _postprocess.rescaled_equalize(sfield)
     return sfield
   else: raise ValueError(f"Unsupported backend: `{backend}`.")
