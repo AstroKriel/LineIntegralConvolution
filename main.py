@@ -13,7 +13,7 @@ import numpy
 import matplotlib.pyplot as mpl_plot
 from pathlib import Path
 from vegtamr.lic import compute_lic_with_postprocessing
-from vegtamr import vfields
+from vegtamr.utils import vfields
 
 
 ## ###############################################################
@@ -83,8 +83,7 @@ def main():
     use_filter             = False,
     filter_sigma           = 2.0, # roughly the pixels-width of LIC tubes
     use_equalize           = False,
-    backend                = "rust",
-    run_in_parallel        = True,
+    backend                = "python",
   )
   elapsed_time = time.perf_counter() - start_time
   print(f"LIC execution took {elapsed_time:.3f} seconds.")
