@@ -13,7 +13,7 @@ import numpy
 import matplotlib.pyplot as mpl_plot
 from pathlib import Path
 from vegtamr.lic import compute_lic_with_postprocessing
-from vegtamr.utils import vfields
+from vegtamr import vfields
 
 
 ## ###############################################################

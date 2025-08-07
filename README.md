@@ -125,27 +125,28 @@ plt.show()
 
 ## Acknowledgements
 
-Special thanks to Dr. James Beattie ([@AstroJames](https://github.com/AstroJames)) for highlighting that iteration, high-pass filtering, and histogram normalisation improves the final result. Also, thanks to Dr. Philip Mocz ([@pmocz](https://github.com/pmocz)) for his helpful suggestions in restructuring and improving the codebase.
+The fast (pre-compiled Rust) backend option, which this repo uses by default, was implemented by Dr. Clément Robert ([@neutrinoceros](https://github.com/neutrinoceros); see [rLIC](https://github.com/neutrinoceros/rLIC)). Special thanks also go to Dr. James Beattie ([@AstroJames](https://github.com/AstroJames)) for highlighting how iteration, high-pass filtering, and histogram normalisation improve the final result. Finally, Dr. Philip Mocz ([@pmocz](https://github.com/pmocz)) provided helpful suggestions in restructuring and improving the codebase.
 
 ## File structure
 
 ```bash
-LineIntegralConvolutions/              # Root (project) directory
+LineIntegralConvolutions/               # root (project) directory
 ├── src/
-│   └── line_integral_convolutions/    # Python package
-│       ├── __init__.py                # Initialization file for the package
-│       ├── fields.py                  # Example vector fields
-│       ├── lic.py                     # Core of the Line Integral Convolution (LIC) package
-│       ├── utils.py                   # Utility functions
-│       └── visualization.py           # Code for plotting LIC
-├── examples/
-│   └── example_lic.py                 # An example script
-├── gallary/
-│   └── example high-resolution LICs
-├── requirements.txt                   # Lists of dependencies
-├── setup.py                           # Script to install and package-up the project
-├── LICENSE                            # Terms of use for the project
-└── README.md                          # This file
+│   └── vegtamr/                        # package is named after Odin’s alias (translated to "Wanderer")
+│       ├── __init__.py                 # package initialiser
+│       ├── fields.py                   # example vector fields
+│       ├── lic.py                      # core of the Line Integral Convolution (LIC) package
+│       ├── utils.py                    # utility functions
+│       └── visualization.py            # code for plotting lic
+├── playground/
+│   └── demo_script.py                  # An example script
+├── gallery/
+│   └── high-resolution images and gifs # example outputs
+├── pyproject.toml                      # project metadata and dependencies
+├── uv.lock                             # lock file (used by uv to pin dependencies)
+├── LICENSE                             # terms of use and distribution for this project
+├── MANIFEST.in                         # specifies which files to include when packaging the project
+└── README.md                           # project overview, installation instructions, and usage examples
 ```
 
 ## License
