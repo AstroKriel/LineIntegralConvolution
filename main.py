@@ -11,6 +11,7 @@ import sys
 import time
 import numpy
 import matplotlib.pyplot as mpl_plot
+from matplotlib.axes import Axes as mpl_axis
 from pathlib import Path
 from vegtamr.lic import compute_lic_with_postprocessing
 from vegtamr.utils import vfields
@@ -21,21 +22,23 @@ from vegtamr.utils import vfields
 ## ###############################################################
 
 def plot_lic(
-    ax                  : mpl_plot.Axes,
+    ax                  : mpl_axis,
     sfield              : numpy.ndarray,
     vfield              : numpy.ndarray,
-    bounds_rows         : tuple[float, float] = None,
-    bounds_cols         : tuple[float, float] = None,
+    bounds_rows         : tuple[float, float] | None = None,
+    bounds_cols         : tuple[float, float] | None = None,
     overlay_streamlines : bool = False,
   ):
+  if bounds_rows is None: bounds_rows = (0.0, sfield.shape[0])
+  if bounds_cols is None: bounds_cols = (0.0, sfield.shape[1]) 
   ax.imshow(
     sfield,
     cmap   = "bone",
     origin = "lower",
-    extent = [
+    extent = (
       bounds_rows[0], bounds_rows[1],
       bounds_cols[0], bounds_cols[1]
-    ],
+    ),
   )
   if overlay_streamlines:
     coords_row = numpy.linspace(bounds_rows[0], bounds_rows[1], sfield.shape[0])
