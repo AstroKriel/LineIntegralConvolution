@@ -19,8 +19,8 @@ from vegtamr.utils import _postprocess
 
 def compute_lic(
     vfield           : numpy.ndarray,
-    sfield_in        : numpy.ndarray = None,
-    streamlength     : int = None,
+    sfield_in        : numpy.ndarray | None = None,
+    streamlength     : int | None = None,
     seed_sfield      : int = 42,
     use_periodic_BCs : bool = True,
     run_in_parallel  : bool = True,
@@ -70,9 +70,8 @@ def compute_lic(
       f"`sfield_in` must have dimensions ({num_rows}, {num_cols}), "
       f"but it has dimensions {sfield_in.shape}."
     )
-  if streamlength is None: streamlength = min(num_rows, num_cols) // 4
+  if streamlength is None: streamlength = int(min(num_rows, num_cols) // 4)
   if run_in_parallel:
-    print("Running in parallel (Python backend)...")
     return _parallel_by_row.compute_lic(
       vfield           = vfield,
       sfield_in        = sfield_in,
@@ -81,7 +80,6 @@ def compute_lic(
       use_periodic_BCs = use_periodic_BCs,
     )
   else:
-    print("Running in serial (Python backend)...")
     return _serial.compute_lic(
       vfield           = vfield,
       sfield_in        = sfield_in,
@@ -97,8 +95,8 @@ def compute_lic(
 
 def compute_lic_with_postprocessing(
     vfield                 : numpy.ndarray,
-    sfield_in              : numpy.ndarray = None,
-    streamlength           : int = None,
+    sfield_in              : numpy.ndarray | None = None,
+    streamlength           : int | None = None,
     *,
     seed_sfield            : int = 42,
     use_periodic_BCs       : bool = True,
@@ -165,8 +163,9 @@ def compute_lic_with_postprocessing(
   if sfield_in is None:
     if seed_sfield is not None: numpy.random.seed(seed_sfield)
     sfield_in = numpy.random.rand(*shape).astype(dtype)
-  if streamlength is None: streamlength = min(shape) // 4
+  if streamlength is None: streamlength = int(min(shape) // 4)
   elif streamlength < 5: raise ValueError("`streamlength` should be at least 5 pixels.")
+  sfield = numpy.array(sfield_in, copy=True)
   if backend.lower() == "python":
     print("Using the native `python` backend. This is slower but more accurate than to the `rust` backend.")
     if not run_in_parallel:
@@ -193,7 +192,7 @@ def compute_lic_with_postprocessing(
     kernel = 0.5 * (1 + numpy.cos(numpy.pi * numpy.arange(1-streamlength, streamlength) / streamlength, dtype=dtype))
     for _ in range(num_postprocess_cycles):
       sfield  = rlic.convolve(
-        sfield_in,
+        sfield_in, # type: ignore
         vfield[0],
         vfield[1],
         kernel     = kernel,

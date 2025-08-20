@@ -11,8 +11,8 @@ import sys
 import time
 import numpy
 import matplotlib.pyplot as mpl_plot
-from matplotlib.axes import Axes as mpl_axis
 from pathlib import Path
+from matplotlib.axes import Axes as mpl_axes
 from vegtamr.lic import compute_lic_with_postprocessing
 from vegtamr.utils import vfields
 
@@ -22,7 +22,7 @@ from vegtamr.utils import vfields
 ## ###############################################################
 
 def plot_lic(
-    ax                  : mpl_axis,
+    ax                  : mpl_axes,
     sfield              : numpy.ndarray,
     vfield              : numpy.ndarray,
     bounds_rows         : tuple[float, float] | None = None,
@@ -67,8 +67,7 @@ def plot_lic(
 def main():
   script_directory = Path(__file__).resolve().parent
   print("Started running demo script...")
-  size         = 200
-  vfield_dict  = vfields.vfield_flowers(size)
+  vfield_dict  = vfields.vfield_circles(size = 200)
   vfield       = vfield_dict["vfield"]
   streamlength = vfield_dict["streamlength"]
   bounds_rows  = vfield_dict["bounds_rows"]
