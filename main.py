@@ -65,7 +65,6 @@ def plot_lic(
 ## ###############################################################
 
 def main():
-  script_directory = Path(__file__).resolve().parent
   print("Started running demo script...")
   vfield_dict  = vfields.vfield_circles(size = 200)
   vfield       = vfield_dict["vfield"]
@@ -78,19 +77,19 @@ def main():
   ## note: `backend` options include "python" (this project) or "rust" (10x faster; https://github.com/tlorach/rLIC)
   start_time = time.perf_counter()
   sfield = compute_lic_with_postprocessing(
-    vfield                 = vfield,
-    streamlength           = streamlength,
-    num_lic_passes         = 1,
-    num_postprocess_cycles = 1,
-    use_filter             = False,
-    filter_sigma           = 2.0, # roughly the pixels-width of LIC tubes
-    use_equalize           = False,
-    backend                = "python",
+    vfield          = vfield,
+    streamlength    = streamlength,
+    num_lic_passes  = 1,
+    num_full_passes = 1,
+    use_filter      = False,
+    filter_sigma    = 2.0, # roughly the pixels-width of LIC tubes
+    use_equalize    = False,
+    backend         = "python",
   )
   elapsed_time = time.perf_counter() - start_time
   print(f"LIC execution took {elapsed_time:.3f} seconds.")
   print("Plotting data...")
-  fig, ax = mpl_plot.subplots(figsize=(6, 6))
+  fig, ax = mpl_plot.subplots()
   plot_lic(
     ax                  = ax,
     sfield              = sfield,
@@ -100,11 +99,11 @@ def main():
     overlay_streamlines = False,
   )
   print("Saving figure...")
-  fig_name = f"lic_{vfield_name}.png"
-  fig_file_path = script_directory / fig_name
-  fig.savefig(fig_file_path, dpi=300, bbox_inches="tight")
+  script_dir = Path(__file__).parent
+  fig_path = script_dir / f"lic_{vfield_name}.png"
+  fig.savefig(fig_path, dpi=300, bbox_inches="tight")
   mpl_plot.close(fig)
-  print("Saved:", fig_file_path)
+  print("Saved:", fig_path)
 
 
 ## ###############################################################

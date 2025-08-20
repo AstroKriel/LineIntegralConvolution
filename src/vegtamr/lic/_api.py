@@ -94,19 +94,19 @@ def compute_lic(
 ## ###############################################################
 
 def compute_lic_with_postprocessing(
-    vfield                 : numpy.ndarray,
-    sfield_in              : numpy.ndarray | None = None,
-    streamlength           : int | None = None,
+    vfield           : numpy.ndarray,
+    sfield_in        : numpy.ndarray | None = None,
+    streamlength     : int | None = None,
     *,
-    seed_sfield            : int = 42,
-    use_periodic_BCs       : bool = True,
-    num_lic_passes         : int = 3,
-    num_postprocess_cycles : int = 3,
-    use_filter             : bool = True,
-    filter_sigma           : float = 3.0,
-    use_equalize           : bool = True,
-    backend                : str = "rust",
-    run_in_parallel        : bool = True,
+    seed_sfield      : int = 42,
+    use_periodic_BCs : bool = True,
+    num_lic_passes   : int = 3,
+    num_full_passes  : int = 3,
+    use_filter       : bool = True,
+    filter_sigma     : float = 3.0,
+    use_equalize     : bool = True,
+    backend          : str = "rust",
+    run_in_parallel  : bool = True,
   ) -> numpy.ndarray:
   """
   Computes LIC with optional iterative post-processing, including high-pass filtering and histogram equalisation.
@@ -136,7 +136,7 @@ def compute_lic_with_postprocessing(
   num_lic_passes : int, optional, default=3
     Number of LIC passes to perform.
 
-  num_postprocess_cycles : int, optional, default=3
+  num_full_passes : int, optional, default=3
     Number of full LIC + post-processing cycles to apply.
 
   use_filter : bool, optional, default=True
@@ -173,7 +173,7 @@ def compute_lic_with_postprocessing(
         "The serial Python backend is deprecated, but retained for completeness. "
         "Consider using the parallel backend (`run_in_parallel = True`) for better performance.",
       )
-    for _ in range(num_postprocess_cycles):
+    for _ in range(num_full_passes):
       for _ in range(num_lic_passes):
         sfield = compute_lic(
           vfield           = vfield,
@@ -190,7 +190,7 @@ def compute_lic_with_postprocessing(
   elif backend.lower() == "rust":
     print("Using the `rust` backend. This is much faster but also less accurate than the `python` backend.")
     kernel = 0.5 * (1 + numpy.cos(numpy.pi * numpy.arange(1-streamlength, streamlength) / streamlength, dtype=dtype))
-    for _ in range(num_postprocess_cycles):
+    for _ in range(num_full_passes):
       sfield  = rlic.convolve(
         sfield_in, # type: ignore
         vfield[0],
