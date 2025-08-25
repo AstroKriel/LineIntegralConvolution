@@ -9,55 +9,10 @@
 
 import sys
 import time
-import numpy
 import matplotlib.pyplot as mpl_plot
 from pathlib import Path
-from matplotlib.axes import Axes as mpl_axes
 from vegtamr.lic import compute_lic_with_postprocessing
-from vegtamr.utils import vfields
-
-
-## ###############################################################
-## HELPER FUNCTION
-## ###############################################################
-
-def plot_lic(
-    ax                  : mpl_axes,
-    sfield              : numpy.ndarray,
-    vfield              : numpy.ndarray,
-    bounds_rows         : tuple[float, float] | None = None,
-    bounds_cols         : tuple[float, float] | None = None,
-    overlay_streamlines : bool = False,
-  ):
-  if bounds_rows is None: bounds_rows = (0.0, sfield.shape[0])
-  if bounds_cols is None: bounds_cols = (0.0, sfield.shape[1]) 
-  ax.imshow(
-    sfield,
-    cmap   = "bone",
-    origin = "lower",
-    extent = (
-      bounds_rows[0], bounds_rows[1],
-      bounds_cols[0], bounds_cols[1]
-    ),
-  )
-  if overlay_streamlines:
-    coords_row = numpy.linspace(bounds_rows[0], bounds_rows[1], sfield.shape[0])
-    coords_col = numpy.linspace(bounds_cols[0], bounds_cols[1], sfield.shape[1])
-    mg_x, mg_y = numpy.meshgrid(coords_col, coords_row, indexing="xy")
-    ax.streamplot(
-      mg_x, mg_y,
-      vfield[0], vfield[1],
-      color              = "white",
-      arrowstyle         = "->",
-      linewidth          = 1.0,
-      density            = 0.5,
-      arrowsize          = 0.5,
-      broken_streamlines = False,
-    )
-  ax.set_xticks([])
-  ax.set_yticks([])
-  ax.set_xlim(bounds_rows)
-  ax.set_ylim(bounds_cols)
+from vegtamr.utils import vfields, plots
 
 
 ## ###############################################################
@@ -65,38 +20,37 @@ def plot_lic(
 ## ###############################################################
 
 def main():
-  print("Started running demo script...")
-  vfield_dict  = vfields.vfield_circles(size = 200)
+  print("Running demo script...")
+  num_pixels   = 500
+  vfield_dict  = vfields.vfield_swirls(size=num_pixels)
   vfield       = vfield_dict["vfield"]
   streamlength = vfield_dict["streamlength"]
   bounds_rows  = vfield_dict["bounds_rows"]
   bounds_cols  = vfield_dict["bounds_cols"]
   vfield_name  = vfield_dict["name"]
-  print("Computing LIC...")
   ## apply the LIC multiple times: equivelant to applying several passes with a paint brush.
   ## note: `backend` options include "python" (this project) or "rust" (10x faster; https://github.com/tlorach/rLIC)
+  print("Computing LIC...")
   start_time = time.perf_counter()
   sfield = compute_lic_with_postprocessing(
-    vfield          = vfield,
-    streamlength    = streamlength,
-    num_lic_passes  = 1,
-    num_full_passes = 1,
-    use_filter      = False,
-    filter_sigma    = 2.0, # roughly the pixels-width of LIC tubes
-    use_equalize    = False,
-    backend         = "python",
+    vfield       = vfield,
+    streamlength = streamlength,
+    filter_sigma = 1e-1 * num_pixels, # approx width of LIC tubes
+    backend      = "rust",
   )
   elapsed_time = time.perf_counter() - start_time
   print(f"LIC execution took {elapsed_time:.3f} seconds.")
   print("Plotting data...")
   fig, ax = mpl_plot.subplots()
-  plot_lic(
+  plots.plot_lic(
     ax                  = ax,
     sfield              = sfield,
     vfield              = vfield,
     bounds_rows         = bounds_rows,
     bounds_cols         = bounds_cols,
     overlay_streamlines = False,
+    streamline_colour   = "orange",
+    streamline_alpha    = 0.25,
   )
   print("Saving figure...")
   script_dir = Path(__file__).parent
