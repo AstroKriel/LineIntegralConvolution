@@ -74,19 +74,22 @@ def vfield_circles(size: int) -> dict:
     "bounds_cols"  : bounds_cols,
   }
 
-def vfield_swirls(size: int) -> dict:
+def vfield_swirls(
+    size       : int,
+    num_swirls : float = 1,
+  ) -> dict:
   bounds_rows = (-10, 10)
   bounds_cols = (-10, 10)
   coords_row  = numpy.linspace(bounds_rows[0], bounds_rows[1], size)
   coords_col  = numpy.linspace(bounds_cols[0], bounds_cols[1], size)
   mg_x, mg_y  = numpy.meshgrid(coords_col, coords_row, indexing="xy")
-  vcomp_rows  = numpy.sin((mg_y + mg_x) / 3)
-  vcomp_cols  = numpy.cos((mg_x - mg_y) / 3)
+  vcomp_rows  = numpy.sin(num_swirls * (mg_y + mg_x) / (2 * numpy.pi))
+  vcomp_cols  = numpy.cos(num_swirls * (mg_x - mg_y) / (2 * numpy.pi))
   vfield      = numpy.array([vcomp_rows, vcomp_cols])
   return {
     "name"         : "swirls",
     "vfield"       : vfield,
-    "streamlength" : size // 3,
+    "streamlength" : size // (4 * num_swirls),
     "num_rows"     : size,
     "num_cols"     : size,
     "bounds_rows"  : bounds_rows,
