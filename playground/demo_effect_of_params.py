@@ -16,6 +16,9 @@ from vegtamr.utils import vfields, plots
 from matplotlib import rcParams
 rcParams["text.usetex"] = True
 
+def format_text_for_latex(string):
+  moified_string = string.replace(" ", " \;")
+  return rf"$\mathrm{{{moified_string}}}$"
 
 ## ###############################################################
 ## MAIN PROGRAM
@@ -59,13 +62,23 @@ def main():
       )
       print(f"Plotting axs[{row_index},{col_index}]")
       ax = axs[row_index, col_index]
-      plots.plot_lic(
+      im = plots.plot_lic(
         ax          = ax,
         sfield      = sfield,
         vfield      = vfield,
         bounds_rows = bounds_rows,
         bounds_cols = bounds_cols,
+        cmap_name   = "twilight_shifted" if (row_index < num_rows-1) else "pink",
       )
+      if col_index == num_rows-1:
+        if row_index < num_rows-1:
+          label = r"a diverging cmap works best"
+        else: label = r"a sequential cmap works best"
+        plots.add_cbar_from_cmap(
+          ax,
+          mappable = im,
+          label    = format_text_for_latex(label),
+        )
   for col_index, streamlength in enumerate(streamlengths):
     axs[0, col_index].set_title(
       rf"$L_\mathrm{{stream}} = {int(streamlength)} \;\mathrm{{pixels}}$",
@@ -85,9 +98,9 @@ def main():
     transform = axs[0,0].transAxes,
     bbox = white_transparent_box
   )
-  axs[0,0].set_ylabel(r"$\mathrm{no \;post-processing}$", fontsize=10)
-  axs[1,0].set_ylabel(r"$\mathrm{highpass \;filter \;enabled}$", fontsize=10)
-  axs[2,0].set_ylabel(r"$\mathrm{highpass \;filter \;enabled} \newline \mathrm{histogram \;equalisation \;enabled}$", fontsize=10)
+  axs[0,0].set_ylabel(format_text_for_latex("no post-processing"), fontsize=10)
+  axs[1,0].set_ylabel(format_text_for_latex("highpass filter enabled"), fontsize=10)
+  axs[2,0].set_ylabel(format_text_for_latex("highpass filter enabled") + r" $\newline$ " + format_text_for_latex("histogram equalisation enabled"), fontsize=10)
   print("Saving figure...")
   script_dir = Path(__file__).parent
   fig_path = script_dir / f"effect_of_params.png"
