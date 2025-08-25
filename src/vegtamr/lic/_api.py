@@ -71,6 +71,7 @@ def compute_lic(
       f"but it has dimensions {sfield_in.shape}."
     )
   if streamlength is None: streamlength = int(min(num_rows, num_cols) // 4)
+  assert isinstance(streamlength, int), print(f"Error: `streamlength = {streamlength}` is not an int.")
   if run_in_parallel:
     return _parallel_by_row.compute_lic(
       vfield           = vfield,
@@ -100,13 +101,13 @@ def compute_lic_with_postprocessing(
     *,
     seed_sfield      : int = 42,
     use_periodic_BCs : bool = True,
-    num_lic_passes   : int = 3,
-    num_full_passes  : int = 3,
+    num_lic_passes   : int = 2,
     use_filter       : bool = True,
     filter_sigma     : float = 3.0,
     use_equalize     : bool = True,
     backend          : str = "rust",
     run_in_parallel  : bool = True,
+    verbose          : bool = True,
   ) -> numpy.ndarray:
   """
   Computes LIC with optional iterative post-processing, including high-pass filtering and histogram equalisation.
@@ -133,11 +134,8 @@ def compute_lic_with_postprocessing(
   use_periodic_BCs : bool, optional, default=True
     If True, applies periodic boundary conditions; otherwise, uses open boundary conditions.
 
-  num_lic_passes : int, optional, default=3
+  num_lic_passes : int, optional, default=2
     Number of LIC passes to perform.
-
-  num_full_passes : int, optional, default=3
-    Number of full LIC + post-processing cycles to apply.
 
   use_filter : bool, optional, default=True
     If True, applies a high-pass filter after each LIC cycle.
@@ -167,41 +165,40 @@ def compute_lic_with_postprocessing(
   elif streamlength < 5: raise ValueError("`streamlength` should be at least 5 pixels.")
   sfield = numpy.array(sfield_in, copy=True)
   if backend.lower() == "python":
-    print("Using the native `python` backend. This is slower but more accurate than to the `rust` backend.")
+    if verbose: print("Using the native `python` backend. This is slower but more accurate than to the `rust` backend.")
     if not run_in_parallel:
+      ## always print this hint
       print(
         "The serial Python backend is deprecated, but retained for completeness. "
         "Consider using the parallel backend (`run_in_parallel = True`) for better performance.",
       )
-    for _ in range(num_full_passes):
-      for _ in range(num_lic_passes):
-        sfield = compute_lic(
-          vfield           = vfield,
-          sfield_in        = sfield_in,
-          streamlength     = streamlength,
-          seed_sfield      = seed_sfield,
-          use_periodic_BCs = False,
-          run_in_parallel  = run_in_parallel,
-        )
-        sfield_in = sfield
-      if use_filter: sfield = _postprocess.filter_highpass(sfield, sigma=filter_sigma)
+    for _ in range(num_lic_passes):
+      sfield = compute_lic(
+        vfield           = vfield,
+        sfield_in        = sfield_in,
+        streamlength     = streamlength,
+        seed_sfield      = seed_sfield,
+        use_periodic_BCs = False,
+        run_in_parallel  = run_in_parallel,
+      )
+      sfield_in = sfield
+    if use_filter: sfield = _postprocess.filter_highpass(sfield, sigma=filter_sigma)
     if use_equalize: sfield = _postprocess.rescaled_equalize(sfield)
     return sfield
   elif backend.lower() == "rust":
-    print("Using the `rust` backend. This is much faster but also less accurate than the `python` backend.")
+    if verbose: print("Using the `rust` backend. This is much faster but also less accurate than the `python` backend.")
     kernel = 0.5 * (1 + numpy.cos(numpy.pi * numpy.arange(1-streamlength, streamlength) / streamlength, dtype=dtype))
-    for _ in range(num_full_passes):
-      sfield  = rlic.convolve(
-        sfield_in, # type: ignore
-        vfield[0],
-        vfield[1],
-        kernel     = kernel,
-        boundaries = "periodic" if use_periodic_BCs else "closed",
-        iterations = num_lic_passes,
-      )
-      sfield /= numpy.max(numpy.abs(sfield))
-      sfield_in = sfield
-      if use_filter: sfield = _postprocess.filter_highpass(sfield, sigma=filter_sigma)
+    sfield  = rlic.convolve(
+      sfield_in, # type: ignore
+      vfield[0],
+      vfield[1],
+      kernel     = kernel,
+      boundaries = "periodic" if use_periodic_BCs else "closed",
+      iterations = num_lic_passes,
+    )
+    sfield /= numpy.max(numpy.abs(sfield))
+    sfield_in = sfield
+    if use_filter: sfield = _postprocess.filter_highpass(sfield, sigma=filter_sigma)
     if use_equalize: sfield = _postprocess.rescaled_equalize(sfield)
     return sfield
   else: raise ValueError(f"Unsupported backend: `{backend}`.")
