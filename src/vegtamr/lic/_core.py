@@ -88,15 +88,24 @@ def advect_streamline(
     vfield_comp_row *= dir_sgn
     ## skip if the field magnitude is zero: advection has halted
     if abs(vfield_comp_row) == 0.0 and abs(vfield_comp_col) == 0.0: break
-    ## compute how long the streamline advects before it leaves the current cell region (divided by cell-centers)
-    if   vfield_comp_row > 0.0: delta_time_row = (numpy.floor(row_float) + 1 - row_float) / vfield_comp_row
-    elif vfield_comp_row < 0.0: delta_time_row = (numpy.ceil(row_float)  - 1 - row_float) / vfield_comp_row
-    else:                       delta_time_row = numpy.inf
-    if   vfield_comp_col > 0.0: delta_time_col = (numpy.floor(col_float) + 1 - col_float) / vfield_comp_col
-    elif vfield_comp_col < 0.0: delta_time_col = (numpy.ceil(col_float)  - 1 - col_float) / vfield_comp_col
-    else:                       delta_time_col = numpy.inf
+        ## compute how long the streamline advects before it leaves the current cell region (divided by cell-centers)
+    eps_denom = 1e-300 # treat tiny speeds as zero (float64-safe)
+    eps_numer = numpy.nextafter(0.0, 1.0) # smallest >0 to avoid zero numerators on gridlines
+    ## row (y)
+    if   vfield_comp_row > 0.0: numer_row = max(numpy.floor(row_float) + 1.0 - row_float, eps_numer)
+    elif vfield_comp_row < 0.0: numer_row = max(row_float - (numpy.ceil(row_float) - 1.0), eps_numer)
+    else: numer_row = numpy.inf
+    denom_row = abs(vfield_comp_row)
+    delta_time_row = (numer_row / denom_row) if denom_row > eps_denom else numpy.inf
+    ## col (x)
+    if   vfield_comp_col > 0.0: numer_col = max(numpy.floor(col_float) + 1.0 - col_float, eps_numer)
+    elif vfield_comp_col < 0.0: numer_col = max(col_float - (numpy.ceil(col_float) - 1.0), eps_numer)
+    else: numer_col = numpy.inf
+    denom_col = abs(vfield_comp_col)
+    delta_time_col = (numer_col / denom_col) if denom_col > eps_denom else numpy.inf
     ## equivelant to a CFL condition
     time_step = min(delta_time_col, delta_time_row)
+    if not numpy.isfinite(time_step) or time_step <= 0.0: break
     ## advect the streamline to the next cell region
     col_float += vfield_comp_col * time_step
     row_float += vfield_comp_row * time_step
