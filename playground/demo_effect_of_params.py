@@ -110,7 +110,7 @@ def main():
     axs[2, 0].set_ylabel(
         format_text_for_latex("highpass filter enabled") + r" $\newline$ " +
         format_text_for_latex("histogram equalisation enabled"),
-        fontsize=10
+        fontsize=10,
     )
     print("Saving figure...")
     script_dir = Path(__file__).parent

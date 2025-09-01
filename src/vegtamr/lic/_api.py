@@ -72,8 +72,10 @@ def compute_lic(
             f"but it has dimensions {sfield_in.shape}."
         )
     if streamlength is None: streamlength = int(min(num_rows, num_cols) // 4)
-    assert isinstance(streamlength,
-                      int), print(f"Error: `streamlength = {streamlength}` is not an int.")
+    assert isinstance(
+        streamlength,
+        int,
+    ), print(f"Error: `streamlength = {streamlength}` is not an int.")
     if run_in_parallel:
         return _parallel_by_row.compute_lic(
             vfield=vfield,
@@ -170,7 +172,7 @@ def compute_lic_with_postprocessing(
     if backend.lower() == "python":
         if verbose:
             print(
-                "Using the native `python` backend. This is slower but more accurate than to the `rust` backend."
+                "Using the native `python` backend. This is slower but more accurate than to the `rust` backend.",
             )
         if not run_in_parallel:
             ## always print this hint
@@ -194,11 +196,12 @@ def compute_lic_with_postprocessing(
     elif backend.lower() == "rust":
         if verbose:
             print(
-                "Using the `rust` backend. This is much faster but also less accurate than the `python` backend."
+                "Using the `rust` backend. This is much faster but also less accurate than the `python` backend.",
             )
         kernel = 0.5 * (
             1 + numpy.cos(
-                numpy.pi * numpy.arange(1 - streamlength, streamlength) / streamlength, dtype=dtype
+                numpy.pi * numpy.arange(1 - streamlength, streamlength) / streamlength,
+                dtype=dtype,
             )
         )
         sfield  = rlic.convolve(

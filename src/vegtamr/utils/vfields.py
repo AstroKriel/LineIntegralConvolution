@@ -46,10 +46,14 @@ def vfield_circles(size: int) -> dict:
     mg_x, mg_y = numpy.meshgrid(coords_col, coords_row, indexing="xy")
     radius = numpy.hypot(mg_x, mg_y)
     vcomp_rows = numpy.where(
-        radius > 2.5 * numpy.pi, numpy.cos(mg_y / numpy.pi), numpy.cos(mg_y * numpy.pi / 2)
+        radius > 2.5 * numpy.pi,
+        numpy.cos(mg_y / numpy.pi),
+        numpy.cos(mg_y * numpy.pi / 2),
     )
     vcomp_cols = numpy.where(
-        radius > 2.5 * numpy.pi, numpy.cos(mg_x / numpy.pi), numpy.cos(mg_x * numpy.pi / 2)
+        radius > 2.5 * numpy.pi,
+        numpy.cos(mg_x / numpy.pi),
+        numpy.cos(mg_x * numpy.pi / 2),
     )
     vfield = numpy.array([vcomp_rows, vcomp_cols])
     return {
@@ -102,7 +106,7 @@ def vfield_squiggles(size: int) -> dict:
         [
             gen_random_field(size, correlation_length),
             gen_random_field(size, correlation_length),
-        ]
+        ],
     )
     return {
         "name": "squiggles",
