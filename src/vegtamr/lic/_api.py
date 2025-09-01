@@ -4,7 +4,6 @@
 ## Copyright (c) 2025 Neco Kriel.
 ## Licensed under the MIT License. See LICENSE for details.
 
-
 ##
 ## === DEPENDENCIES ===
 ##
@@ -14,20 +13,20 @@ import numpy
 from vegtamr.lic import _serial, _parallel_by_row
 from vegtamr.utils import _postprocess
 
-
 ##
 ## === PERFORM LIC ON ITS OWN ===
 ##
 
+
 def compute_lic(
-    vfield           : numpy.ndarray,
-    sfield_in        : numpy.ndarray | None = None,
-    streamlength     : int | None = None,
-    seed_sfield      : int = 42,
-    use_periodic_BCs : bool = True,
-    run_in_parallel  : bool = True,
-  ) -> numpy.ndarray:
-  """
+    vfield: numpy.ndarray,
+    sfield_in: numpy.ndarray | None = None,
+    streamlength: int | None = None,
+    seed_sfield: int = 42,
+    use_periodic_BCs: bool = True,
+    run_in_parallel: bool = True,
+) -> numpy.ndarray:
+    """
   Computes the Line Integral Convolution (LIC) for a given vector field.
 
   This function generates a LIC image using the input vector field (`vfield`) and an optional background scalar field (`sfield_in`).
@@ -60,58 +59,60 @@ def compute_lic(
   numpy.ndarray
     A 2D array storing the output LIC image with shape (num_rows, num_cols).
   """
-  assert vfield.ndim == 3, f"`vfield` must have 3 dimensions, but got {vfield.ndim}."
-  num_vcomps, num_rows, num_cols = vfield.shape
-  assert num_vcomps == 2, f"`vfield` must have 2 components (in the first dimension), but got {num_vcomps}."
-  sfield_out = numpy.zeros((num_rows, num_cols), dtype=numpy.float32)
-  if sfield_in is None:
-    if seed_sfield is not None: numpy.random.seed(seed_sfield)
-    sfield_in = numpy.random.rand(num_rows, num_cols).astype(numpy.float32)
-  else:
-    assert sfield_in.shape == (num_rows, num_cols), (
-      f"`sfield_in` must have dimensions ({num_rows}, {num_cols}), "
-      f"but it has dimensions {sfield_in.shape}."
-    )
-  if streamlength is None: streamlength = int(min(num_rows, num_cols) // 4)
-  assert isinstance(streamlength, int), print(f"Error: `streamlength = {streamlength}` is not an int.")
-  if run_in_parallel:
-    return _parallel_by_row.compute_lic(
-      vfield           = vfield,
-      sfield_in        = sfield_in,
-      sfield_out       = sfield_out,
-      streamlength     = streamlength,
-      use_periodic_BCs = use_periodic_BCs,
-    )
-  else:
-    return _serial.compute_lic(
-      vfield           = vfield,
-      sfield_in        = sfield_in,
-      sfield_out       = sfield_out,
-      streamlength     = streamlength,
-      use_periodic_BCs = use_periodic_BCs,
-    )
+    assert vfield.ndim == 3, f"`vfield` must have 3 dimensions, but got {vfield.ndim}."
+    num_vcomps, num_rows, num_cols = vfield.shape
+    assert num_vcomps == 2, f"`vfield` must have 2 components (in the first dimension), but got {num_vcomps}."
+    sfield_out = numpy.zeros((num_rows, num_cols), dtype=numpy.float32)
+    if sfield_in is None:
+        if seed_sfield is not None: numpy.random.seed(seed_sfield)
+        sfield_in = numpy.random.rand(num_rows, num_cols).astype(numpy.float32)
+    else:
+        assert sfield_in.shape == (num_rows, num_cols), (
+            f"`sfield_in` must have dimensions ({num_rows}, {num_cols}), "
+            f"but it has dimensions {sfield_in.shape}."
+        )
+    if streamlength is None: streamlength = int(min(num_rows, num_cols) // 4)
+    assert isinstance(streamlength,
+                      int), print(f"Error: `streamlength = {streamlength}` is not an int.")
+    if run_in_parallel:
+        return _parallel_by_row.compute_lic(
+            vfield=vfield,
+            sfield_in=sfield_in,
+            sfield_out=sfield_out,
+            streamlength=streamlength,
+            use_periodic_BCs=use_periodic_BCs,
+        )
+    else:
+        return _serial.compute_lic(
+            vfield=vfield,
+            sfield_in=sfield_in,
+            sfield_out=sfield_out,
+            streamlength=streamlength,
+            use_periodic_BCs=use_periodic_BCs,
+        )
 
 
 ##
 ## === PERFORM LIC + POSTPROCESSING ===
 ##
 
+
 def compute_lic_with_postprocessing(
-    vfield           : numpy.ndarray,
-    sfield_in        : numpy.ndarray | None = None,
-    streamlength     : int | None = None,
+    vfield: numpy.ndarray,
+    sfield_in: numpy.ndarray | None = None,
+    streamlength: int | None = None,
     *,
-    seed_sfield      : int = 42,
-    use_periodic_BCs : bool = True,
-    num_lic_passes   : int = 2,
-    use_filter       : bool = True,
-    filter_sigma     : float = 3.0,
-    use_equalize     : bool = True,
-    backend          : str = "rust",
-    run_in_parallel  : bool = True,
-    verbose          : bool = True,
-  ) -> numpy.ndarray:
-  """
+    seed_sfield: int = 42,
+    use_periodic_BCs: bool = True,
+    num_lic_passes: int = 2,
+    use_filter: bool = True,
+    filter_sigma: float = 3.0,
+    use_equalize: bool = True,
+    backend: str = "rust",
+    run_in_parallel: bool = True,
+    verbose: bool = True,
+) -> numpy.ndarray:
+    """
   Computes LIC with optional iterative post-processing, including high-pass filtering and histogram equalisation.
   
   This routine supports both a native Python backend (more accurate, but slower), and a Rust-accelerated backend
@@ -158,52 +159,63 @@ def compute_lic_with_postprocessing(
   numpy.ndarray
     The post-processed LIC image.
   """
-  dtype = vfield.dtype
-  shape = vfield.shape[1:]
-  if sfield_in is None:
-    if seed_sfield is not None: numpy.random.seed(seed_sfield)
-    sfield_in = numpy.random.rand(*shape).astype(dtype)
-  if streamlength is None: streamlength = int(min(shape) // 4)
-  elif streamlength < 5: raise ValueError("`streamlength` should be at least 5 pixels.")
-  sfield = numpy.array(sfield_in, copy=True)
-  if backend.lower() == "python":
-    if verbose: print("Using the native `python` backend. This is slower but more accurate than to the `rust` backend.")
-    if not run_in_parallel:
-      ## always print this hint
-      print(
-        "The serial Python backend is deprecated, but retained for completeness. "
-        "Consider using the parallel backend (`run_in_parallel = True`) for better performance.",
-      )
-    for _ in range(num_lic_passes):
-      sfield = compute_lic(
-        vfield           = vfield,
-        sfield_in        = sfield_in,
-        streamlength     = streamlength,
-        seed_sfield      = seed_sfield,
-        use_periodic_BCs = False,
-        run_in_parallel  = run_in_parallel,
-      )
-      sfield_in = sfield
-    if use_filter: sfield = _postprocess.filter_highpass(sfield, sigma=filter_sigma)
-    if use_equalize: sfield = _postprocess.rescaled_equalize(sfield)
-    return sfield
-  elif backend.lower() == "rust":
-    if verbose: print("Using the `rust` backend. This is much faster but also less accurate than the `python` backend.")
-    kernel = 0.5 * (1 + numpy.cos(numpy.pi * numpy.arange(1-streamlength, streamlength) / streamlength, dtype=dtype))
-    sfield  = rlic.convolve(
-      sfield_in, # type: ignore
-      vfield[0],
-      vfield[1],
-      kernel     = kernel,
-      boundaries = "periodic" if use_periodic_BCs else "closed",
-      iterations = num_lic_passes,
-    )
-    sfield /= numpy.max(numpy.abs(sfield))
-    sfield_in = sfield
-    if use_filter: sfield = _postprocess.filter_highpass(sfield, sigma=filter_sigma)
-    if use_equalize: sfield = _postprocess.rescaled_equalize(sfield)
-    return sfield
-  else: raise ValueError(f"Unsupported backend: `{backend}`.")
+    dtype = vfield.dtype
+    shape = vfield.shape[1:]
+    if sfield_in is None:
+        if seed_sfield is not None: numpy.random.seed(seed_sfield)
+        sfield_in = numpy.random.rand(*shape).astype(dtype)
+    if streamlength is None: streamlength = int(min(shape) // 4)
+    elif streamlength < 5: raise ValueError("`streamlength` should be at least 5 pixels.")
+    sfield = numpy.array(sfield_in, copy=True)
+    if backend.lower() == "python":
+        if verbose:
+            print(
+                "Using the native `python` backend. This is slower but more accurate than to the `rust` backend."
+            )
+        if not run_in_parallel:
+            ## always print this hint
+            print(
+                "The serial Python backend is deprecated, but retained for completeness. "
+                "Consider using the parallel backend (`run_in_parallel = True`) for better performance.",
+            )
+        for _ in range(num_lic_passes):
+            sfield = compute_lic(
+                vfield=vfield,
+                sfield_in=sfield_in,
+                streamlength=streamlength,
+                seed_sfield=seed_sfield,
+                use_periodic_BCs=False,
+                run_in_parallel=run_in_parallel,
+            )
+            sfield_in = sfield
+        if use_filter: sfield = _postprocess.filter_highpass(sfield, sigma=filter_sigma)
+        if use_equalize: sfield = _postprocess.rescaled_equalize(sfield)
+        return sfield
+    elif backend.lower() == "rust":
+        if verbose:
+            print(
+                "Using the `rust` backend. This is much faster but also less accurate than the `python` backend."
+            )
+        kernel = 0.5 * (
+            1 + numpy.cos(
+                numpy.pi * numpy.arange(1 - streamlength, streamlength) / streamlength, dtype=dtype
+            )
+        )
+        sfield  = rlic.convolve(
+          sfield_in, # type: ignore
+          vfield[0],
+          vfield[1],
+          kernel     = kernel,
+          boundaries = "periodic" if use_periodic_BCs else "closed",
+          iterations = num_lic_passes,
+        )
+        sfield /= numpy.max(numpy.abs(sfield))
+        sfield_in = sfield
+        if use_filter: sfield = _postprocess.filter_highpass(sfield, sigma=filter_sigma)
+        if use_equalize: sfield = _postprocess.rescaled_equalize(sfield)
+        return sfield
+    else:
+        raise ValueError(f"Unsupported backend: `{backend}`.")
 
 
 ## } MODULE
