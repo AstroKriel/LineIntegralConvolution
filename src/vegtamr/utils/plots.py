@@ -1,31 +1,36 @@
+## { MODULE
+
 ## This file is part of the "vegtamr" project.
 ## Copyright (c) 2025 Neco Kriel.
 ## Licensed under the MIT License. See LICENSE for details.
 
 
-## ###############################################################
-## DEPENDENCIES
-## ###############################################################
+##
+## === DEPENDENCIES ===
+##
 
 import numpy
 from matplotlib.colors import to_rgba
 from matplotlib.axes import Axes as mpl_axes
 
+from matplotlib import rcParams
+rcParams["text.usetex"] = True
 
-## ###############################################################
-## HELPER FUNCTIONS
-## ###############################################################
+
+##
+## === HELPER FUNCTIONS ===
+##
 
 def plot_lic(
     ax                  : mpl_axes,
     sfield              : numpy.ndarray,
     vfield              : numpy.ndarray,
-    cmap_name           : str = "twilight",
+    cmap_name           : str = "pink",
     bounds_rows         : tuple[float, float] | None = None,
     bounds_cols         : tuple[float, float] | None = None,
     overlay_streamlines : bool = False,
-    streamline_colour   : str = "orange",
-    streamline_alpha    : float = 0.25,
+    streamline_colour   : str = "royalblue",
+    streamline_alpha    : float = 0.5,
   ):
   if bounds_rows is None: bounds_rows = (0.0, sfield.shape[0])
   if bounds_cols is None: bounds_cols = (0.0, sfield.shape[1]) 
@@ -47,9 +52,9 @@ def plot_lic(
       vfield[0], vfield[1],
       color              = to_rgba(streamline_colour, alpha=streamline_alpha),
       arrowstyle         = "->",
-      linewidth          = 1.0,
+      linewidth          = 1.5,
       density            = 0.5,
-      arrowsize          = 0.5,
+      arrowsize          = 1.0,
       broken_streamlines = False,
     )
   ax.set_xticks([])
@@ -58,7 +63,7 @@ def plot_lic(
   ax.set_ylim(bounds_cols)
   return im
 
-def add_cbar_from_cmap(
+def add_cbar(
     ax, mappable,
     label         : str | None = "",
     side          : str = "right",
@@ -93,4 +98,4 @@ def add_cbar_from_cmap(
   return cbar
 
 
-## END OF MODULE
+## } MODULE

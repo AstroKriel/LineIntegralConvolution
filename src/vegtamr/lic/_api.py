@@ -1,11 +1,13 @@
+## { MODULE
+
 ## This file is part of the "LineIntegralConvolution" project.
 ## Copyright (c) 2025 Neco Kriel.
 ## Licensed under the MIT License. See LICENSE for details.
 
 
-## ###############################################################
-## DEPENDENCIES
-## ###############################################################
+##
+## === DEPENDENCIES ===
+##
 
 import rlic
 import numpy
@@ -13,9 +15,9 @@ from vegtamr.lic import _serial, _parallel_by_row
 from vegtamr.utils import _postprocess
 
 
-## ###############################################################
-## PERFORM LIC ON ITS OWN
-## ###############################################################
+##
+## === PERFORM LIC ON ITS OWN ===
+##
 
 def compute_lic(
     vfield           : numpy.ndarray,
@@ -90,9 +92,9 @@ def compute_lic(
     )
 
 
-## ###############################################################
-## PERFORM LIC + POSTPROCESSING
-## ###############################################################
+##
+## === PERFORM LIC + POSTPROCESSING ===
+##
 
 def compute_lic_with_postprocessing(
     vfield           : numpy.ndarray,
@@ -204,4 +206,4 @@ def compute_lic_with_postprocessing(
   else: raise ValueError(f"Unsupported backend: `{backend}`.")
 
 
-## END OF MODULE
+## } MODULE

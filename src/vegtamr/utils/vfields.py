@@ -1,21 +1,23 @@
+## { MODULE
+
 ## This file is part of the "LineIntegralConvolution" project.
 ## Copyright (c) 2025 Neco Kriel.
 ## Licensed under the MIT License. See LICENSE for details.
 
 
-## ###############################################################
-## DEPENDENCIES
-## ###############################################################
+##
+## === DEPENDENCIES ===
+##
 
 import numpy
 
 
-## ###############################################################
-## EXAMPLE VECTOR FIELDS
-## ###############################################################
+##
+## === EXAMPLE VECTOR FIELDS ===
+##
 
 def vfield_lotka_volterra(size: int) -> dict:
-  bounds_rows = (-5, 10)
+  bounds_rows = (-3, 11)
   bounds_cols = (-5, 10)
   coords_row  = numpy.linspace(bounds_rows[0], bounds_rows[1], size)
   coords_col  = numpy.linspace(bounds_cols[0], bounds_cols[1], size)
@@ -36,33 +38,15 @@ def vfield_lotka_volterra(size: int) -> dict:
     "bounds_cols"  : bounds_cols,
   }
 
-def vfield_flowers(size: int) -> dict:
-  bounds_rows = (-10, 10)
-  bounds_cols = (-10, 10)
-  coords_row  = numpy.linspace(bounds_rows[0], bounds_rows[1], size)
-  coords_col  = numpy.linspace(bounds_cols[0], bounds_cols[1], size)
-  mg_x, mg_y  = numpy.meshgrid(coords_col, coords_row, indexing="xy")
-  vcomp_rows  = numpy.cos(mg_x / 2)
-  vcomp_cols  = numpy.cos(mg_y / 2)
-  vfield      = numpy.array([vcomp_rows, vcomp_cols])
-  return {
-    "name"         : "flowers",
-    "vfield"       : vfield,
-    "streamlength" : size // 4,
-    "num_rows"     : size,
-    "num_cols"     : size,
-    "bounds_rows"  : bounds_rows,
-    "bounds_cols"  : bounds_cols,
-  }
-
 def vfield_circles(size: int) -> dict:
   bounds_rows = (-10, 10)
   bounds_cols = (-10, 10)
   coords_row  = numpy.linspace(bounds_rows[0], bounds_rows[1], size)
   coords_col  = numpy.linspace(bounds_cols[0], bounds_cols[1], size)
   mg_x, mg_y  = numpy.meshgrid(coords_col, coords_row, indexing="xy")
-  vcomp_rows  = numpy.cos(mg_y / 2)
-  vcomp_cols  = numpy.cos(mg_x / 2)
+  radius      = numpy.hypot(mg_x, mg_y)
+  vcomp_rows  = numpy.where(radius > 2.5*numpy.pi, numpy.cos(mg_y / numpy.pi), numpy.cos(mg_y * numpy.pi / 2))
+  vcomp_cols  = numpy.where(radius > 2.5*numpy.pi, numpy.cos(mg_x / numpy.pi), numpy.cos(mg_x * numpy.pi / 2))
   vfield      = numpy.array([vcomp_rows, vcomp_cols])
   return {
     "name"         : "circles",
@@ -96,5 +80,30 @@ def vfield_swirls(
     "bounds_cols"  : bounds_cols,
   }
 
+def gen_random_field(size, correlation_length):
+  ki_values   = numpy.fft.fftfreq(size)
+  kx, ky      = numpy.meshgrid(*(ki_values for _ in range(2)), indexing="ij")
+  k_magn      = numpy.hypot(kx, ky)
+  fft_filter  = numpy.exp(-2.0 * numpy.square(k_magn * correlation_length))
+  white_noise = numpy.random.normal(0.0, 1.0, (size,size))
+  sfield_fft  = fft_filter * numpy.fft.fftn(white_noise)
+  return numpy.real(numpy.fft.ifftn(sfield_fft))
 
-## END OF MODULE
+def vfield_squiggles(size: int) -> dict:
+  correlation_length = size / 7
+  vfield = numpy.array([
+    gen_random_field(size, correlation_length),
+    gen_random_field(size, correlation_length)
+  ])
+  return {
+    "name"         : "squiggles",
+    "vfield"       : vfield,
+    "streamlength" : correlation_length // 2,
+    "num_rows"     : size,
+    "num_cols"     : size,
+    "bounds_rows"  : (-10, 10),
+    "bounds_cols"  : (-10, 10),
+  }
+
+
+## } MODULE

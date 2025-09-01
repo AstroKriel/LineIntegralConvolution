@@ -1,20 +1,22 @@
+## { MODULE
+
 ## This file is part of the "LineIntegralConvolution" project.
 ## Copyright (c) 2025 Neco Kriel.
 ## Licensed under the MIT License. See LICENSE for details.
 
 
-## ###############################################################
-## DEPENDENCIES
-## ###############################################################
+##
+## === DEPENDENCIES ===
+##
 
 import numpy
 from vegtamr.lic import _core
 from multiprocessing import Pool, shared_memory, cpu_count
 
 
-## ###############################################################
-## LOOP THROUGH THE DOMAIN IN PARALLEL
-## ###############################################################
+##
+## === LOOP THROUGH THE DOMAIN IN PARALLEL ===
+##
 
 def _process_row(
     row_index,
@@ -92,4 +94,4 @@ def compute_lic(
   return sfield_out
 
 
-## END OF MODULE
+## } MODULE

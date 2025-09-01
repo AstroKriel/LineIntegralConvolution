@@ -1,20 +1,22 @@
+## { MODULE
+
 ## This file is part of the "LineIntegralConvolution" project.
 ## Copyright (c) 2025 Neco Kriel.
 ## Licensed under the MIT License. See LICENSE for details.
 
 
-## ###############################################################
-## DEPENDENCIES
-## ###############################################################
+##
+## === DEPENDENCIES ===
+##
 
 import numpy
 from scipy import ndimage
 from skimage.exposure import equalize_adapthist
 
 
-## ###############################################################
-## FUNCTIONS
-## ###############################################################
+##
+## === FUNCTIONS ===
+##
 
 def filter_highpass(
     sfield : numpy.ndarray,
@@ -47,4 +49,4 @@ def rescaled_equalize(
   return sfield
 
 
-## END OF MODULE
+## } MODULE

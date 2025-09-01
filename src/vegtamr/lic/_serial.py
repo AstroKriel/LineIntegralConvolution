@@ -1,19 +1,21 @@
+## { MODULE
+
 ## This file is part of the "LineIntegralConvolution" project.
 ## Copyright (c) 2025 Neco Kriel.
 ## Licensed under the MIT License. See LICENSE for details.
 
 
-## ###############################################################
-## DEPENDENCIES
-## ###############################################################
+##
+## === DEPENDENCIES ===
+##
 
 import numpy
 from vegtamr.lic import _core
 
 
-## ###############################################################
-## LOOP THROUGH THE DOMAIN SERIALLY
-## ###############################################################
+##
+## === LOOP THROUGH THE DOMAIN SERIALLY ===
+##
 
 def compute_lic(
     vfield           : numpy.ndarray,
@@ -55,4 +57,4 @@ def compute_lic(
   return sfield_out
 
 
-## END OF MODULE
+## } MODULE

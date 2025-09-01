@@ -1,11 +1,13 @@
+## { MODULE
+
 ## This file is part of the "vegtamr" project.
 ## Copyright (c) 2025 Neco Kriel.
 ## Licensed under the MIT License. See LICENSE for details.
 
 
-## ###############################################################
-## DEPENDENCIES
-## ###############################################################
+##
+## === DEPENDENCIES ===
+##
 
 import sys
 import matplotlib.pyplot as mpl_plot
@@ -13,16 +15,19 @@ from pathlib import Path
 from vegtamr.lic import compute_lic_with_postprocessing
 from vegtamr.utils import vfields, plots
 
-from matplotlib import rcParams
-rcParams["text.usetex"] = True
+
+##
+## === HELPER FUNCTIONS ===
+##
 
 def format_text_for_latex(string):
   moified_string = string.replace(" ", " \;")
   return rf"$\mathrm{{{moified_string}}}$"
 
-## ###############################################################
-## MAIN PROGRAM
-## ###############################################################
+
+##
+## === MAIN PROGRAM ===
+##
 
 def main():
   print("Running demo script...")
@@ -74,7 +79,7 @@ def main():
         if row_index < num_rows-1:
           label = r"a diverging cmap works best"
         else: label = r"a sequential cmap works best"
-        plots.add_cbar_from_cmap(
+        plots.add_cbar(
           ax,
           mappable = im,
           label    = format_text_for_latex(label),
@@ -109,13 +114,13 @@ def main():
   print("Saved:", fig_path)
 
 
-## ###############################################################
-## SCRIPT ENTRY POINT
-## ###############################################################
+##
+## === ENTRY POINT ===
+##
 
 if __name__ == "__main__":
   main()
   sys.exit(0)
 
 
-## END OF SCRIPT
+## } SCRIPT

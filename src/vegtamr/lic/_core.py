@@ -1,18 +1,20 @@
+## { MODULE
+
 ## This file is part of the "LineIntegralConvolution" project.
 ## Copyright (c) 2025 Neco Kriel.
 ## Licensed under the MIT License. See LICENSE for details.
 
 
-## ###############################################################
-## DEPENDENCIES
-## ###############################################################
+##
+## === DEPENDENCIES ===
+##
 
 import numpy
 
 
-## ###############################################################
-## LIC IMPLEMENTATION
-## ###############################################################
+##
+## === LIC IMPLEMENTATION ===
+##
 
 def taper_pixel_contribution(
     streamlength : int,
@@ -124,4 +126,4 @@ def advect_streamline(
   return weighted_sum, total_weight
 
 
-## END OF MODULE
+## } MODULE
