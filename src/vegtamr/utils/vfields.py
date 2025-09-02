@@ -102,12 +102,10 @@ def gen_random_field(size, correlation_length):
 
 def vfield_squiggles(size: int) -> dict:
     correlation_length = size / 7
-    vfield = numpy.array(
-        [
-            gen_random_field(size, correlation_length),
-            gen_random_field(size, correlation_length),
-        ],
-    )
+    vfield = numpy.array([
+        gen_random_field(size, correlation_length),
+        gen_random_field(size, correlation_length),
+    ], )
     return {
         "name": "squiggles",
         "vfield": vfield,
