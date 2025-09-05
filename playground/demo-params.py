@@ -31,8 +31,8 @@ def format_text_for_latex(string):
 
 def main():
     print("Running demo script...")
-    num_pixels = 500
-    vfield_dict = vfields.vfield_swirls(size=num_pixels, num_swirls=4)
+    num_cells = 500
+    vfield_dict = vfields.vfield_swirls(num_cells=num_cells, num_swirls=4)
     vfield = vfield_dict["vfield"]
     bounds_rows = vfield_dict["bounds_rows"]
     bounds_cols = vfield_dict["bounds_cols"]
@@ -59,7 +59,7 @@ def main():
             sfield = compute_lic_with_postprocessing(
                 vfield=vfield,
                 streamlength=int(streamlength),
-                filter_sigma=5e-2 * num_pixels,
+                filter_sigma=5e-2 * num_cells,
                 use_filter=use_filter,
                 use_equalize=use_equalize,
                 backend="rust",
@@ -99,7 +99,7 @@ def main():
     axs[0, 0].text(
         0.05,
         0.95,
-        r"$N_\mathrm{pixels} = %d$" % num_pixels,
+        r"$N_\mathrm{pixels} = %d$" % num_cells,
         ha="left",
         va="top",
         transform=axs[0, 0].transAxes,

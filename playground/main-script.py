@@ -22,8 +22,8 @@ from vegtamr.utils import vfields, plots
 
 def main():
     print("Running demo script...")
-    num_pixels = 1000
-    vfield_dict = vfields.vfield_lotka_volterra(size=num_pixels)
+    num_cells = 1000
+    vfield_dict = vfields.vfield_lotka_volterra(num_cells=num_cells)
     vfield = vfield_dict["vfield"]
     streamlength = vfield_dict["streamlength"]
     bounds_rows = vfield_dict["bounds_rows"]
@@ -37,7 +37,7 @@ def main():
       vfield         = vfield,
       streamlength   = streamlength,
       num_lic_passes = 3,
-      filter_sigma   = 5e-2 * num_pixels, # approx width of LIC tubes
+      filter_sigma   = 5e-2 * num_cells, # approx width of LIC tubes
       backend        = "rust",
     )
     elapsed_time = time.perf_counter() - start_time

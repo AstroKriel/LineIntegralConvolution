@@ -82,8 +82,8 @@ from vegtamr.lic import compute_lic_with_postprocessing
 from vegtamr.utils import vfields, plots
 
 ## generate a sample vector field
-num_pixels   = 500
-dict_field   = vfields.vfield_swirls(num_pixels)
+num_cells   = 500
+dict_field   = vfields.vfield_swirls(num_cells)
 vfield       = dict_field["vfield"]
 streamlength = dict_field["streamlength"]
 bounds_rows  = dict_field["bounds_rows"]
@@ -95,7 +95,7 @@ sfield = compute_lic_with_postprocessing(
     streamlength   = streamlength,      # brush stroke length
     num_lic_passes = 3,                 # number of brush strokes
     use_filter     = True,
-    filter_sigma   = 5e-2 * num_pixels, # tube thickness
+    filter_sigma   = 5e-2 * num_cells, # tube thickness
     use_equalize   = True,
     backend        = "rust",
 )
