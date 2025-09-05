@@ -39,10 +39,10 @@ def plot_lic(
         cmap=cmap_name,
         origin="lower",
         extent=(
-            bounds_rows[0],
-            bounds_rows[1],
             bounds_cols[0],
             bounds_cols[1],
+            bounds_rows[0],
+            bounds_rows[1],
         ),
     )
     if overlay_streamlines:
@@ -63,8 +63,8 @@ def plot_lic(
         )
     ax.set_xticks([])
     ax.set_yticks([])
-    ax.set_xlim(bounds_rows)
-    ax.set_ylim(bounds_cols)
+    ax.set_xlim(bounds_cols)
+    ax.set_ylim(bounds_rows)
     return im
 
 
