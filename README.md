@@ -2,15 +2,15 @@
 
 Line Integral Convolutions (LICs) are an amazing way to visualise 2D vector fields, and are widely used in many different fields (e.g., weather modelling, plasma physics, etc.), however I couldn't find a simple, up-to-date implementation, so I wrote my own. I hope it can now also help you on your own vector field fueled journey!
 
-Here is an example of the LIC code applied to two different vector fields:
-- Left: modified Lotka-Volterra equations
-- Right: Gaussian random vector field
+Here is the LIC code applied to a couple of example vector fields:
+- Left: modified version of the Lotka-Volterra equations
+- Right: a swirling pattern
 
 <div style="display: flex; justify-content: space-between;">
-  <!-- <img src="./gallery/lic_lotka_volterra.png" width="49%" /> -->
-  <!-- <img src="./gallery/lic_gaussian_random.png" width="49%" /> -->
+  <!-- <img src="./gallery/lic_lotka_volterra.png" width="49%" />
+  <img src="./gallery/lic_swirls.png" width="49%" /> -->
   <img src="https://raw.githubusercontent.com/AstroKriel/LineIntegralConvolution/refs/heads/main/gallery/lic_lotka_volterra.png" width="49%" />
-  <img src="https://raw.githubusercontent.com/AstroKriel/LineIntegralConvolution/refs/heads/main/gallery/lic_gaussian_random.png" width="49%" />
+  <img src="https://raw.githubusercontent.com/AstroKriel/LineIntegralConvolution/refs/heads/main/gallery/lic_swirls.png" width="49%" />
 </div>
 
 
@@ -23,130 +23,134 @@ You can now install the LIC package directly from [PyPI](https://pypi.org/projec
 If you only need to use the package, you can install it via `pip`:
 
 ```bash
-pip install line-integral-convolutions
+pip install vegtamr
 ```
 
 After installing, import the main LIC implementation as follows:
 
 ```bash
-from line_integral_convolutions import lic
+from vegtamr import lic
 ```
 
-Inside this module, you will want to use the `compute_lic_with_postprocessing` function. See its documentation for more details on how to get the most out of it.
+Inside this module, you will want to use the `compute_lic_with_postprocessing` function. See below for details on how to get the most out of it.
 
 ### Option 2: Clone the GitHub repository (for development)
 
-#### 1. Clone the repository:
+#### 1. Clone the repo:
 
 ```bash
 git clone git@github.com:AstroKriel/LineIntegralConvolutions.git
 cd LineIntegralConvolutions
 ```
 
-#### 2. Set up a virtual environment (optional but recommended):
-
-It is recommended to use a virtual environment to manage the project's dependencies. Before running any code or installing dependencies, activate the virtual environment via the following commands:
+#### 2. Create a development environment with uv:
 
 ```bash
-python3 -m venv venv
-source venv/bin/activate # on Windows: venv\Scripts\activate
+uv sync
 ```
 
-Once activated, you will install the dependencies and the LIC package inside this environment, keeping them isolated from the rest of your system.
+This will install dependencies listed in `pyproject.toml` into a virtual environment managed by `uv`.
 
-When you are done working on or using the LIC code, deactivate the virtual environment by running:
+With `uv` you get clean package management and reproducibility, where the only trade-off is a few extra keystrokes when running scripts:
 
 ```bash
-deactivate
+uv run playground/main-script.py
 ```
 
-#### 3. Install dependencies:
+A small price to pay for sanity! Alternatively, you can activate the environment with source `.venv/bin/activate` and run `python3 playground/main-script.py`.
+
+#### 3. Editable install (optional):
+
+If you’d like to make changes to the code and have them reflected immediately (for example, when importing `vegtamr` into other projects), run:
 
 ```bash
-pip install -r requirements.txt
+uv pip install -e .
 ```
 
-#### 4. Install the LIC package (optional, for using as a library):
-
-To install the package locally for development or use in other Python scripts, run the following command:
-
-```bash
-pip install -e .
-```
-
-This will install the package in "editable" mode, allowing you to make changes to the code and have them reflected without needing to reinstall the package each time.
-
-#### 5. Try out the demo-script
-
-Run the demo script `examples/example_lic.py` which demonstrates how the LIC code can be applied to a vector field (the example file uses the Lotka-Volterra system). You can experiment by modifying the script or play around by adding your own vector fields!
-
-```bash
-cd examples
-python3 example_lic.py
-```
+This will install the package in "editable" mode, allowing you to edit the code and have the changes reflected without needing to reinstall the package each time.
 
 ## Quick start
 
-`compute_lic_with_postprocessing` handles all of the internal calls necessary to compute a LIC, and it includes optional postprocessing steps for filtering and intensity equalization. In practice, this is the only function you will need to call within this package. Here is an example of how to use it:
+`compute_lic_with_postprocessing` is the main entry point for generating LICs. It manages all the internal calls and offers optional postprocessing: filtering and intensity equalisation. In practice, this is the only function you’ll need to call!
+
+Here’s a quick example:
 
 
 ```python
-import matplotlib.pyplot as plt
-from line_integral_convolutions import lic
-from line_integral_convolutions import fields, utils # for demo-ing
+import matplotlib.pyplot as mpl_plot
+from vegtamr.lic import compute_lic_with_postprocessing
+from vegtamr.utils import vfields, plots
 
 ## generate a sample vector field
-size         = 500
-dict_field   = fields.vfield_swirls(size)
+num_cells   = 500
+dict_field   = vfields.vfield_swirls(num_cells)
 vfield       = dict_field["vfield"]
 streamlength = dict_field["streamlength"]
-bounds_rows  = dict_field["bounds_rows"]
-bounds_cols  = dict_field["bounds_cols"]
 
-## apply the LIC a few times: equivelant to painting over with a few brush strokes
-sfield = lic.compute_lic_with_postprocessing(
-    vfield          = vfield,
-    streamlength    = streamlength,
-    num_iterations  = 3,
-    num_repetitions = 3,
-    bool_filter     = True,
-    filter_sigma    = 3.0,
-    bool_equalize   = True,
+## apply the lic
+sfield = compute_lic_with_postprocessing(
+    vfield         = vfield,
+    streamlength   = streamlength,      # brush stroke length
+    num_lic_passes = 3,                 # number of brush strokes
+    use_filter     = True,
+    filter_sigma   = 5e-2 * num_cells, # tube thickness
+    use_equalize   = True,
+    backend        = "rust",
 )
 
-utils.plot_lic(
-    sfield      = sfield,
-    vfield      = vfield,
-    bounds_rows = bounds_rows,
-    bounds_cols = bounds_cols,
+## and now plot!
+fig, ax = mpl_plot.subplots()
+plots.plot_lic(
+    ax=ax,
+    sfield=sfield,
+    vfield=vfield,
+    cmap_name="pink",
 )
-plt.show()
+mpl_plot.show()
 ```
+
+There are a number of parameters for you to experiment with; the effect of some choices is demonstrated by `playground/demo_effect_of_params.py`, which produces the following image:
+
+<img src="./gallery/effect_of_params.png" width="100%" />
+
+In practice you will want to choose a `streamlength` close to the correlation length (in cells) of the structures you are trying to highlight. Depending on the effect you're aiming for, you can also play around with turning on the highpass filter (`use_filter`), changing its size (`filter_sigma`; controls the thickness of tubes), and turning on intensity equalization (`use_equalize`).
 
 ## Acknowledgements
 
-The fast (pre-compiled Rust) backend option, which this repo uses by default, was implemented by Dr. Clément Robert ([@neutrinoceros](https://github.com/neutrinoceros); see [rLIC](https://github.com/neutrinoceros/rLIC)). Special thanks also go to Dr. James Beattie ([@AstroJames](https://github.com/AstroJames)) for highlighting how iteration, high-pass filtering, and histogram normalisation improve the final result. Finally, Dr. Philip Mocz ([@pmocz](https://github.com/pmocz)) provided helpful suggestions in restructuring and improving the codebase.
+The fast (pre-compiled Rust) backend option, which this repo uses by default, was implemented by Dr. Clément Robert ([@neutrinoceros](https://github.com/neutrinoceros); see [rLIC](https://github.com/neutrinoceros/rLIC)). Special thanks also go to Dr. James Beattie ([@AstroJames](https://github.com/AstroJames)) for highlighting how iteration, high-pass filtering, and histogram normalisation improve the final result. Finally, Dr. Philip Mocz ([@pmocz](https://github.com/pmocz)) provided lots of helpful suggestions in restructuring and improving the codebase.
 
 ## File structure
 
 ```bash
-LineIntegralConvolutions/               # root (project) directory
+## File structure
+
+```bash
+LineIntegralConvolutions/               # project root
 ├── src/
-│   └── vegtamr/                        # package is named after Odin’s alias (translated to "Wanderer")
-│       ├── __init__.py                 # package initialiser
-│       ├── fields.py                   # example vector fields
-│       ├── lic.py                      # core of the Line Integral Convolution (LIC) package
-│       ├── utils.py                    # utility functions
-│       └── visualization.py            # code for plotting lic
+│   └── vegtamr/                        # package root (named after Odin’s alias, "Wanderer")
+│       ├── __init__.py
+│       ├── py.typed                    # marker for type checkers (PEP 561)
+│       ├── lic/
+│       │   ├── __init__.py
+│       │   ├── _api.py                 # public-facing API
+│       │   ├── _core.py                # core algorithms
+│       │   ├── _parallel_by_row.py     # parallel implementation
+│       │   └── _serial.py              # serial implementation
+│       └── utils/
+│           ├── __init__.py
+│           ├── _postprocess.py         # filtering + equalisation
+│           ├── plots.py                # plotting helpers
+│           └── vfields.py              # example vector fields
 ├── playground/
-│   └── demo_script.py                  # An example script
+│   ├── main-script.py                  # simple demo
+│   ├── main-notebook.ipynb             # same as above, but in a notebook
+│   └── demo-params.py                  # demo of how parameters affect LIC output
 ├── gallery/
-│   └── high-resolution images and gifs # example outputs
+│   └── high resolution plots!
 ├── pyproject.toml                      # project metadata and dependencies
 ├── uv.lock                             # lock file (used by uv to pin dependencies)
-├── LICENSE                             # terms of use and distribution for this project
-├── MANIFEST.in                         # specifies which files to include when packaging the project
-└── README.md                           # project overview, installation instructions, and usage examples
+├── LICENSE                             # terms of use and distribution
+└── README.md                           # this file
 ```
 
 ## License

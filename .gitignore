@@ -11,3 +11,12 @@ __pycache__/
 
 ## plots saved by the demo script
 **.png
+!gallery/*.png
+
+## jupyter notebook (+ LSP) files
+.ipynb_checkpoints/
+.virtual_documents/
+
+tmp/
+
+## .
