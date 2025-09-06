@@ -22,7 +22,7 @@ from vegtamr.utils import vfields, plots
 
 def main():
     print("Running demo script...")
-    num_cells = 1000
+    num_cells = 500
     vfield_dict = vfields.vfield_swirls(num_cells=num_cells)
     vfield = vfield_dict["vfield"]
     streamlength = vfield_dict["streamlength"]
