@@ -81,4 +81,24 @@ def vfield_swirls(
     }
 
 
+def vfield_orszag_tang(num_cells: int) -> dict:
+    bounds_rows = (0.0, 2 * numpy.pi)
+    bounds_cols = (0.0, 2 * numpy.pi)
+    y = numpy.linspace(bounds_rows[0], bounds_rows[1], num_cells)
+    x = numpy.linspace(bounds_cols[0], bounds_cols[1], num_cells)
+    mg_x, mg_y = numpy.meshgrid(x, y, indexing="xy")
+    v_rows = -numpy.sin(mg_y)
+    v_cols = numpy.sin(mg_x)
+    vfield = numpy.array([v_rows, v_cols])
+    return {
+        "name": "orszag_tang",
+        "vfield": vfield,
+        "streamlength": num_cells // 4,
+        "num_rows": num_cells,
+        "num_cols": num_cells,
+        "bounds_rows": bounds_rows,
+        "bounds_cols": bounds_cols,
+    }
+
+
 ## } MODULE
