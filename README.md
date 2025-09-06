@@ -86,8 +86,6 @@ num_cells   = 500
 dict_field   = vfields.vfield_swirls(num_cells)
 vfield       = dict_field["vfield"]
 streamlength = dict_field["streamlength"]
-bounds_rows  = dict_field["bounds_rows"]
-bounds_cols  = dict_field["bounds_cols"]
 
 ## apply the lic
 sfield = compute_lic_with_postprocessing(
@@ -146,7 +144,7 @@ LineIntegralConvolutions/               # project root
 ├── playground/
 │   ├── main-script.py                  # simple demo
 │   ├── main-notebook.ipynb             # same as above, but in a notebook
-│   └── params_demo.py                  # demo of how parameters affect LIC output
+│   └── demo-params.py                  # demo of how parameters affect LIC output
 ├── gallery/
 │   └── high resolution plots!
 ├── pyproject.toml                      # project metadata and dependencies

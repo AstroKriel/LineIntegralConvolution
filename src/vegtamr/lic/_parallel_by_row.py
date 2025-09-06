@@ -1,6 +1,6 @@
 ## { MODULE
 
-## This file is part of the "LineIntegralConvolution" project.
+## This file is part of the "vegtamr" project.
 ## Copyright (c) 2025 Neco Kriel.
 ## Licensed under the MIT License. See LICENSE for details.
 
@@ -32,9 +32,9 @@ def _process_row(
     vfield = numpy.ndarray(vfield_shape, dtype=vfield_dtype, buffer=shm_vfield.buf)
     shm_sfield = shared_memory.SharedMemory(name=shm_sfield_name)
     sfield_in = numpy.ndarray(sfield_shape, dtype=sfield_dtype, buffer=shm_sfield.buf)
-    _, num_cols_total = vfield_shape[1], vfield_shape[2]
-    row_results = numpy.zeros(num_cols_total, dtype=numpy.float32)
-    for col_index in range(num_cols_total):
+    _, num_cols = vfield_shape[1], vfield_shape[2]
+    row_results = numpy.zeros(num_cols, dtype=numpy.float32)
+    for col_index in range(num_cols):
         forward_sum, forward_total = _core.advect_streamline(
             vfield=vfield,
             sfield_in=sfield_in,

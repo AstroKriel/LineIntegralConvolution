@@ -1,6 +1,6 @@
 ## { MODULE
 
-## This file is part of the "LineIntegralConvolution" project.
+## This file is part of the "vegtamr" project.
 ## Copyright (c) 2025 Neco Kriel.
 ## Licensed under the MIT License. See LICENSE for details.
 

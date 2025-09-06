@@ -1,6 +1,6 @@
 ## { MODULE
 
-## This file is part of the "LineIntegralConvolution" project.
+## This file is part of the "vegtamr" project.
 ## Copyright (c) 2025 Neco Kriel.
 ## Licensed under the MIT License. See LICENSE for details.
 
@@ -23,7 +23,7 @@ from vegtamr.utils import vfields, plots
 def main():
     print("Running demo script...")
     num_cells = 1000
-    vfield_dict = vfields.vfield_lotka_volterra(num_cells=num_cells)
+    vfield_dict = vfields.vfield_swirls(num_cells=num_cells)
     vfield = vfield_dict["vfield"]
     streamlength = vfield_dict["streamlength"]
     bounds_rows = vfield_dict["bounds_rows"]
@@ -37,7 +37,9 @@ def main():
       vfield         = vfield,
       streamlength   = streamlength,
       num_lic_passes = 3,
+      use_filter     = True,
       filter_sigma   = 5e-2 * num_cells, # approx width of LIC tubes
+      use_equalize   = True,
       backend        = "rust",
     )
     elapsed_time = time.perf_counter() - start_time

@@ -9,9 +9,8 @@
 ##
 
 import numpy
-from matplotlib.colors import to_rgba
+import matplotlib.colors as mpl_colors
 from matplotlib.axes import Axes as mpl_axes
-
 from matplotlib import rcParams
 
 rcParams["text.usetex"] = True
@@ -54,7 +53,7 @@ def plot_lic(
             mg_y,
             vfield[0],
             vfield[1],
-            color=to_rgba(streamline_colour, alpha=streamline_alpha),
+            color=mpl_colors.to_rgba(streamline_colour, alpha=streamline_alpha),
             arrowstyle="->",
             linewidth=1.5,
             density=0.5,

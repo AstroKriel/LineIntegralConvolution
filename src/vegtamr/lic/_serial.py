@@ -1,6 +1,6 @@
 ## { MODULE
 
-## This file is part of the "LineIntegralConvolution" project.
+## This file is part of the "vegtamr" project.
 ## Copyright (c) 2025 Neco Kriel.
 ## Licensed under the MIT License. See LICENSE for details.
 
@@ -24,9 +24,9 @@ def compute_lic(
     use_periodic_BCs: bool,
 ) -> numpy.ndarray:
     """
-  Perform a Line Integral Convolution (LIC) over the entire domain by tracing streamlines from each pixel in both
-  forward and backward directions along the vector field.
-  """
+    Perform a Line Integral Convolution (LIC) over the entire domain by tracing streamlines from each pixel in both
+    forward and backward directions along the vector field.
+    """
     _, num_rows, num_cols = vfield.shape
     for row_index in range(num_rows):
         for col_index in range(num_cols):
