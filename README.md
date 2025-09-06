@@ -7,8 +7,6 @@ Here is the LIC code applied to a couple of example vector fields:
 - Right: a swirling pattern
 
 <div style="display: flex; justify-content: space-between;">
-  <!-- <img src="./gallery/lic_lotka_volterra.png" width="49%" />
-  <img src="./gallery/lic_swirls.png" width="49%" /> -->
   <img src="https://raw.githubusercontent.com/AstroKriel/LineIntegralConvolution/refs/heads/main/gallery/lic_lotka_volterra.png" width="49%" />
   <img src="https://raw.githubusercontent.com/AstroKriel/LineIntegralConvolution/refs/heads/main/gallery/lic_swirls.png" width="49%" />
 </div>
