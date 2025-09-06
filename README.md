@@ -80,7 +80,7 @@ from vegtamr.lic import compute_lic_with_postprocessing
 from vegtamr.utils import vfields, plots
 
 ## generate a sample vector field
-num_cells   = 500
+num_cells    = 500
 dict_field   = vfields.vfield_swirls(num_cells)
 vfield       = dict_field["vfield"]
 streamlength = dict_field["streamlength"]
