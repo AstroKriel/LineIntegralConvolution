@@ -16,7 +16,7 @@ import numpy
 
 
 def vfield_lotka_volterra(num_cells: int) -> dict:
-    bounds_rows = (-3, 11)
+    bounds_rows = (-3, 12)
     bounds_cols = (-5, 10)
     coords_row = numpy.linspace(bounds_rows[0], bounds_rows[1], num_cells)
     coords_col = numpy.linspace(bounds_cols[0], bounds_cols[1], num_cells)
