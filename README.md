@@ -2,9 +2,9 @@
 
 Line Integral Convolutions (LICs) are an amazing way to visualise 2D vector fields, and are widely used in many different fields (e.g., weather modelling, plasma physics, etc.), however I couldn't find a simple, up-to-date implementation, so I wrote my own. I hope it can now also help you on your own vector field fueled journey!
 
-Here is an example of the LIC code applied to two different vector fields:
-- Left: modified Lotka-Volterra equations
-- Right: Gaussian random vector field
+Here is the LIC code applied to a couple of example vector fields:
+- Left: modified version of the Lotka-Volterra equations
+- Right: a swirling pattern
 
 <div style="display: flex; justify-content: space-between;">
   <!-- <img src="./gallery/lic_lotka_volterra.png" width="49%" />
@@ -71,7 +71,7 @@ This will install the package in "editable" mode, allowing you to edit the code 
 
 ## Quick start
 
-`compute_lic_with_postprocessing` is the main entry point for generating Line Integral Convolutions. It manages all the internal calls and offers optional postprocessing: filtering and intensity equalisation. In practice, this is the only function you’ll need to call!
+`compute_lic_with_postprocessing` is the main entry point for generating LICs. It manages all the internal calls and offers optional postprocessing: filtering and intensity equalisation. In practice, this is the only function you’ll need to call!
 
 Here’s a quick example:
 
