@@ -120,9 +120,6 @@ The fast (pre-compiled Rust) backend option, which this repo uses by default, wa
 ## File structure
 
 ```bash
-## File structure
-
-```bash
 LineIntegralConvolutions/               # project root
 ├── src/
 │   └── vegtamr/                        # package root (named after Odin’s alias, "Wanderer")
