@@ -57,16 +57,6 @@ uv run playground/main-script.py
 
 A small price to pay for sanity! Alternatively, you can activate the environment with source `.venv/bin/activate` and run `python3 playground/main-script.py`.
 
-#### 3. Editable install (optional):
-
-If you’d like to make changes to the code and have them reflected immediately (for example, when importing `vegtamr` into other projects), run:
-
-```bash
-uv pip install -e .
-```
-
-This will install the package in "editable" mode, allowing you to edit the code and have the changes reflected without needing to reinstall the package each time.
-
 ## Quick start
 
 `compute_lic_with_postprocessing` is the main entry point for generating LICs. It manages all the internal calls and offers optional postprocessing: filtering and intensity equalisation. In practice, this is the only function you’ll need to call!
