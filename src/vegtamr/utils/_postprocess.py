@@ -9,8 +9,8 @@
 ##
 
 import numpy
+from ahe import equalize_histogram
 from scipy import ndimage
-from skimage.exposure import equalize_adapthist
 
 ##
 ## === FUNCTIONS ===
@@ -32,16 +32,22 @@ def rescaled_equalize(
     num_subregions_cols: int = 8,
     clip_intensity_gradient: float = 0.01,
     num_intensity_bins: int = 150,
+    *,
+    use_periodic_BCs: bool
 ) -> numpy.ndarray:
     min_val = sfield.min()
     max_val = sfield.max()
     is_rescale_needed = (max_val > 1.0) or (min_val < 0.0)
     ## rescale values to enhance local contrast
     ## note, output values are bound by [0, 1]
-    sfield = equalize_adapthist(
-        image=sfield,
-        kernel_size=(num_subregions_rows, num_subregions_cols),
-        clip_limit=clip_intensity_gradient,
+    sfield = equalize_histogram(
+        sfield,
+        adaptive_strategy={
+            "kind": "tile-interpolation",
+            "tile-into": (num_subregions_rows, num_subregions_cols),
+        },
+        boundaries="periodic" if use_periodic_BCs else "reflect",
+        max_normalized_bincount=clip_intensity_gradient,
         nbins=num_intensity_bins,
     )
     ## rescale field back to its original value range
