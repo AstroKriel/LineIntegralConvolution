@@ -5,13 +5,14 @@
 ## Licensed under the MIT License. See LICENSE for details.
 
 ##
-## === DEPENDENCIES ===
+## === DEPENDENCIES
 ##
 
+## third-party
 import numpy
 
 ##
-## === LIC IMPLEMENTATION ===
+## === LIC IMPLEMENTATION
 ##
 
 

@@ -5,18 +5,22 @@
 ## Licensed under the MIT License. See LICENSE for details.
 
 ##
-## === DEPENDENCIES ===
+## === DEPENDENCIES
 ##
 
-import sys
+## stdlib
 import time
-import matplotlib.pyplot as mpl_plot
 from pathlib import Path
+
+## third-party
+import matplotlib.pyplot as mpl_plot
+
+## local
 from vegtamr.lic import compute_lic_with_postprocessing
 from vegtamr.utils import vfields, plots
 
 ##
-## === MAIN PROGRAM ===
+## === PROGRAM MAIN
 ##
 
 
@@ -66,11 +70,10 @@ def main():
 
 
 ##
-## === ENTRY POINT ===
+## === ENTRY POINT
 ##
 
 if __name__ == "__main__":
     main()
-    sys.exit(0)
 
 ## } SCRIPT

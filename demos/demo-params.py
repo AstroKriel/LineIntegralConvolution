@@ -5,27 +5,31 @@
 ## Licensed under the MIT License. See LICENSE for details.
 
 ##
-## === DEPENDENCIES ===
+## === DEPENDENCIES
 ##
 
-import sys
-import matplotlib.pyplot as mpl_plot
+## stdlib
 from pathlib import Path
+
+## third-party
+import matplotlib.pyplot as mpl_plot
+
+## local
 from vegtamr.lic import compute_lic_with_postprocessing
 from vegtamr.utils import vfields, plots
 
 ##
-## === HELPER FUNCTIONS ===
+## === HELPER FUNCTIONS
 ##
 
 
-def format_text_for_latex(string):
-    moified_string = string.replace(" ", " \;")
-    return rf"$\mathrm{{{moified_string}}}$"
+def format_for_latex(string):
+    modified_string = string.replace(" ", r"\ ")
+    return rf"$\mathrm{{{modified_string}}}$"
 
 
 ##
-## === MAIN PROGRAM ===
+## === PROGRAM MAIN
 ##
 
 
@@ -44,13 +48,13 @@ def main():
     ]
     num_cols = len(streamlengths)
     axis_length = 2.5
-    fig, axs = mpl_plot.subplots(
+    fig, axs_grid = mpl_plot.subplots(
         nrows=3,
         ncols=num_cols,
         figsize=(num_cols * axis_length, 3 * axis_length),
     )
     fig.subplots_adjust(wspace=0.05, hspace=0.05)
-    num_rows = axs.shape[0]
+    num_rows = axs_grid.shape[0]
     print("Computing LIC...")
     for row_index in range(num_rows):
         use_filter = row_index > 0
@@ -65,9 +69,9 @@ def main():
                 backend="rust",
                 verbose=False,
             )
-            print(f"Plotting axs[{row_index},{col_index}]")
-            ax = axs[row_index, col_index]
-            im = plots.plot_lic(
+            print(f"Plotting axs_grid[{row_index},{col_index}]")
+            ax = axs_grid[row_index, col_index]
+            lic_image = plots.plot_lic(
                 ax=ax,
                 sfield=sfield,
                 vfield=vfield,
@@ -75,18 +79,18 @@ def main():
                 bounds_cols=bounds_cols,
                 cmap_name="twilight_shifted" if (row_index < num_rows - 1) else "pink",
             )
-            if col_index == num_rows - 1:
+            if col_index == num_cols - 1:
                 if row_index < num_rows - 1:
                     label = r"a diverging cmap works best"
                 else:
                     label = r"a sequential cmap works best"
                 plots.add_cbar(
-                    ax,
-                    mappable=im,
-                    label=format_text_for_latex(label),
+                    ax=ax,
+                    mappable=lic_image,
+                    label=format_for_latex(label),
                 )
     for col_index, streamlength in enumerate(streamlengths):
-        axs[0, col_index].set_title(
+        axs_grid[0, col_index].set_title(
             rf"$L_\mathrm{{stream}} = {int(streamlength)} \;\mathrm{{pixels}}$",
             fontsize=10,
         )
@@ -96,36 +100,41 @@ def main():
         boxstyle="round,pad=0.3",
         alpha=0.75,
     )
-    axs[0, 0].text(
+    axs_grid[0, 0].text(
         0.05,
         0.95,
         r"$N_\mathrm{pixels} = %d$" % num_cells,
         ha="left",
         va="top",
-        transform=axs[0, 0].transAxes,
+        transform=axs_grid[0, 0].transAxes,
         bbox=white_transparent_box,
     )
-    axs[0, 0].set_ylabel(format_text_for_latex("no post-processing"), fontsize=10)
-    axs[1, 0].set_ylabel(format_text_for_latex("highpass filter enabled"), fontsize=10)
-    axs[2, 0].set_ylabel(
-        format_text_for_latex("highpass filter enabled") + r" $\newline$ " +
-        format_text_for_latex("histogram equalisation enabled"),
+    axs_grid[0, 0].set_ylabel(
+        format_for_latex("no post-processing"),
+        fontsize=10,
+    )
+    axs_grid[1, 0].set_ylabel(
+        format_for_latex("highpass filter enabled"),
+        fontsize=10,
+    )
+    axs_grid[2, 0].set_ylabel(
+        format_for_latex("highpass filter enabled") + r" $\newline$ " +
+        format_for_latex("histogram equalisation enabled"),
         fontsize=10,
     )
     print("Saving figure...")
     script_dir = Path(__file__).parent
-    fig_path = script_dir / f"effect_of_params.png"
+    fig_path = script_dir / "effect_of_params.png"
     fig.savefig(fig_path, dpi=300, bbox_inches="tight")
     mpl_plot.close(fig)
     print("Saved:", fig_path)
 
 
 ##
-## === ENTRY POINT ===
+## === ENTRY POINT
 ##
 
 if __name__ == "__main__":
     main()
-    sys.exit(0)
 
 ## } SCRIPT

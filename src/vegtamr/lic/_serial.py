@@ -5,14 +5,17 @@
 ## Licensed under the MIT License. See LICENSE for details.
 
 ##
-## === DEPENDENCIES ===
+## === DEPENDENCIES
 ##
 
+## third-party
 import numpy
+
+## local
 from vegtamr.lic import _core
 
 ##
-## === LOOP THROUGH THE DOMAIN SERIALLY ===
+## === LOOP THROUGH THE DOMAIN SERIALLY
 ##
 
 

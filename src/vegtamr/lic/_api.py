@@ -5,16 +5,19 @@
 ## Licensed under the MIT License. See LICENSE for details.
 
 ##
-## === DEPENDENCIES ===
+## === DEPENDENCIES
 ##
 
+## third-party
 import rlic
 import numpy
+
+## local
 from vegtamr.lic import _serial, _parallel_by_row
-from vegtamr.utils import _postprocess
+from vegtamr.lic import _postprocess
 
 ##
-## === PERFORM LIC ON ITS OWN ===
+## === PERFORM LIC ON ITS OWN
 ##
 
 
@@ -95,7 +98,7 @@ def compute_lic(
 
 
 ##
-## === PERFORM LIC + POSTPROCESSING ===
+## === PERFORM LIC + POSTPROCESSING
 ##
 
 

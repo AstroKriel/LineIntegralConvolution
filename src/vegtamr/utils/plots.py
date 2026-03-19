@@ -5,9 +5,10 @@
 ## Licensed under the MIT License. See LICENSE for details.
 
 ##
-## === DEPENDENCIES ===
+## === DEPENDENCIES
 ##
 
+## third-party
 import numpy
 import matplotlib.colors as mpl_colors
 from matplotlib.axes import Axes as mpl_axes
@@ -16,7 +17,7 @@ from matplotlib import rcParams
 rcParams["text.usetex"] = True
 
 ##
-## === HELPER FUNCTIONS ===
+## === HELPER FUNCTIONS
 ##
 
 
@@ -33,7 +34,7 @@ def plot_lic(
 ):
     if bounds_rows is None: bounds_rows = (0.0, sfield.shape[0])
     if bounds_cols is None: bounds_cols = (0.0, sfield.shape[1])
-    im = ax.imshow(
+    lic_image = ax.imshow(
         sfield,
         cmap=cmap_name,
         origin="lower",
@@ -64,45 +65,38 @@ def plot_lic(
     ax.set_yticks([])
     ax.set_xlim(bounds_cols)
     ax.set_ylim(bounds_rows)
-    return im
+    return lic_image
 
 
 def add_cbar(
     ax,
     mappable,
     label: str | None = "",
-    side: str = "right",
-    percentage: float = 0.1,
+    label_size: float = 10,
+    cbar_thickness: float = 0.1,
     cbar_padding: float = 0.02,
-    label_padding: float = 10,
-    fontsize: float = 10,
 ):
     fig = ax.figure
     box = ax.get_position()
-    if side in ["left", "right"]:
-        orientation = "vertical"
-        cbar_size = box.width * percentage
-        if side == "right":
-            cbar_bounds = [box.x1 + cbar_padding, box.y0, cbar_size, box.height]
-        else:
-            cbar_bounds = [box.x0 - cbar_size - cbar_padding, box.y0, cbar_size, box.height]
-    elif side in ["top", "bottom"]:
-        orientation = "horizontal"
-        cbar_size = box.height * percentage
-        if side == "top":
-            cbar_bounds = [box.x0, box.y1 + cbar_padding, box.width, cbar_size]
-        else:
-            cbar_bounds = [box.x0, box.y0 - cbar_size - cbar_padding, box.width, cbar_size]
-    else:
-        raise ValueError(f"Unsupported side: {side}")
+    cbar_bounds = [
+        box.x1 + cbar_padding,
+        box.y0,
+        box.width * cbar_thickness,
+        box.height,
+    ]
     ax_cbar = fig.add_axes(cbar_bounds)
-    cbar = fig.colorbar(mappable=mappable, cax=ax_cbar, orientation=orientation)
-    if orientation == "horizontal":
-        cbar.ax.set_title(label, fontsize=fontsize, pad=label_padding)
-        cbar.ax.xaxis.set_ticks_position(side)
-    else:
-        cbar.set_label(label, fontsize=fontsize, rotation=-90, va="bottom")
-        cbar.ax.yaxis.set_ticks_position(side)
+    cbar = fig.colorbar(
+        mappable=mappable,
+        cax=ax_cbar,
+        orientation="vertical",
+    )
+    cbar.set_label(
+        label,
+        fontsize=label_size,
+        rotation=-90,
+        va="bottom",
+    )
+    cbar.ax.yaxis.set_ticks_position("right")
     return cbar
 
 

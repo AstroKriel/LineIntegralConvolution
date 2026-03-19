@@ -27,7 +27,7 @@ pip install vegtamr
 After installing, import the main LIC implementation as follows:
 
 ```bash
-from vegtamr import lic
+from vegtamr.lic import compute_lic_with_postprocessing
 ```
 
 Inside this module, you will want to use the `compute_lic_with_postprocessing` function. See below for details on how to get the most out of it.
@@ -47,15 +47,19 @@ cd LineIntegralConvolutions
 uv sync
 ```
 
-This will install dependencies listed in `pyproject.toml` into a virtual environment managed by `uv`.
+This will install dependencies listed in `pyproject.toml` into a virtual environment managed by `uv`. To also install the notebook dependencies (e.g. to run `demo-lic.ipynb`), use:
+
+```bash
+uv sync --group notebook
+```
 
 With `uv` you get clean package management and reproducibility, where the only trade-off is a few extra keystrokes when running scripts:
 
 ```bash
-uv run playground/main-script.py
+uv run demos/demo-lic.py
 ```
 
-A small price to pay for sanity! Alternatively, you can activate the environment with source `.venv/bin/activate` and run `python3 playground/main-script.py`.
+A small price to pay for sanity! Alternatively, you can activate the environment with source `.venv/bin/activate` and run `python3 demos/demo-lic.py`.
 
 #### 3. Editable install (optional):
 
@@ -107,7 +111,7 @@ plots.plot_lic(
 mpl_plot.show()
 ```
 
-There are a number of parameters for you to experiment with; the effect of some choices is demonstrated by `playground/demo_effect_of_params.py`, which produces the following image:
+There are a number of parameters for you to experiment with; the effect of some choices is demonstrated by `demos/demo-params.py`, which produces the following image:
 
 <img src="./gallery/effect_of_params.png" width="100%" />
 
@@ -130,15 +134,15 @@ LineIntegralConvolutions/               # project root
 │       │   ├── _api.py                 # public-facing API
 │       │   ├── _core.py                # core algorithms
 │       │   ├── _parallel_by_row.py     # parallel implementation
+│       │   ├── _postprocess.py         # filtering + equalisation
 │       │   └── _serial.py              # serial implementation
 │       └── utils/
 │           ├── __init__.py
-│           ├── _postprocess.py         # filtering + equalisation
 │           ├── plots.py                # plotting helpers
 │           └── vfields.py              # example vector fields
-├── playground/
-│   ├── main-script.py                  # simple demo
-│   ├── main-notebook.ipynb             # same as above, but in a notebook
+├── demos/
+│   ├── demo-lic.py                     # simple demo
+│   ├── demo-lic.ipynb                  # same as above, but in a notebook
 │   └── demo-params.py                  # demo of how parameters affect LIC output
 ├── gallery/
 │   └── high resolution plots!

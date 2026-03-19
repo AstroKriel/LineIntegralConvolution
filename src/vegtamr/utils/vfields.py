@@ -5,13 +5,14 @@
 ## Licensed under the MIT License. See LICENSE for details.
 
 ##
-## === DEPENDENCIES ===
+## === DEPENDENCIES
 ##
 
+## third-party
 import numpy
 
 ##
-## === EXAMPLE VECTOR FIELDS ===
+## === EXAMPLE VECTOR FIELDS
 ##
 
 

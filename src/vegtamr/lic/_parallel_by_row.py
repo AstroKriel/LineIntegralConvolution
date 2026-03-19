@@ -5,15 +5,20 @@
 ## Licensed under the MIT License. See LICENSE for details.
 
 ##
-## === DEPENDENCIES ===
+## === DEPENDENCIES
 ##
 
-import numpy
-from vegtamr.lic import _core
+## stdlib
 from multiprocessing import Pool, shared_memory, cpu_count
 
+## third-party
+import numpy
+
+## local
+from vegtamr.lic import _core
+
 ##
-## === LOOP THROUGH THE DOMAIN IN PARALLEL ===
+## === LOOP THROUGH THE DOMAIN IN PARALLEL
 ##
 
 
