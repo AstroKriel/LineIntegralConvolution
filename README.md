@@ -52,10 +52,10 @@ This will install dependencies listed in `pyproject.toml` into a virtual environ
 With `uv` you get clean package management and reproducibility, where the only trade-off is a few extra keystrokes when running scripts:
 
 ```bash
-uv run playground/main-script.py
+uv run demos/demo-lic.py
 ```
 
-A small price to pay for sanity! Alternatively, you can activate the environment with source `.venv/bin/activate` and run `python3 playground/main-script.py`.
+A small price to pay for sanity! Alternatively, you can activate the environment with source `.venv/bin/activate` and run `python3 demos/demo-lic.py`.
 
 #### 3. Editable install (optional):
 
@@ -107,7 +107,7 @@ plots.plot_lic(
 mpl_plot.show()
 ```
 
-There are a number of parameters for you to experiment with; the effect of some choices is demonstrated by `playground/demo_effect_of_params.py`, which produces the following image:
+There are a number of parameters for you to experiment with; the effect of some choices is demonstrated by `demos/demo-params.py`, which produces the following image:
 
 <img src="./gallery/effect_of_params.png" width="100%" />
 
@@ -139,9 +139,9 @@ LineIntegralConvolutions/               # project root
 │           ├── _postprocess.py         # filtering + equalisation
 │           ├── plots.py                # plotting helpers
 │           └── vfields.py              # example vector fields
-├── playground/
-│   ├── main-script.py                  # simple demo
-│   ├── main-notebook.ipynb             # same as above, but in a notebook
+├── demos/
+│   ├── demo-lic.py                     # simple demo
+│   ├── demo-lic.ipynb                  # same as above, but in a notebook
 │   └── demo-params.py                  # demo of how parameters affect LIC output
 ├── gallery/
 │   └── high resolution plots!
