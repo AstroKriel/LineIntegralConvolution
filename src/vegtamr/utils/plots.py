@@ -34,7 +34,7 @@ def plot_lic(
 ):
     if bounds_rows is None: bounds_rows = (0.0, sfield.shape[0])
     if bounds_cols is None: bounds_cols = (0.0, sfield.shape[1])
-    im = ax.imshow(
+    lic_image = ax.imshow(
         sfield,
         cmap=cmap_name,
         origin="lower",
@@ -65,7 +65,7 @@ def plot_lic(
     ax.set_yticks([])
     ax.set_xlim(bounds_cols)
     ax.set_ylim(bounds_rows)
-    return im
+    return lic_image
 
 
 def add_cbar(

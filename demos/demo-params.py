@@ -24,7 +24,7 @@ from vegtamr.utils import vfields, plots
 ##
 
 
-def format_text_for_latex(string):
+def format_for_latex(string):
     moified_string = string.replace(" ", r"\ ")
     return rf"$\mathrm{{{moified_string}}}$"
 
@@ -72,7 +72,7 @@ def main():
             )
             print(f"Plotting axs_grid[{row_index},{col_index}]")
             ax = axs_grid[row_index, col_index]
-            im = plots.plot_lic(
+            lic_image = plots.plot_lic(
                 ax=ax,
                 sfield=sfield,
                 vfield=vfield,
@@ -86,9 +86,9 @@ def main():
                 else:
                     label = r"a sequential cmap works best"
                 plots.add_cbar(
-                    ax,
-                    mappable=im,
-                    label=format_text_for_latex(label),
+                    ax=ax,
+                    mappable=lic_image,
+                    label=format_for_latex(label),
                 )
     for col_index, streamlength in enumerate(streamlengths):
         axs_grid[0, col_index].set_title(
@@ -110,11 +110,17 @@ def main():
         transform=axs_grid[0, 0].transAxes,
         bbox=white_transparent_box,
     )
-    axs_grid[0, 0].set_ylabel(format_text_for_latex("no post-processing"), fontsize=10)
-    axs_grid[1, 0].set_ylabel(format_text_for_latex("highpass filter enabled"), fontsize=10)
+    axs_grid[0, 0].set_ylabel(
+        format_for_latex("no post-processing"),
+        fontsize=10,
+    )
+    axs_grid[1, 0].set_ylabel(
+        format_for_latex("highpass filter enabled"),
+        fontsize=10,
+    )
     axs_grid[2, 0].set_ylabel(
-        format_text_for_latex("highpass filter enabled") + r" $\newline$ " +
-        format_text_for_latex("histogram equalisation enabled"),
+        format_for_latex("highpass filter enabled") + r" $\newline$ " +
+        format_for_latex("histogram equalisation enabled"),
         fontsize=10,
     )
     print("Saving figure...")
