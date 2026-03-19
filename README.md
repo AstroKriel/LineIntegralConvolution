@@ -27,7 +27,7 @@ pip install vegtamr
 After installing, import the main LIC implementation as follows:
 
 ```bash
-from vegtamr import lic
+from vegtamr.lic import compute_lic_with_postprocessing
 ```
 
 Inside this module, you will want to use the `compute_lic_with_postprocessing` function. See below for details on how to get the most out of it.
@@ -47,7 +47,11 @@ cd LineIntegralConvolutions
 uv sync
 ```
 
-This will install dependencies listed in `pyproject.toml` into a virtual environment managed by `uv`.
+This will install dependencies listed in `pyproject.toml` into a virtual environment managed by `uv`. To also install the notebook dependencies (e.g. to run `demo-lic.ipynb`), use:
+
+```bash
+uv sync --group notebook
+```
 
 With `uv` you get clean package management and reproducibility, where the only trade-off is a few extra keystrokes when running scripts:
 
@@ -117,9 +121,6 @@ In practice you will want to choose a `streamlength` close to the correlation le
 
 The fast (pre-compiled Rust) backend option, which this repo uses by default, was implemented by Dr. Clément Robert ([@neutrinoceros](https://github.com/neutrinoceros); see [rLIC](https://github.com/neutrinoceros/rLIC)). Special thanks also go to Dr. James Beattie ([@AstroJames](https://github.com/AstroJames)) for highlighting how iteration, high-pass filtering, and histogram normalisation improve the final result. Finally, Dr. Philip Mocz ([@pmocz](https://github.com/pmocz)) provided lots of helpful suggestions in restructuring and improving the codebase.
 
-## File structure
-
-```bash
 ## File structure
 
 ```bash
