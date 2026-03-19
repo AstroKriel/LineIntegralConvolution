@@ -5,7 +5,7 @@
 ## Licensed under the MIT License. See LICENSE for details.
 
 ##
-## === DEPENDENCIES ===
+## === DEPENDENCIES
 ##
 
 import rlic
@@ -14,7 +14,7 @@ from vegtamr.lic import _serial, _parallel_by_row
 from vegtamr.utils import _postprocess
 
 ##
-## === PERFORM LIC ON ITS OWN ===
+## === PERFORM LIC ON ITS OWN
 ##
 
 
@@ -95,7 +95,7 @@ def compute_lic(
 
 
 ##
-## === PERFORM LIC + POSTPROCESSING ===
+## === PERFORM LIC + POSTPROCESSING
 ##
 
 

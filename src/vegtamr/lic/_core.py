@@ -5,13 +5,13 @@
 ## Licensed under the MIT License. See LICENSE for details.
 
 ##
-## === DEPENDENCIES ===
+## === DEPENDENCIES
 ##
 
 import numpy
 
 ##
-## === LIC IMPLEMENTATION ===
+## === LIC IMPLEMENTATION
 ##
 
 
@@ -58,7 +58,7 @@ def interpolate_bilinear(
     return interpolated_vfield_comp_col, interpolated_vfield_comp_row
 
 
-def advect_streamline(
+def advect_stringeamline(
     vfield: numpy.ndarray,
     sfield_in: numpy.ndarray,
     start_row: int,

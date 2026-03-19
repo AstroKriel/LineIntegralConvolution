@@ -5,7 +5,7 @@
 ## Licensed under the MIT License. See LICENSE for details.
 
 ##
-## === DEPENDENCIES ===
+## === DEPENDENCIES
 ##
 
 import numpy
@@ -16,7 +16,7 @@ from matplotlib import rcParams
 rcParams["text.usetex"] = True
 
 ##
-## === HELPER FUNCTIONS ===
+## === HELPER FUNCTIONS
 ##
 
 
@@ -27,7 +27,7 @@ def plot_lic(
     cmap_name: str = "pink",
     bounds_rows: tuple[float, float] | None = None,
     bounds_cols: tuple[float, float] | None = None,
-    overlay_streamlines: bool = False,
+    overlay_stringeamlines: bool = False,
     streamline_colour: str = "royalblue",
     streamline_alpha: float = 0.5,
 ):
@@ -44,7 +44,7 @@ def plot_lic(
             bounds_rows[1],
         ),
     )
-    if overlay_streamlines:
+    if overlay_stringeamlines:
         coords_row = numpy.linspace(bounds_rows[0], bounds_rows[1], sfield.shape[0])
         coords_col = numpy.linspace(bounds_cols[0], bounds_cols[1], sfield.shape[1])
         mg_x, mg_y = numpy.meshgrid(coords_col, coords_row, indexing="xy")
@@ -58,7 +58,7 @@ def plot_lic(
             linewidth=1.5,
             density=0.5,
             arrowsize=1.0,
-            broken_streamlines=False,
+            broken_stringeamlines=False,
         )
     ax.set_xticks([])
     ax.set_yticks([])
@@ -81,18 +81,18 @@ def add_cbar(
     box = ax.get_position()
     if side in ["left", "right"]:
         orientation = "vertical"
-        cbar_size = box.width * percentage
+        cbar_thickness = box.width * percentage
         if side == "right":
-            cbar_bounds = [box.x1 + cbar_padding, box.y0, cbar_size, box.height]
+            cbar_bounds = [box.x1 + cbar_padding, box.y0, cbar_thickness, box.height]
         else:
-            cbar_bounds = [box.x0 - cbar_size - cbar_padding, box.y0, cbar_size, box.height]
+            cbar_bounds = [box.x0 - cbar_thickness - cbar_padding, box.y0, cbar_thickness, box.height]
     elif side in ["top", "bottom"]:
         orientation = "horizontal"
-        cbar_size = box.height * percentage
+        cbar_thickness = box.height * percentage
         if side == "top":
-            cbar_bounds = [box.x0, box.y1 + cbar_padding, box.width, cbar_size]
+            cbar_bounds = [box.x0, box.y1 + cbar_padding, box.width, cbar_thickness]
         else:
-            cbar_bounds = [box.x0, box.y0 - cbar_size - cbar_padding, box.width, cbar_size]
+            cbar_bounds = [box.x0, box.y0 - cbar_thickness - cbar_padding, box.width, cbar_thickness]
     else:
         raise ValueError(f"Unsupported side: {side}")
     ax_cbar = fig.add_axes(cbar_bounds)

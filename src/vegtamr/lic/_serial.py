@@ -5,14 +5,14 @@
 ## Licensed under the MIT License. See LICENSE for details.
 
 ##
-## === DEPENDENCIES ===
+## === DEPENDENCIES
 ##
 
 import numpy
 from vegtamr.lic import _core
 
 ##
-## === LOOP THROUGH THE DOMAIN SERIALLY ===
+## === LOOP THROUGH THE DOMAIN SERIALLY
 ##
 
 
@@ -30,7 +30,7 @@ def compute_lic(
     _, num_rows, num_cols = vfield.shape
     for row_index in range(num_rows):
         for col_index in range(num_cols):
-            forward_sum, forward_total = _core.advect_streamline(
+            forward_sum, forward_total = _core.advect_stringeamline(
                 vfield=vfield,
                 sfield_in=sfield_in,
                 start_row=row_index,
@@ -39,7 +39,7 @@ def compute_lic(
                 streamlength=streamlength,
                 use_periodic_BCs=use_periodic_BCs,
             )
-            backward_sum, backward_total = _core.advect_streamline(
+            backward_sum, backward_total = _core.advect_stringeamline(
                 vfield=vfield,
                 sfield_in=sfield_in,
                 start_row=row_index,
