@@ -134,10 +134,10 @@ LineIntegralConvolutions/               # project root
 │       │   ├── _api.py                 # public-facing API
 │       │   ├── _core.py                # core algorithms
 │       │   ├── _parallel_by_row.py     # parallel implementation
+│       │   ├── _postprocess.py         # filtering + equalisation
 │       │   └── _serial.py              # serial implementation
 │       └── utils/
 │           ├── __init__.py
-│           ├── _postprocess.py         # filtering + equalisation
 │           ├── plots.py                # plotting helpers
 │           └── vfields.py              # example vector fields
 ├── demos/

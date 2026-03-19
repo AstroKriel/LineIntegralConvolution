@@ -14,7 +14,7 @@ import numpy
 
 ## local
 from vegtamr.lic import _serial, _parallel_by_row
-from vegtamr.utils import _postprocess
+from vegtamr.lic import _postprocess
 
 ##
 ## === PERFORM LIC ON ITS OWN
