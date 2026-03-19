@@ -9,7 +9,6 @@
 ##
 
 ## stdlib
-import sys
 from pathlib import Path
 
 ## third-party
@@ -25,8 +24,8 @@ from vegtamr.utils import vfields, plots
 
 
 def format_for_latex(string):
-    moified_string = string.replace(" ", r"\ ")
-    return rf"$\mathrm{{{moified_string}}}$"
+    modified_string = string.replace(" ", r"\ ")
+    return rf"$\mathrm{{{modified_string}}}$"
 
 
 ##
@@ -80,7 +79,7 @@ def main():
                 bounds_cols=bounds_cols,
                 cmap_name="twilight_shifted" if (row_index < num_rows - 1) else "pink",
             )
-            if col_index == num_rows - 1:
+            if col_index == num_cols - 1:
                 if row_index < num_rows - 1:
                     label = r"a diverging cmap works best"
                 else:
@@ -125,7 +124,7 @@ def main():
     )
     print("Saving figure...")
     script_dir = Path(__file__).parent
-    fig_path = script_dir / f"effect_of_params.png"
+    fig_path = script_dir / "effect_of_params.png"
     fig.savefig(fig_path, dpi=300, bbox_inches="tight")
     mpl_plot.close(fig)
     print("Saved:", fig_path)
@@ -137,6 +136,5 @@ def main():
 
 if __name__ == "__main__":
     main()
-    sys.exit(0)
 
 ## } SCRIPT
