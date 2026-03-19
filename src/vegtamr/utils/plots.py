@@ -28,7 +28,7 @@ def plot_lic(
     cmap_name: str = "pink",
     bounds_rows: tuple[float, float] | None = None,
     bounds_cols: tuple[float, float] | None = None,
-    overlay_stringeamlines: bool = False,
+    overlay_streamlines: bool = False,
     streamline_colour: str = "royalblue",
     streamline_alpha: float = 0.5,
 ):
@@ -45,7 +45,7 @@ def plot_lic(
             bounds_rows[1],
         ),
     )
-    if overlay_stringeamlines:
+    if overlay_streamlines:
         coords_row = numpy.linspace(bounds_rows[0], bounds_rows[1], sfield.shape[0])
         coords_col = numpy.linspace(bounds_cols[0], bounds_cols[1], sfield.shape[1])
         mg_x, mg_y = numpy.meshgrid(coords_col, coords_row, indexing="xy")
@@ -59,7 +59,7 @@ def plot_lic(
             linewidth=1.5,
             density=0.5,
             arrowsize=1.0,
-            broken_stringeamlines=False,
+            broken_streamlines=False,
         )
     ax.set_xticks([])
     ax.set_yticks([])

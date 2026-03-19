@@ -33,7 +33,7 @@ def compute_lic(
     _, num_rows, num_cols = vfield.shape
     for row_index in range(num_rows):
         for col_index in range(num_cols):
-            forward_sum, forward_total = _core.advect_stringeamline(
+            forward_sum, forward_total = _core.advect_streamline(
                 vfield=vfield,
                 sfield_in=sfield_in,
                 start_row=row_index,
@@ -42,7 +42,7 @@ def compute_lic(
                 streamlength=streamlength,
                 use_periodic_BCs=use_periodic_BCs,
             )
-            backward_sum, backward_total = _core.advect_stringeamline(
+            backward_sum, backward_total = _core.advect_streamline(
                 vfield=vfield,
                 sfield_in=sfield_in,
                 start_row=row_index,

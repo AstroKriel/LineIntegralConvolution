@@ -59,7 +59,7 @@ def interpolate_bilinear(
     return interpolated_vfield_comp_col, interpolated_vfield_comp_row
 
 
-def advect_stringeamline(
+def advect_streamline(
     vfield: numpy.ndarray,
     sfield_in: numpy.ndarray,
     start_row: int,

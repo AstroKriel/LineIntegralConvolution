@@ -41,11 +41,11 @@ def main():
     vfield = vfield_dict["vfield"]
     bounds_rows = vfield_dict["bounds_rows"]
     bounds_cols = vfield_dict["bounds_cols"]
-    ideal_stringeamlength = vfield_dict["streamlength"]
+    ideal_streamlength = vfield_dict["streamlength"]
     streamlengths = [
-        ideal_stringeamlength / 2,
-        ideal_stringeamlength,
-        ideal_stringeamlength * 4,
+        ideal_streamlength / 2,
+        ideal_streamlength,
+        ideal_streamlength * 4,
     ]
     num_cols = len(streamlengths)
     axis_length = 2.5

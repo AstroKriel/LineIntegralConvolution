@@ -40,7 +40,7 @@ def _process_row(
     _, num_cols = vfield_shape[1], vfield_shape[2]
     row_results = numpy.zeros(num_cols, dtype=numpy.float32)
     for col_index in range(num_cols):
-        forward_sum, forward_total = _core.advect_stringeamline(
+        forward_sum, forward_total = _core.advect_streamline(
             vfield=vfield,
             sfield_in=sfield_in,
             start_row=row_index,
@@ -49,7 +49,7 @@ def _process_row(
             streamlength=streamlength,
             use_periodic_BCs=use_periodic_BCs,
         )
-        backward_sum, backward_total = _core.advect_stringeamline(
+        backward_sum, backward_total = _core.advect_streamline(
             vfield=vfield,
             sfield_in=sfield_in,
             start_row=row_index,

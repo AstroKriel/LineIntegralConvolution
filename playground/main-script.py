@@ -58,7 +58,7 @@ def main():
         cmap_name="pink",
         bounds_rows=bounds_rows,
         bounds_cols=bounds_cols,
-        overlay_stringeamlines=False,
+        overlay_streamlines=False,
         streamline_colour="royalblue",
         streamline_alpha=0.75,
     )
