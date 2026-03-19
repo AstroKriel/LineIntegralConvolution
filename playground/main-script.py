@@ -5,7 +5,7 @@
 ## Licensed under the MIT License. See LICENSE for details.
 
 ##
-## === DEPENDENCIES ===
+## === DEPENDENCIES
 ##
 
 import sys
@@ -16,7 +16,7 @@ from vegtamr.lic import compute_lic_with_postprocessing
 from vegtamr.utils import vfields, plots
 
 ##
-## === MAIN PROGRAM ===
+## === PROGRAM MAIN
 ##
 
 
@@ -53,7 +53,7 @@ def main():
         cmap_name="pink",
         bounds_rows=bounds_rows,
         bounds_cols=bounds_cols,
-        overlay_streamlines=False,
+        overlay_stringeamlines=False,
         streamline_colour="royalblue",
         streamline_alpha=0.75,
     )
@@ -66,7 +66,7 @@ def main():
 
 
 ##
-## === ENTRY POINT ===
+## === ENTRY POINT
 ##
 
 if __name__ == "__main__":

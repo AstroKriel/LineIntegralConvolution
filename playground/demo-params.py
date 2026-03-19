@@ -5,7 +5,7 @@
 ## Licensed under the MIT License. See LICENSE for details.
 
 ##
-## === DEPENDENCIES ===
+## === DEPENDENCIES
 ##
 
 import sys
@@ -15,7 +15,7 @@ from vegtamr.lic import compute_lic_with_postprocessing
 from vegtamr.utils import vfields, plots
 
 ##
-## === HELPER FUNCTIONS ===
+## === HELPER FUNCTIONS
 ##
 
 
@@ -25,7 +25,7 @@ def format_text_for_latex(string):
 
 
 ##
-## === MAIN PROGRAM ===
+## === PROGRAM MAIN
 ##
 
 
@@ -36,21 +36,21 @@ def main():
     vfield = vfield_dict["vfield"]
     bounds_rows = vfield_dict["bounds_rows"]
     bounds_cols = vfield_dict["bounds_cols"]
-    ideal_streamlength = vfield_dict["streamlength"]
+    ideal_stringeamlength = vfield_dict["streamlength"]
     streamlengths = [
-        ideal_streamlength / 2,
-        ideal_streamlength,
-        ideal_streamlength * 4,
+        ideal_stringeamlength / 2,
+        ideal_stringeamlength,
+        ideal_stringeamlength * 4,
     ]
     num_cols = len(streamlengths)
     axis_length = 2.5
-    fig, axs = mpl_plot.subplots(
+    fig, axs_grid = mpl_plot.subplots(
         nrows=3,
         ncols=num_cols,
         figsize=(num_cols * axis_length, 3 * axis_length),
     )
     fig.subplots_adjust(wspace=0.05, hspace=0.05)
-    num_rows = axs.shape[0]
+    num_rows = axs_grid.shape[0]
     print("Computing LIC...")
     for row_index in range(num_rows):
         use_filter = row_index > 0
@@ -65,8 +65,8 @@ def main():
                 backend="rust",
                 verbose=False,
             )
-            print(f"Plotting axs[{row_index},{col_index}]")
-            ax = axs[row_index, col_index]
+            print(f"Plotting axs_grid[{row_index},{col_index}]")
+            ax = axs_grid[row_index, col_index]
             im = plots.plot_lic(
                 ax=ax,
                 sfield=sfield,
@@ -86,7 +86,7 @@ def main():
                     label=format_text_for_latex(label),
                 )
     for col_index, streamlength in enumerate(streamlengths):
-        axs[0, col_index].set_title(
+        axs_grid[0, col_index].set_title(
             rf"$L_\mathrm{{stream}} = {int(streamlength)} \;\mathrm{{pixels}}$",
             fontsize=10,
         )
@@ -96,18 +96,18 @@ def main():
         boxstyle="round,pad=0.3",
         alpha=0.75,
     )
-    axs[0, 0].text(
+    axs_grid[0, 0].text(
         0.05,
         0.95,
         r"$N_\mathrm{pixels} = %d$" % num_cells,
         ha="left",
         va="top",
-        transform=axs[0, 0].transAxes,
+        transform=axs_grid[0, 0].transAxes,
         bbox=white_transparent_box,
     )
-    axs[0, 0].set_ylabel(format_text_for_latex("no post-processing"), fontsize=10)
-    axs[1, 0].set_ylabel(format_text_for_latex("highpass filter enabled"), fontsize=10)
-    axs[2, 0].set_ylabel(
+    axs_grid[0, 0].set_ylabel(format_text_for_latex("no post-processing"), fontsize=10)
+    axs_grid[1, 0].set_ylabel(format_text_for_latex("highpass filter enabled"), fontsize=10)
+    axs_grid[2, 0].set_ylabel(
         format_text_for_latex("highpass filter enabled") + r" $\newline$ " +
         format_text_for_latex("histogram equalisation enabled"),
         fontsize=10,
@@ -121,7 +121,7 @@ def main():
 
 
 ##
-## === ENTRY POINT ===
+## === ENTRY POINT
 ##
 
 if __name__ == "__main__":
