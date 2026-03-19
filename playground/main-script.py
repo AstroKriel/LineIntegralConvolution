@@ -8,10 +8,15 @@
 ## === DEPENDENCIES
 ##
 
+## stdlib
 import sys
 import time
-import matplotlib.pyplot as mpl_plot
 from pathlib import Path
+
+## third-party
+import matplotlib.pyplot as mpl_plot
+
+## local
 from vegtamr.lic import compute_lic_with_postprocessing
 from vegtamr.utils import vfields, plots
 

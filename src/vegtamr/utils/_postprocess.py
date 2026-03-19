@@ -8,6 +8,7 @@
 ## === DEPENDENCIES
 ##
 
+## third-party
 import numpy
 from scipy import ndimage
 from skimage.exposure import equalize_adapthist

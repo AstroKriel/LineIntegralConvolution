@@ -8,6 +8,7 @@
 ## === DEPENDENCIES
 ##
 
+## third-party
 import numpy
 import matplotlib.colors as mpl_colors
 from matplotlib.axes import Axes as mpl_axes

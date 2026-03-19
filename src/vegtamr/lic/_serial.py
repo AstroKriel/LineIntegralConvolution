@@ -8,7 +8,10 @@
 ## === DEPENDENCIES
 ##
 
+## third-party
 import numpy
+
+## local
 from vegtamr.lic import _core
 
 ##

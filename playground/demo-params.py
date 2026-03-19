@@ -8,9 +8,14 @@
 ## === DEPENDENCIES
 ##
 
+## stdlib
 import sys
-import matplotlib.pyplot as mpl_plot
 from pathlib import Path
+
+## third-party
+import matplotlib.pyplot as mpl_plot
+
+## local
 from vegtamr.lic import compute_lic_with_postprocessing
 from vegtamr.utils import vfields, plots
 
@@ -20,7 +25,7 @@ from vegtamr.utils import vfields, plots
 
 
 def format_text_for_latex(string):
-    moified_string = string.replace(" ", " \;")
+    moified_string = string.replace(" ", r"\ ")
     return rf"$\mathrm{{{moified_string}}}$"
 
 

@@ -8,8 +8,11 @@
 ## === DEPENDENCIES
 ##
 
+## third-party
 import rlic
 import numpy
+
+## local
 from vegtamr.lic import _serial, _parallel_by_row
 from vegtamr.utils import _postprocess
 
