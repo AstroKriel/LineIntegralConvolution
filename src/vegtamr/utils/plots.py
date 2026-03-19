@@ -72,38 +72,31 @@ def add_cbar(
     ax,
     mappable,
     label: str | None = "",
-    side: str = "right",
-    percentage: float = 0.1,
+    label_size: float = 10,
+    cbar_thickness: float = 0.1,
     cbar_padding: float = 0.02,
-    label_padding: float = 10,
-    fontsize: float = 10,
 ):
     fig = ax.figure
     box = ax.get_position()
-    if side in ["left", "right"]:
-        orientation = "vertical"
-        cbar_thickness = box.width * percentage
-        if side == "right":
-            cbar_bounds = [box.x1 + cbar_padding, box.y0, cbar_thickness, box.height]
-        else:
-            cbar_bounds = [box.x0 - cbar_thickness - cbar_padding, box.y0, cbar_thickness, box.height]
-    elif side in ["top", "bottom"]:
-        orientation = "horizontal"
-        cbar_thickness = box.height * percentage
-        if side == "top":
-            cbar_bounds = [box.x0, box.y1 + cbar_padding, box.width, cbar_thickness]
-        else:
-            cbar_bounds = [box.x0, box.y0 - cbar_thickness - cbar_padding, box.width, cbar_thickness]
-    else:
-        raise ValueError(f"Unsupported side: {side}")
+    cbar_bounds = [
+        box.x1 + cbar_padding,
+        box.y0,
+        box.width * cbar_thickness,
+        box.height,
+    ]
     ax_cbar = fig.add_axes(cbar_bounds)
-    cbar = fig.colorbar(mappable=mappable, cax=ax_cbar, orientation=orientation)
-    if orientation == "horizontal":
-        cbar.ax.set_title(label, fontsize=fontsize, pad=label_padding)
-        cbar.ax.xaxis.set_ticks_position(side)
-    else:
-        cbar.set_label(label, fontsize=fontsize, rotation=-90, va="bottom")
-        cbar.ax.yaxis.set_ticks_position(side)
+    cbar = fig.colorbar(
+        mappable=mappable,
+        cax=ax_cbar,
+        orientation="vertical",
+    )
+    cbar.set_label(
+        label,
+        fontsize=label_size,
+        rotation=-90,
+        va="bottom",
+    )
+    cbar.ax.yaxis.set_ticks_position("right")
     return cbar
 
 
