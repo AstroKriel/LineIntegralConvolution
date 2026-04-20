@@ -23,7 +23,9 @@ from vegtamr.utils import vfields, plots
 ##
 
 
-def format_for_latex(string):
+def format_for_latex(
+    string,
+):
     modified_string = string.replace(" ", r"\ ")
     return rf"$\mathrm{{{modified_string}}}$"
 
