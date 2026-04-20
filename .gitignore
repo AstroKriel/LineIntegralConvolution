@@ -16,7 +16,3 @@ __pycache__/
 ## jupyter notebook (+ LSP) files
 .ipynb_checkpoints/
 .virtual_documents/
-
-tmp/
-
-## .
