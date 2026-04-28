@@ -34,9 +34,17 @@ def _process_row(
     use_periodic_BCs,
 ):
     shm_vfield = shared_memory.SharedMemory(name=shm_vfield_name)
-    vfield = numpy.ndarray(vfield_shape, dtype=vfield_dtype, buffer=shm_vfield.buf)
+    vfield = numpy.ndarray(
+        vfield_shape,
+        dtype=vfield_dtype,
+        buffer=shm_vfield.buf,
+    )
     shm_sfield = shared_memory.SharedMemory(name=shm_sfield_name)
-    sfield_in = numpy.ndarray(sfield_shape, dtype=sfield_dtype, buffer=shm_sfield.buf)
+    sfield_in = numpy.ndarray(
+        sfield_shape,
+        dtype=sfield_dtype,
+        buffer=shm_sfield.buf,
+    )
     _, num_cols = vfield_shape[1], vfield_shape[2]
     row_results = numpy.zeros(num_cols, dtype=numpy.float32)
     for col_index in range(num_cols):
@@ -74,11 +82,25 @@ def compute_lic(
     use_periodic_BCs: bool,
 ) -> numpy.ndarray:
     _, num_rows, _ = vfield.shape
-    shm_vfield = shared_memory.SharedMemory(create=True, size=vfield.nbytes)
-    shm_vfield_arr = numpy.ndarray(vfield.shape, dtype=vfield.dtype, buffer=shm_vfield.buf)
+    shm_vfield = shared_memory.SharedMemory(
+        create=True,
+        size=vfield.nbytes,
+    )
+    shm_vfield_arr = numpy.ndarray(
+        vfield.shape,
+        dtype=vfield.dtype,
+        buffer=shm_vfield.buf,
+    )
     numpy.copyto(shm_vfield_arr, vfield)
-    shm_sfield = shared_memory.SharedMemory(create=True, size=sfield_in.nbytes)
-    shm_sfield_arr = numpy.ndarray(sfield_in.shape, dtype=sfield_in.dtype, buffer=shm_sfield.buf)
+    shm_sfield = shared_memory.SharedMemory(
+        create=True,
+        size=sfield_in.nbytes,
+    )
+    shm_sfield_arr = numpy.ndarray(
+        sfield_in.shape,
+        dtype=sfield_in.dtype,
+        buffer=shm_sfield.buf,
+    )
     numpy.copyto(shm_sfield_arr, sfield_in)
     try:
         with Pool(processes=cpu_count()) as pool:

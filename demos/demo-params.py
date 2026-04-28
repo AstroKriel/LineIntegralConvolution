@@ -38,7 +38,10 @@ def format_for_latex(
 def main():
     print("Running demo script...")
     num_cells = 500
-    vfield_dict = vfields.vfield_swirls(num_cells=num_cells, num_swirls=4)
+    vfield_dict = vfields.vfield_swirls(
+        num_cells=num_cells,
+        num_swirls=4,
+    )
     vfield = vfield_dict["vfield"]
     bounds_rows = vfield_dict["bounds_rows"]
     bounds_cols = vfield_dict["bounds_cols"]
@@ -55,7 +58,10 @@ def main():
         ncols=num_cols,
         figsize=(num_cols * axis_length, 3 * axis_length),
     )
-    fig.subplots_adjust(wspace=0.05, hspace=0.05)
+    fig.subplots_adjust(
+        wspace=0.05,
+        hspace=0.05,
+    )
     num_rows = axs_grid.shape[0]
     print("Computing LIC...")
     for row_index in range(num_rows):
@@ -127,7 +133,11 @@ def main():
     print("Saving figure...")
     script_dir = Path(__file__).parent
     fig_path = script_dir / "effect_of_params.png"
-    fig.savefig(fig_path, dpi=300, bbox_inches="tight")
+    fig.savefig(
+        fig_path,
+        dpi=300,
+        bbox_inches="tight",
+    )
     mpl_plot.close(fig)
     print("Saved:", fig_path)
 

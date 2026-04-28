@@ -64,7 +64,11 @@ def main():
     print("Saving figure...")
     script_dir = Path(__file__).parent
     fig_path = script_dir / f"lic_{vfield_name}.png"
-    fig.savefig(fig_path, dpi=300, bbox_inches="tight")
+    fig.savefig(
+        fig_path,
+        dpi=300,
+        bbox_inches="tight",
+    )
     mpl_plot.close(fig)
     print("Saved:", fig_path)
 
