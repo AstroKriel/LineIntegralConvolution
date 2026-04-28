@@ -1,4 +1,4 @@
-# Line Integral Convolution
+# vegtamr (Vegtamr; Odin's Wandering Disguise)
 
 Line Integral Convolutions (LICs) are an amazing way to visualise 2D vector fields, and are widely used in many different fields (e.g., weather modelling, plasma physics, etc.), however I couldn't find a simple, up-to-date implementation, so I wrote my own. I hope it can now also help you on your own vector field fueled journey!
 
