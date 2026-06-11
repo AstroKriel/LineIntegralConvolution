@@ -208,7 +208,7 @@ def compute_lic_with_postprocessing(
             )
         )
         sfield  = rlic.convolve(
-          sfield_in, # type: ignore
+          sfield_in, # pyright: ignore[reportArgumentType]
           vfield[0],
           vfield[1],
           kernel     = kernel,
