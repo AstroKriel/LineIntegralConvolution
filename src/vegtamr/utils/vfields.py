@@ -8,6 +8,9 @@
 ## === DEPENDENCIES
 ##
 
+## stdlib
+from typing import Any
+
 ## third-party
 import numpy
 
@@ -18,7 +21,7 @@ import numpy
 
 def vfield_lotka_volterra(
     num_cells: int,
-) -> dict:
+) -> dict[str, Any]:
     bounds_rows = (-3, 12)
     bounds_cols = (-5, 10)
     coords_row = numpy.linspace(bounds_rows[0], bounds_rows[1], num_cells)
@@ -43,7 +46,7 @@ def vfield_lotka_volterra(
 
 def vfield_flowers(
     num_cells: int,
-) -> dict:
+) -> dict[str, Any]:
     bounds_rows = (-10, 10)
     bounds_cols = (-10, 10)
     coords_row = numpy.linspace(bounds_rows[0], bounds_rows[1], num_cells)
@@ -66,7 +69,7 @@ def vfield_flowers(
 def vfield_swirls(
     num_cells: int,
     num_swirls: float = 1,
-) -> dict:
+) -> dict[str, Any]:
     bounds_rows = (-10, 10)
     bounds_cols = (-10, 10)
     coords_row = numpy.linspace(bounds_rows[0], bounds_rows[1], num_cells)
@@ -88,7 +91,7 @@ def vfield_swirls(
 
 def vfield_orszag_tang(
     num_cells: int,
-) -> dict:
+) -> dict[str, Any]:
     bounds_rows = (0.0, 2 * numpy.pi)
     bounds_cols = (0.0, 2 * numpy.pi)
     y = numpy.linspace(bounds_rows[0], bounds_rows[1], num_cells)

@@ -16,6 +16,7 @@ dependencies = [
 ]
 
 [dependency-groups]
+dev = ["basedpyright>=1.0"]
 notebook = [
   "ipykernel>=6.30.1",
   "ipympl>=0.9.7",
@@ -31,5 +32,11 @@ build-backend = "hatchling.build"
 [tool.hatch.build]
 sources = ["src"]
 
-[tool.pyright]
+[tool.basedpyright]
 include = ["src", "demos"]
+reportExplicitAny = "none"
+reportAny = "none"
+reportImplicitStringConcatenation = "none"
+reportImplicitOverride = "none"
+reportUnusedCallResult = "none"
+reportImportCycles = "none"

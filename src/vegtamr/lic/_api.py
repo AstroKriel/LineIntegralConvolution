@@ -12,10 +12,6 @@
 import rlic
 import numpy
 
-## local
-from vegtamr.lic import _serial, _parallel_by_row
-from vegtamr.lic import _postprocess
-
 ##
 ## === PERFORM LIC ON ITS OWN
 ##
@@ -62,6 +58,7 @@ def compute_lic(
     numpy.ndarray
     A 2D array storing the output LIC image with shape (num_rows, num_cols).
     """
+    from vegtamr.lic import _serial, _parallel_by_row
     assert vfield.ndim == 3, f"`vfield` must have 3 dimensions, but got {vfield.ndim}."
     num_vcomps, num_rows, num_cols = vfield.shape
     assert num_vcomps == 2, f"`vfield` must have 2 components (in the first dimension), but got {num_vcomps}."
@@ -164,6 +161,7 @@ def compute_lic_with_postprocessing(
     numpy.ndarray
     The post-processed LIC image.
     """
+    from vegtamr.lic import _postprocess
     dtype = vfield.dtype
     shape = vfield.shape[1:]
     if sfield_in is None:
