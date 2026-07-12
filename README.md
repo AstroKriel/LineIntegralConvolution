@@ -117,40 +117,39 @@ There are a number of parameters for you to experiment with; the effect of some 
 
 In practice you will want to choose a `streamlength` close to the correlation length (in cells) of the structures you are trying to highlight. Depending on the effect you're aiming for, you can also play around with turning on the highpass filter (`use_filter`), changing its size (`filter_sigma`; controls the thickness of tubes), and turning on intensity equalization (`use_equalize`).
 
+## File structure
+
+```text
+LineIntegralConvolutions/  # project root
+├── src/
+│   └── vegtamr/  # package root (named after Odin's alias, "Wanderer")
+│       ├── __init__.py
+│       ├── py.typed  # marker for type checkers (PEP 561)
+│       ├── lic/
+│       │   ├── __init__.py
+│       │   ├── _api.py  # public-facing API
+│       │   ├── _core.py  # core algorithms
+│       │   ├── _parallel_by_row.py  # parallel implementation
+│       │   ├── _postprocess.py  # filtering + equalisation
+│       │   └── _serial.py  # serial implementation
+│       └── utils/
+│           ├── __init__.py
+│           ├── plots.py  # plotting helpers
+│           └── vfields.py  # example vector fields
+├── demos/  # example scripts
+│   ├── demo-lic.py  # simple demo
+│   ├── demo-lic.ipynb  # same as above, but in a notebook
+│   └── demo-params.py  # demo of how parameters affect LIC output
+├── gallery/  # reference images
+├── pyproject.toml  # project metadata and dependencies
+├── uv.lock  # lock file (used by uv to pin dependencies)
+├── LICENSE  # terms of use and distribution
+└── README.md  # this file
+```
+
 ## Acknowledgements
 
 The fast (pre-compiled Rust) backend option, which this repo uses by default, was implemented by Dr. Clément Robert ([@neutrinoceros](https://github.com/neutrinoceros); see [rLIC](https://github.com/neutrinoceros/rLIC)). Special thanks also go to Dr. James Beattie ([@AstroJames](https://github.com/AstroJames)) for highlighting how iteration, high-pass filtering, and histogram normalisation improve the final result. Finally, Dr. Philip Mocz ([@pmocz](https://github.com/pmocz)) provided lots of helpful suggestions in restructuring and improving the codebase.
-
-## File structure
-
-```bash
-LineIntegralConvolutions/               # project root
-├── src/
-│   └── vegtamr/                        # package root (named after Odin’s alias, "Wanderer")
-│       ├── __init__.py
-│       ├── py.typed                    # marker for type checkers (PEP 561)
-│       ├── lic/
-│       │   ├── __init__.py
-│       │   ├── _api.py                 # public-facing API
-│       │   ├── _core.py                # core algorithms
-│       │   ├── _parallel_by_row.py     # parallel implementation
-│       │   ├── _postprocess.py         # filtering + equalisation
-│       │   └── _serial.py              # serial implementation
-│       └── utils/
-│           ├── __init__.py
-│           ├── plots.py                # plotting helpers
-│           └── vfields.py              # example vector fields
-├── demos/
-│   ├── demo-lic.py                     # simple demo
-│   ├── demo-lic.ipynb                  # same as above, but in a notebook
-│   └── demo-params.py                  # demo of how parameters affect LIC output
-├── gallery/
-│   └── high resolution plots!
-├── pyproject.toml                      # project metadata and dependencies
-├── uv.lock                             # lock file (used by uv to pin dependencies)
-├── LICENSE                             # terms of use and distribution
-└── README.md                           # this file
-```
 
 ## License
 
