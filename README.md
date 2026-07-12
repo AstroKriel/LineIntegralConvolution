@@ -153,4 +153,4 @@ The fast (pre-compiled Rust) backend option, which this repo uses by default, wa
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE](./LICENSE) file for details.
+This project is licensed under the MIT License; see the [LICENSE](./LICENSE) file for details.
