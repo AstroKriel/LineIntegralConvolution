@@ -17,6 +17,25 @@ import rlic
 ##
 
 
+def _ensure_valid_lic_inputs(
+    *,
+    vfield: numpy.ndarray,
+    sfield_in: numpy.ndarray | None,
+    streamlength: int | None,
+) -> None:
+    if vfield.ndim != 3:
+        raise ValueError(f"`vfield` must have 3 dimensions; got `{vfield.ndim}`.")
+    num_vcomps, num_rows, num_cols = vfield.shape
+    if num_vcomps != 2:
+        raise ValueError(f"`vfield` must have 2 components (in the first dimension); got `{num_vcomps}`.")
+    if (sfield_in is not None) and (sfield_in.shape != (num_rows, num_cols)):
+        raise ValueError(
+            f"`sfield_in` must have shape `({num_rows}, {num_cols})`; got `{sfield_in.shape}`."
+        )
+    if (streamlength is not None) and (not isinstance(streamlength, int)):
+        raise TypeError(f"`streamlength` must be an int; got `{type(streamlength).__name__}`.")
+
+
 def compute_lic(
     vfield: numpy.ndarray,
     sfield_in: numpy.ndarray | None = None,
@@ -60,23 +79,17 @@ def compute_lic(
     A 2D array storing the output LIC image with shape (num_rows, num_cols).
     """
     from vegtamr.lic import _serial, _parallel_by_row
-    assert vfield.ndim == 3, f"`vfield` must have 3 dimensions, but got {vfield.ndim}."
+    _ensure_valid_lic_inputs(
+        vfield=vfield,
+        sfield_in=sfield_in,
+        streamlength=streamlength,
+    )
     num_vcomps, num_rows, num_cols = vfield.shape
-    assert num_vcomps == 2, f"`vfield` must have 2 components (in the first dimension), but got {num_vcomps}."
     sfield_out = numpy.zeros((num_rows, num_cols), dtype=numpy.float32)
     if sfield_in is None:
         if seed_sfield is not None: numpy.random.seed(seed_sfield)
         sfield_in = numpy.random.rand(num_rows, num_cols).astype(numpy.float32)
-    else:
-        assert sfield_in.shape == (num_rows, num_cols), (
-            f"`sfield_in` must have dimensions ({num_rows}, {num_cols}), "
-            f"but it has dimensions {sfield_in.shape}."
-        )
     if streamlength is None: streamlength = int(min(num_rows, num_cols) // 4)
-    assert isinstance(
-        streamlength,
-        int,
-    ), print(f"Error: `streamlength = {streamlength}` is not an int.")
     if run_in_parallel:
         return _parallel_by_row.compute_lic(
             vfield=vfield,
@@ -169,7 +182,7 @@ def compute_lic_with_postprocessing(
         if seed_sfield is not None: numpy.random.seed(seed_sfield)
         sfield_in = numpy.random.rand(*shape).astype(dtype)
     if streamlength is None: streamlength = int(min(shape) // 4)
-    elif streamlength < 5: raise ValueError("`streamlength` should be at least 5 pixels.")
+    elif streamlength < 5: raise ValueError(f"`streamlength` must be at least 5 pixels; got `{streamlength}`.")
     sfield = numpy.array(sfield_in, copy=True)
     if backend.lower() == "python":
         if verbose:
@@ -220,7 +233,7 @@ def compute_lic_with_postprocessing(
         if use_equalize: sfield = _postprocess.rescaled_equalize(sfield)
         return sfield
     else:
-        raise ValueError(f"Unsupported backend: `{backend}`.")
+        raise ValueError(f"`backend` must be one of {{'python', 'rust'}}; got `{backend}`.")
 
 
 ## } MODULE
