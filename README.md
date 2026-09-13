@@ -47,11 +47,7 @@ cd LineIntegralConvolutions
 uv sync
 ```
 
-This will install dependencies listed in `pyproject.toml` into a virtual environment managed by `uv`. To also install the notebook dependencies (e.g. to run `demo-lic.ipynb`), use:
-
-```bash
-uv sync --group notebook
-```
+This will install dependencies listed in `pyproject.toml` into a virtual environment managed by `uv`.
 
 With `uv` you get clean package management and reproducibility, where the only trade-off is a few extra keystrokes when running scripts:
 
@@ -146,7 +142,6 @@ LineIntegralConvolutions/  # project root
 │           └── vfields.py  # example vector fields
 ├── demos/  # example scripts
 │   ├── demo-lic.py  # simple demo
-│   ├── demo-lic.ipynb  # same as above, but in a notebook
 │   └── demo-params.py  # demo of how parameters affect LIC output
 ├── gallery/  # reference images
 ├── pyproject.toml  # project metadata and dependencies

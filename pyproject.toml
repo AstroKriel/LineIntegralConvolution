@@ -16,14 +16,6 @@ dependencies = [
 
 [dependency-groups]
 dev = ["basedpyright>=1.0"]
-notebook = [
-  "astropy>=7.1.0",
-  "ipykernel>=6.30.1",
-  "ipympl>=0.9.7",
-  "jupyterlab>=4.4.6",
-  "jupyterlab-lsp>=5.2.0",
-  "python-lsp-server>=1.13.0",
-]
 
 [build-system]
 requires = ["hatchling"]
