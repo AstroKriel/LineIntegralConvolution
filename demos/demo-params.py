@@ -1,4 +1,4 @@
-## { MODULE
+## { SCRIPT
 
 ## This file is part of the "vegtamr" project.
 ## Copyright (c) 2025 Neco Kriel.
@@ -15,7 +15,7 @@ from pathlib import Path
 import matplotlib.pyplot as mpl_plot
 
 ## local
-from vegtamr.lic import compute_lic_with_postprocessing
+from vegtamr import lic
 from vegtamr.utils import vfields, plots
 
 ##
@@ -24,8 +24,8 @@ from vegtamr.utils import vfields, plots
 
 
 def format_for_latex(
-    string,
-):
+    string: str,
+) -> str:
     modified_string = string.replace(" ", r"\ ")
     return rf"$\mathrm{{{modified_string}}}$"
 
@@ -35,7 +35,7 @@ def format_for_latex(
 ##
 
 
-def main():
+def main() -> None:
     print("Running demo script...")
     num_cells = 500
     vfield_dict = vfields.vfield_swirls(
@@ -68,7 +68,7 @@ def main():
         use_filter = row_index > 0
         use_equalize = row_index > 1
         for col_index, streamlength in enumerate(streamlengths):
-            sfield = compute_lic_with_postprocessing(
+            sfield = lic.compute_lic_with_postprocessing(
                 vfield=vfield,
                 streamlength=int(streamlength),
                 filter_sigma=5e-2 * num_cells,

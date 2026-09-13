@@ -26,12 +26,12 @@ def vfield_lotka_volterra(
     bounds_cols = (-5, 10)
     coords_row = numpy.linspace(bounds_rows[0], bounds_rows[1], num_cells)
     coords_col = numpy.linspace(bounds_cols[0], bounds_cols[1], num_cells)
-    mg_x, mg_y = numpy.meshgrid(coords_col, coords_row, indexing="xy")
+    grid_x, grid_y = numpy.meshgrid(coords_col, coords_row, indexing="xy")
     x_capacity = 8
     y_growth = 3
     y_decay = 2
-    vcomp_rows = mg_x * (1 - mg_x / x_capacity) - mg_y * mg_x / (1 + mg_x)
-    vcomp_cols = y_growth * mg_y * mg_x / (1 + mg_x) - y_decay * mg_y
+    vcomp_rows = grid_x * (1 - grid_x / x_capacity) - grid_y * grid_x / (1 + grid_x)
+    vcomp_cols = y_growth * grid_y * grid_x / (1 + grid_x) - y_decay * grid_y
     vfield = numpy.array([vcomp_rows, vcomp_cols])
     return {
         "name": "lotka_volterra",
@@ -51,9 +51,9 @@ def vfield_flowers(
     bounds_cols = (-10, 10)
     coords_row = numpy.linspace(bounds_rows[0], bounds_rows[1], num_cells)
     coords_col = numpy.linspace(bounds_cols[0], bounds_cols[1], num_cells)
-    mg_x, mg_y = numpy.meshgrid(coords_col, coords_row, indexing="xy")
-    vcomp_rows = numpy.cos(0.5 * mg_x)
-    vcomp_cols = numpy.cos(0.5 * mg_y)
+    grid_x, grid_y = numpy.meshgrid(coords_col, coords_row, indexing="xy")
+    vcomp_rows = numpy.cos(0.5 * grid_x)
+    vcomp_cols = numpy.cos(0.5 * grid_y)
     vfield = numpy.array([vcomp_rows, vcomp_cols])
     return {
         "name": "flowers",
@@ -68,15 +68,16 @@ def vfield_flowers(
 
 def vfield_swirls(
     num_cells: int,
+    *,
     num_swirls: float = 1,
 ) -> dict[str, Any]:
     bounds_rows = (-10, 10)
     bounds_cols = (-10, 10)
     coords_row = numpy.linspace(bounds_rows[0], bounds_rows[1], num_cells)
     coords_col = numpy.linspace(bounds_cols[0], bounds_cols[1], num_cells)
-    mg_x, mg_y = numpy.meshgrid(coords_col, coords_row, indexing="xy")
-    vcomp_rows = numpy.sin(num_swirls * (mg_y + mg_x) / (2 * numpy.pi))
-    vcomp_cols = numpy.cos(num_swirls * (mg_x - mg_y) / (2 * numpy.pi))
+    grid_x, grid_y = numpy.meshgrid(coords_col, coords_row, indexing="xy")
+    vcomp_rows = numpy.sin(num_swirls * (grid_y + grid_x) / (2 * numpy.pi))
+    vcomp_cols = numpy.cos(num_swirls * (grid_x - grid_y) / (2 * numpy.pi))
     vfield = numpy.array([vcomp_rows, vcomp_cols])
     return {
         "name": "swirls",
@@ -94,12 +95,12 @@ def vfield_orszag_tang(
 ) -> dict[str, Any]:
     bounds_rows = (0.0, 2 * numpy.pi)
     bounds_cols = (0.0, 2 * numpy.pi)
-    y = numpy.linspace(bounds_rows[0], bounds_rows[1], num_cells)
-    x = numpy.linspace(bounds_cols[0], bounds_cols[1], num_cells)
-    mg_x, mg_y = numpy.meshgrid(x, y, indexing="xy")
-    v_rows = -numpy.sin(mg_y)
-    v_cols = numpy.sin(mg_x)
-    vfield = numpy.array([v_rows, v_cols])
+    coords_row = numpy.linspace(bounds_rows[0], bounds_rows[1], num_cells)
+    coords_col = numpy.linspace(bounds_cols[0], bounds_cols[1], num_cells)
+    grid_x, grid_y = numpy.meshgrid(coords_col, coords_row, indexing="xy")
+    vcomp_rows = -numpy.sin(grid_y)
+    vcomp_cols = numpy.sin(grid_x)
+    vfield = numpy.array([vcomp_rows, vcomp_cols])
     return {
         "name": "orszag_tang",
         "vfield": vfield,

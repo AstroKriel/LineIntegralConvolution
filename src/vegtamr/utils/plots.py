@@ -23,6 +23,7 @@ mpl_rcParams["text.usetex"] = True
 
 def plot_lic(
     ax: mpl_axes.Axes,
+    *,
     sfield: numpy.ndarray,
     vfield: numpy.ndarray,
     cmap_name: str = "pink",
@@ -48,10 +49,10 @@ def plot_lic(
     if overlay_streamlines:
         coords_row = numpy.linspace(bounds_rows[0], bounds_rows[1], sfield.shape[0])
         coords_col = numpy.linspace(bounds_cols[0], bounds_cols[1], sfield.shape[1])
-        mg_x, mg_y = numpy.meshgrid(coords_col, coords_row, indexing="xy")
+        grid_x, grid_y = numpy.meshgrid(coords_col, coords_row, indexing="xy")
         ax.streamplot(
-            mg_x,
-            mg_y,
+            grid_x,
+            grid_y,
             vfield[0],
             vfield[1],
             color=mpl_colors.to_rgba(streamline_colour, alpha=streamline_alpha),
@@ -70,6 +71,7 @@ def plot_lic(
 
 def add_cbar(
     ax,
+    *,
     mappable,
     label: str | None = None,
     label_size: float = 10,

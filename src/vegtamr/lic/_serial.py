@@ -21,6 +21,7 @@ from vegtamr.lic import _core
 
 def compute_lic(
     vfield: numpy.ndarray,
+    *,
     sfield_in: numpy.ndarray,
     sfield_out: numpy.ndarray,
     streamlength: int,

@@ -10,7 +10,7 @@
 
 ## third-party
 import numpy
-from scipy import ndimage
+from scipy import ndimage as scipy_ndimage
 from skimage import exposure as skimage_exposure
 
 ##
@@ -22,7 +22,7 @@ def filter_highpass(
     sfield: numpy.ndarray,
     sigma: float = 3.0,
 ) -> numpy.ndarray:
-    lowpass = ndimage.gaussian_filter(sfield, sigma)
+    lowpass = scipy_ndimage.gaussian_filter(sfield, sigma)
     gauss_highpass = sfield - lowpass
     return gauss_highpass
 

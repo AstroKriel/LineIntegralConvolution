@@ -9,8 +9,8 @@
 ##
 
 ## third-party
-import rlic
 import numpy
+import rlic
 
 ##
 ## === PERFORM LIC ON ITS OWN
@@ -21,6 +21,7 @@ def compute_lic(
     vfield: numpy.ndarray,
     sfield_in: numpy.ndarray | None = None,
     streamlength: int | None = None,
+    *,
     seed_sfield: int = 42,
     use_periodic_BCs: bool = True,
     run_in_parallel: bool = True,
@@ -205,13 +206,13 @@ def compute_lic_with_postprocessing(
                 dtype=dtype,
             )
         )
-        sfield  = rlic.convolve(
-          sfield_in, # pyright: ignore[reportArgumentType]
-          vfield[0],
-          vfield[1],
-          kernel     = kernel,
-          boundaries = "periodic" if use_periodic_BCs else "closed",
-          iterations = num_lic_passes,
+        sfield = rlic.convolve(
+            sfield_in,  # pyright: ignore[reportArgumentType]
+            vfield[0],
+            vfield[1],
+            kernel=kernel,
+            boundaries="periodic" if use_periodic_BCs else "closed",
+            iterations=num_lic_passes,
         )
         sfield /= numpy.max(numpy.abs(sfield))
         sfield_in = sfield

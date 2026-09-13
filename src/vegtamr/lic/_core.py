@@ -28,6 +28,7 @@ def taper_pixel_contribution(
 
 def interpolate_bilinear(
     vfield: numpy.ndarray,
+    *,
     row: float,
     col: float,
 ) -> tuple[float, float]:
@@ -61,6 +62,7 @@ def interpolate_bilinear(
 
 def advect_streamline(
     vfield: numpy.ndarray,
+    *,
     sfield_in: numpy.ndarray,
     start_row: int,
     start_col: int,
@@ -79,9 +81,6 @@ def advect_streamline(
     for step in range(streamlength):
         row_int = int(numpy.floor(row_float))
         col_int = int(numpy.floor(col_float))
-        # ## nearest neighbor interpolation
-        # vfield_comp_col = dir_sgn * vfield[0, row_int, col_int]  # x
-        # vfield_comp_row = dir_sgn * vfield[1, row_int, col_int]  # y
         ## bilinear interpolation (negligble performance hit compared to nearest neighbor)
         vfield_comp_col, vfield_comp_row = interpolate_bilinear(
             vfield=vfield,

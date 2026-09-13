@@ -1,4 +1,4 @@
-## { MODULE
+## { SCRIPT
 
 ## This file is part of the "vegtamr" project.
 ## Copyright (c) 2025 Neco Kriel.
@@ -16,7 +16,7 @@ from pathlib import Path
 import matplotlib.pyplot as mpl_plot
 
 ## local
-from vegtamr.lic import compute_lic_with_postprocessing
+from vegtamr import lic
 from vegtamr.utils import vfields, plots
 
 ##
@@ -24,7 +24,7 @@ from vegtamr.utils import vfields, plots
 ##
 
 
-def main():
+def main() -> None:
     print("Running demo script...")
     num_cells = 500
     vfield_dict = vfields.vfield_swirls(num_cells=num_cells)
@@ -37,7 +37,7 @@ def main():
     ## note: `backend` options include "python" (this project) or "rust" (10x faster; https://github.com/tlorach/rLIC)
     print("Computing LIC...")
     start_time = time.perf_counter()
-    sfield = compute_lic_with_postprocessing(
+    sfield = lic.compute_lic_with_postprocessing(
       vfield         = vfield,
       streamlength   = streamlength,
       num_lic_passes = 3,
