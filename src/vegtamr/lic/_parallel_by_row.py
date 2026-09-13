@@ -9,7 +9,8 @@
 ##
 
 ## stdlib
-from multiprocessing import Pool, shared_memory, cpu_count
+import multiprocessing
+from multiprocessing import shared_memory
 
 ## third-party
 import numpy
@@ -103,7 +104,7 @@ def compute_lic(
     )
     numpy.copyto(shm_sfield_arr, sfield_in)
     try:
-        with Pool(processes=cpu_count()) as pool:
+        with multiprocessing.Pool(processes=multiprocessing.cpu_count()) as pool:
             args = [
                 (
                     row_index,
@@ -117,7 +118,7 @@ def compute_lic(
                     use_periodic_BCs,
                 ) for row_index in range(num_rows)
             ]
-            chunk_size = max(1, num_rows // (cpu_count() * 8))
+            chunk_size = max(1, num_rows // (multiprocessing.cpu_count() * 8))
             results = pool.starmap(_process_row, args, chunksize=chunk_size)
             for row_index, row_data in results:
                 sfield_out[row_index] = row_data

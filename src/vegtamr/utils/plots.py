@@ -11,10 +11,10 @@
 ## third-party
 import numpy
 import matplotlib.colors as mpl_colors
-from matplotlib.axes import Axes as mpl_axes
-from matplotlib import rcParams
+from matplotlib import axes as mpl_axes
+from matplotlib import rcParams as mpl_rcParams
 
-rcParams["text.usetex"] = True
+mpl_rcParams["text.usetex"] = True
 
 ##
 ## === HELPER FUNCTIONS
@@ -22,7 +22,7 @@ rcParams["text.usetex"] = True
 
 
 def plot_lic(
-    ax: mpl_axes,
+    ax: mpl_axes.Axes,
     sfield: numpy.ndarray,
     vfield: numpy.ndarray,
     cmap_name: str = "pink",

@@ -11,7 +11,7 @@
 ## third-party
 import numpy
 from scipy import ndimage
-from skimage.exposure import equalize_adapthist
+from skimage import exposure as skimage_exposure
 
 ##
 ## === FUNCTIONS
@@ -39,7 +39,7 @@ def rescaled_equalize(
     is_rescale_needed = (max_val > 1.0) or (min_val < 0.0)
     ## rescale values to enhance local contrast
     ## note, output values are bound by [0, 1]
-    sfield = equalize_adapthist(
+    sfield = skimage_exposure.equalize_adapthist(
         image=sfield,
         kernel_size=(num_subregions_rows, num_subregions_cols),
         clip_limit=clip_intensity_gradient,
