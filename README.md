@@ -1,4 +1,10 @@
-# LineIntegralConvolution (Vegtamr; Odin's alias while wandering Hel)
+# A library for generating Line Integral Convolutions
+
+| Platform | Name |
+|---|---|
+| GitHub | `LineIntegralConvolution` |
+| Python (import) | `vegtamr` (Odin's alias while wandering Hel) |
+| PyPI | `line-integral-convolutions` |
 
 Line Integral Convolutions (LICs) are an amazing way to visualise 2D vector fields, and are widely used in many different fields (e.g., weather modelling, plasma physics, etc.), however I couldn't find a simple, up-to-date implementation, so I wrote my own. I hope it can now also help you on your own vector field fueled journey!
 
@@ -119,7 +125,7 @@ mpl_plot.show()
 
 There are a number of parameters for you to experiment with; the effect of some choices is demonstrated by `demos/demo-params.py`, which produces the following image:
 
-<img src="./gallery/effect_of_params.png" width="100%" />
+<img src="https://raw.githubusercontent.com/AstroKriel/LineIntegralConvolution/refs/heads/main/gallery/effect_of_params.png" width="100%" />
 
 In practice you will want to choose a `streamlength` close to the correlation length (in cells) of the structures you are trying to highlight. Depending on the effect you're aiming for, you can also play around with turning on the highpass filter (`use_filter`), changing its size (`filter_sigma`; controls the thickness of tubes), and turning on intensity equalization (`use_equalize`).
 
