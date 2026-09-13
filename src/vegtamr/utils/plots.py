@@ -71,7 +71,7 @@ def plot_lic(
 def add_cbar(
     ax,
     mappable,
-    label: str | None = "",
+    label: str | None = None,
     label_size: float = 10,
     cbar_thickness: float = 0.1,
     cbar_padding: float = 0.02,
