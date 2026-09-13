@@ -33,6 +33,7 @@ def plot_lic(
     streamline_colour: str = "royalblue",
     streamline_alpha: float = 0.5,
 ):
+    """Plot an already-computed LIC image `sfield`, optionally overlaid with streamlines from `vfield`."""
     if bounds_rows is None: bounds_rows = (0.0, sfield.shape[0])
     if bounds_cols is None: bounds_cols = (0.0, sfield.shape[1])
     lic_image = ax.imshow(

@@ -46,37 +46,16 @@ def compute_lic(
     run_in_parallel: bool = True,
 ) -> numpy.ndarray:
     """
-    Computes the Line Integral Convolution (LIC) for a given vector field.
+    Compute the Line Integral Convolution (LIC) for `vfield`.
 
-    This function generates a LIC image using the input vector field (`vfield`) and an optional background scalar field (`sfield_in`).
-    If no scalar field is provided, a random scalar field is generated. If a background scalar field is provided, the LIC is computed on top of it.
+    `streamlength` should be close to the correlation length of `vfield` for the best results; defaults to 1/4 of the smallest domain dimension.
 
-    The `streamlength` parameter controls the length of the LIC streamlines. For better results, set it close to the correlation length of
-    the vector field (often known a priori). If not specified, it defaults to 1/4 of the smallest domain dimension.
-
-    Parameters:
-    -----------
-    vfield : numpy.ndarray
-    3D array storing a 2D vector field with shape (num_vcomps=2, num_rows, num_cols).
-    The first dimension holds the vector components (x,y), and the remaining two dimensions define the domain size.
-    For 3D vector fields, provide a 2D slice.
-
-    sfield_in : numpy.ndarray, optional, default=None
-    2D scalar field to be used for the LIC. If None, a random scalar field is generated.
-
-    streamlength : int, optional, default=None
-    Length of LIC streamlines. If None, it defaults to 1/4 the smallest domain dimension.
-
-    seed_sfield : int, optional, default=42
-    The random seed for generating the scalar field.
-
-    use_periodic_BCs : bool, optional, default=True
-    If True, periodic boundary conditions are applied; otherwise, uses open boundary conditions.
-
-    Returns:
-    --------
-    numpy.ndarray
-    A 2D array storing the output LIC image with shape (num_rows, num_cols).
+    Parameters
+    ---
+    - `vfield`:
+        3D array with shape `(2, num_rows, num_cols)`; the first axis holds the vector components. Provide a 2D slice for 3D fields.
+    - `sfield_in`:
+        2D scalar field with shape `(num_rows, num_cols)` to seed the LIC; a random field is generated if `None`.
     """
     from vegtamr.lic import _serial, _parallel_by_row
     _ensure_valid_lic_inputs(
@@ -129,51 +108,19 @@ def compute_lic_with_postprocessing(
     verbose: bool = True,
 ) -> numpy.ndarray:
     """
-    Computes LIC with optional iterative post-processing, including high-pass filtering and histogram equalisation.
+    Compute LIC for `vfield` with optional iterative high-pass filtering and histogram equalisation.
 
-    This routine supports both a native Python backend (more accurate, but slower), and a Rust-accelerated backend
-    (less accurate, but significantly faster). By default, the Rust backend is used for performance and is powered
-    by the excellent `rLIC` implementation developed by @tlorach: https://github.com/tlorach/rLIC
+    Supports a native Python backend (slower, more accurate) and a Rust-accelerated backend via `rLIC`
+    (default; faster, less accurate): https://github.com/tlorach/rLIC
 
-    Parameters:
-    -----------
-    vfield : numpy.ndarray
-    3D array storing a 2D vector field with shape (num_vcomps=2, num_rows, num_cols).
-    For 3D fields, provide a 2D slice.
-
-    sfield_in : numpy.ndarray, optional, default=None
-    2D scalar field to be used for the LIC. If None, a random scalar field is generated.
-
-    streamlength : int, optional, default=None
-    Length of LIC streamlines. If None, defaults to 1/4 of the smallest domain dimension.
-
-    seed_sfield : int, optional, default=42
-    Random seed for generating the scalar field (only used if sfield_in is None).
-
-    use_periodic_BCs : bool, optional, default=True
-    If True, applies periodic boundary conditions; otherwise, uses open boundary conditions.
-
-    num_lic_passes : int, optional, default=2
-    Number of LIC passes to perform.
-
-    use_filter : bool, optional, default=True
-    If True, applies a high-pass filter after each LIC cycle.
-
-    filter_sigma : float, optional, default=3.0
-    Standard deviation for the Gaussian high-pass filter. Lower values produce finer structure.
-
-    use_equalize : bool, optional, default=True
-    If True, applies histogram equalisation at the end of the routine.
-
-    backend : str, optional, default="rust"
-    Selects the LIC backend implementation. Options are:
-        - "rust": Use the fast Rust-based implementation via `rLIC`
-        - "python": Use the slower, native Python implementation
-
-    Returns:
-    --------
-    numpy.ndarray
-    The post-processed LIC image.
+    Parameters
+    ---
+    - `vfield`:
+        3D array with shape `(2, num_rows, num_cols)`; provide a 2D slice for 3D fields.
+    - `sfield_in`:
+        2D scalar field with shape `(num_rows, num_cols)` to seed the LIC; a random field is generated if `None`.
+    - `backend`:
+        `"rust"` or `"python"`; see above for the tradeoff.
     """
     from vegtamr.lic import _postprocess
     dtype = vfield.dtype

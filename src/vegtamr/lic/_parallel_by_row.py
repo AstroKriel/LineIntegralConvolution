@@ -83,6 +83,7 @@ def compute_lic(
     streamlength: int,
     use_periodic_BCs: bool,
 ) -> numpy.ndarray:
+    """Row-parallel counterpart to `_serial.compute_lic`, computed via multiprocessing."""
     _, num_rows, _ = vfield.shape
     shm_vfield = shared_memory.SharedMemory(
         create=True,
