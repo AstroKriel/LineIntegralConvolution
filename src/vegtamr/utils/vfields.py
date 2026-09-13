@@ -9,10 +9,26 @@
 ##
 
 ## stdlib
-from typing import Any
+import dataclasses
 
 ## third-party
 import numpy
+
+##
+## === DATA STRUCTURES
+##
+
+
+@dataclasses.dataclass(frozen=True)
+class VectorFieldDemo:
+    name: str
+    vfield: numpy.ndarray
+    streamlength: int
+    num_rows: int
+    num_cols: int
+    bounds_rows: tuple[float, float]
+    bounds_cols: tuple[float, float]
+
 
 ##
 ## === EXAMPLE VECTOR FIELDS
@@ -21,7 +37,7 @@ import numpy
 
 def vfield_lotka_volterra(
     num_cells: int,
-) -> dict[str, Any]:
+) -> VectorFieldDemo:
     bounds_rows = (-3, 12)
     bounds_cols = (-5, 10)
     coords_row = numpy.linspace(bounds_rows[0], bounds_rows[1], num_cells)
@@ -33,20 +49,20 @@ def vfield_lotka_volterra(
     vcomp_rows = grid_x * (1 - grid_x / x_capacity) - grid_y * grid_x / (1 + grid_x)
     vcomp_cols = y_growth * grid_y * grid_x / (1 + grid_x) - y_decay * grid_y
     vfield = numpy.array([vcomp_rows, vcomp_cols])
-    return {
-        "name": "lotka_volterra",
-        "vfield": vfield,
-        "streamlength": num_cells // 4,
-        "num_rows": num_cells,
-        "num_cols": num_cells,
-        "bounds_rows": bounds_rows,
-        "bounds_cols": bounds_cols,
-    }
+    return VectorFieldDemo(
+        name="lotka_volterra",
+        vfield=vfield,
+        streamlength=num_cells // 4,
+        num_rows=num_cells,
+        num_cols=num_cells,
+        bounds_rows=bounds_rows,
+        bounds_cols=bounds_cols,
+    )
 
 
 def vfield_flowers(
     num_cells: int,
-) -> dict[str, Any]:
+) -> VectorFieldDemo:
     bounds_rows = (-10, 10)
     bounds_cols = (-10, 10)
     coords_row = numpy.linspace(bounds_rows[0], bounds_rows[1], num_cells)
@@ -55,22 +71,22 @@ def vfield_flowers(
     vcomp_rows = numpy.cos(0.5 * grid_x)
     vcomp_cols = numpy.cos(0.5 * grid_y)
     vfield = numpy.array([vcomp_rows, vcomp_cols])
-    return {
-        "name": "flowers",
-        "vfield": vfield,
-        "streamlength": num_cells // 4,
-        "num_rows": num_cells,
-        "num_cols": num_cells,
-        "bounds_rows": bounds_rows,
-        "bounds_cols": bounds_cols,
-    }
+    return VectorFieldDemo(
+        name="flowers",
+        vfield=vfield,
+        streamlength=num_cells // 4,
+        num_rows=num_cells,
+        num_cols=num_cells,
+        bounds_rows=bounds_rows,
+        bounds_cols=bounds_cols,
+    )
 
 
 def vfield_swirls(
     num_cells: int,
     *,
     num_swirls: float = 1,
-) -> dict[str, Any]:
+) -> VectorFieldDemo:
     bounds_rows = (-10, 10)
     bounds_cols = (-10, 10)
     coords_row = numpy.linspace(bounds_rows[0], bounds_rows[1], num_cells)
@@ -79,20 +95,20 @@ def vfield_swirls(
     vcomp_rows = numpy.sin(num_swirls * (grid_y + grid_x) / (2 * numpy.pi))
     vcomp_cols = numpy.cos(num_swirls * (grid_x - grid_y) / (2 * numpy.pi))
     vfield = numpy.array([vcomp_rows, vcomp_cols])
-    return {
-        "name": "swirls",
-        "vfield": vfield,
-        "streamlength": num_cells // (4 * num_swirls),
-        "num_rows": num_cells,
-        "num_cols": num_cells,
-        "bounds_rows": bounds_rows,
-        "bounds_cols": bounds_cols,
-    }
+    return VectorFieldDemo(
+        name="swirls",
+        vfield=vfield,
+        streamlength=int(num_cells // (4 * num_swirls)),
+        num_rows=num_cells,
+        num_cols=num_cells,
+        bounds_rows=bounds_rows,
+        bounds_cols=bounds_cols,
+    )
 
 
 def vfield_orszag_tang(
     num_cells: int,
-) -> dict[str, Any]:
+) -> VectorFieldDemo:
     bounds_rows = (0.0, 2 * numpy.pi)
     bounds_cols = (0.0, 2 * numpy.pi)
     coords_row = numpy.linspace(bounds_rows[0], bounds_rows[1], num_cells)
@@ -101,15 +117,15 @@ def vfield_orszag_tang(
     vcomp_rows = -numpy.sin(grid_y)
     vcomp_cols = numpy.sin(grid_x)
     vfield = numpy.array([vcomp_rows, vcomp_cols])
-    return {
-        "name": "orszag_tang",
-        "vfield": vfield,
-        "streamlength": num_cells // 4,
-        "num_rows": num_cells,
-        "num_cols": num_cells,
-        "bounds_rows": bounds_rows,
-        "bounds_cols": bounds_cols,
-    }
+    return VectorFieldDemo(
+        name="orszag_tang",
+        vfield=vfield,
+        streamlength=num_cells // 4,
+        num_rows=num_cells,
+        num_cols=num_cells,
+        bounds_rows=bounds_rows,
+        bounds_cols=bounds_cols,
+    )
 
 
 ## } MODULE

@@ -27,12 +27,12 @@ from vegtamr.utils import vfields, plots
 def main() -> None:
     print("Running demo script...")
     num_cells = 500
-    vfield_dict = vfields.vfield_swirls(num_cells=num_cells)
-    vfield = vfield_dict["vfield"]
-    streamlength = vfield_dict["streamlength"]
-    bounds_rows = vfield_dict["bounds_rows"]
-    bounds_cols = vfield_dict["bounds_cols"]
-    vfield_name = vfield_dict["name"]
+    vfield_demo = vfields.vfield_swirls(num_cells=num_cells)
+    vfield = vfield_demo.vfield
+    streamlength = vfield_demo.streamlength
+    bounds_rows = vfield_demo.bounds_rows
+    bounds_cols = vfield_demo.bounds_cols
+    vfield_name = vfield_demo.name
     ## apply the LIC multiple times: equivelant to applying several passes with a paint brush.
     ## note: `backend` options include "python" (this project) or "rust" (10x faster; https://github.com/tlorach/rLIC)
     print("Computing LIC...")
