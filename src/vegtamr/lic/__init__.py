@@ -1,1 +1,2 @@
-from ._api import compute_lic, compute_lic_with_postprocessing
+from ._api import compute_lic as compute_lic
+from ._api import compute_lic_with_postprocessing as compute_lic_with_postprocessing
