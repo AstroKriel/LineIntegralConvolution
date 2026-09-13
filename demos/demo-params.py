@@ -38,14 +38,14 @@ def format_for_latex(
 def main() -> None:
     print("Running demo script...")
     num_cells = 500
-    vfield_demo = vfields.vfield_swirls(
+    vfield_config = vfields.vfield_swirls(
         num_cells=num_cells,
         num_swirls=4,
     )
-    vfield = vfield_demo.vfield
-    bounds_rows = vfield_demo.bounds_rows
-    bounds_cols = vfield_demo.bounds_cols
-    ideal_streamlength = vfield_demo.streamlength
+    vfield = vfield_config.vfield
+    bounds_rows = vfield_config.bounds_rows
+    bounds_cols = vfield_config.bounds_cols
+    ideal_streamlength = vfield_config.streamlength
     streamlengths = [
         ideal_streamlength / 2,
         ideal_streamlength,
