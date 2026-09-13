@@ -203,6 +203,33 @@ wheels = [
 ]
 
 [[package]]
+name = "line-integral-convolutions"
+version = "2.0.0"
+source = { editable = "." }
+dependencies = [
+    { name = "matplotlib" },
+    { name = "rlic" },
+    { name = "scikit-image" },
+    { name = "scipy" },
+]
+
+[package.dev-dependencies]
+dev = [
+    { name = "basedpyright" },
+]
+
+[package.metadata]
+requires-dist = [
+    { name = "matplotlib", specifier = ">=3.10.1" },
+    { name = "rlic", specifier = ">=0.5.1" },
+    { name = "scikit-image", specifier = ">=0.25.2" },
+    { name = "scipy", specifier = ">=1.15.2" },
+]
+
+[package.metadata.requires-dev]
+dev = [{ name = "basedpyright", specifier = ">=1.0" }]
+
+[[package]]
 name = "matplotlib"
 version = "3.10.1"
 source = { registry = "https://pypi.org/simple" }
@@ -528,30 +555,3 @@ sdist = { url = "https://files.pythonhosted.org/packages/3c/54/d5ebe66a9de349b83
 wheels = [
     { url = "https://files.pythonhosted.org/packages/6e/be/10d23cfd4078fbec6aba768a357eff9e70c0b6d2a07398425985c524ad2a/tifffile-2025.3.30-py3-none-any.whl", hash = "sha256:0ed6eee7b66771db2d1bfc42262a51b01887505d35539daef118f4ff8c0f629c", size = 226837, upload-time = "2025-03-30T04:45:29Z" },
 ]
-
-[[package]]
-name = "vegtamr"
-version = "0.1.0"
-source = { editable = "." }
-dependencies = [
-    { name = "matplotlib" },
-    { name = "rlic" },
-    { name = "scikit-image" },
-    { name = "scipy" },
-]
-
-[package.dev-dependencies]
-dev = [
-    { name = "basedpyright" },
-]
-
-[package.metadata]
-requires-dist = [
-    { name = "matplotlib", specifier = ">=3.10.1" },
-    { name = "rlic", specifier = ">=0.5.1" },
-    { name = "scikit-image", specifier = ">=0.25.2" },
-    { name = "scipy", specifier = ">=1.15.2" },
-]
-
-[package.metadata.requires-dev]
-dev = [{ name = "basedpyright", specifier = ">=1.0" }]
