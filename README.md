@@ -14,31 +14,33 @@ Here is the LIC code applied to a couple of example vector fields:
 
 ## Getting setup
 
-You can now install the LIC package directly from [PyPI](https://pypi.org/project/line-integral-convolutions/) or clone the [Github](https://github.com/AstroKriel/LineIntegralConvolutions/) repository if you'd like to play around with the source code.
+You can now install the LIC package directly from [PyPI](https://pypi.org/project/line-integral-convolutions/) or clone the [Github](https://github.com/AstroKriel/LineIntegralConvolution/) repository if you'd like to play around with the source code.
 
 ### Option 1: Install from PyPI (for general use)
 
 If you only need to use the package, you can install it via `pip`:
 
 ```bash
-pip install vegtamr
+pip install line-integral-convolutions
 ```
 
 After installing, import the main LIC implementation as follows:
 
-```bash
-from vegtamr.lic import compute_lic_with_postprocessing
+```python
+from vegtamr import lic
 ```
 
-Inside this module, you will want to use the `compute_lic_with_postprocessing` function. See below for details on how to get the most out of it.
+Inside this module, you will want to use the `lic.compute_lic_with_postprocessing` function. See below for details on how to get the most out of it.
+
+> **Note:** if you used this package before version 2.0.0 (as `line-integral-convolutions` on PyPI, imported as `line_integral_convolutions`), the import path has changed: `from line_integral_convolutions.lic import ...` is now `from vegtamr import lic`, and the package's internal layout moved from flat modules to nested subpackages (`vegtamr.lic.*`, `vegtamr.utils.*`).
 
 ### Option 2: Clone the GitHub repository (for development)
 
 #### 1. Clone the repo:
 
 ```bash
-git clone git@github.com:AstroKriel/LineIntegralConvolutions.git
-cd LineIntegralConvolutions
+git clone git@github.com:AstroKriel/LineIntegralConvolution.git
+cd LineIntegralConvolution
 ```
 
 #### 2. Create a development environment with uv:
@@ -84,24 +86,24 @@ Here’s a quick example:
 
 ```python
 import matplotlib.pyplot as mpl_plot
-from vegtamr.lic import compute_lic_with_postprocessing
+from vegtamr import lic
 from vegtamr.utils import vfields, plots
 
 ## generate a sample vector field
-num_cells    = 500
-dict_field   = vfields.vfield_swirls(num_cells)
-vfield       = dict_field["vfield"]
-streamlength = dict_field["streamlength"]
+num_cells = 500
+vfield_config = vfields.vfield_swirls(num_cells)
+vfield = vfield_config.vfield
+streamlength = vfield_config.streamlength
 
 ## apply the lic
-sfield = compute_lic_with_postprocessing(
-    vfield         = vfield,
-    streamlength   = streamlength,      # brush stroke length
-    num_lic_passes = 3,                 # number of brush strokes
-    use_filter     = True,
-    filter_sigma   = 5e-2 * num_cells, # tube thickness
-    use_equalize   = True,
-    backend        = "rust",
+sfield = lic.compute_lic_with_postprocessing(
+    vfield=vfield,
+    streamlength=streamlength,  # brush stroke length
+    num_lic_passes=3,  # number of brush strokes
+    use_filter=True,
+    filter_sigma=5e-2 * num_cells,  # tube thickness
+    use_equalize=True,
+    backend="rust",
 )
 
 ## and now plot!
@@ -124,7 +126,7 @@ In practice you will want to choose a `streamlength` close to the correlation le
 ## File structure
 
 ```text
-LineIntegralConvolutions/  # project root
+LineIntegralConvolution/  # project root
 ├── src/
 │   └── vegtamr/  # package root (named after Odin's alias, "Wanderer")
 │       ├── __init__.py
