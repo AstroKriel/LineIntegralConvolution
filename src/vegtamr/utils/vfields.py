@@ -20,7 +20,7 @@ import numpy
 
 
 @dataclasses.dataclass(frozen=True)
-class VectorFieldDemo:
+class VectorFieldConfig:
     name: str
     vfield: numpy.ndarray
     streamlength: int
@@ -37,7 +37,7 @@ class VectorFieldDemo:
 
 def vfield_lotka_volterra(
     num_cells: int,
-) -> VectorFieldDemo:
+) -> VectorFieldConfig:
     bounds_rows = (-3, 12)
     bounds_cols = (-5, 10)
     coords_row = numpy.linspace(bounds_rows[0], bounds_rows[1], num_cells)
@@ -49,7 +49,7 @@ def vfield_lotka_volterra(
     vcomp_rows = grid_x * (1 - grid_x / x_capacity) - grid_y * grid_x / (1 + grid_x)
     vcomp_cols = y_growth * grid_y * grid_x / (1 + grid_x) - y_decay * grid_y
     vfield = numpy.array([vcomp_rows, vcomp_cols])
-    return VectorFieldDemo(
+    return VectorFieldConfig(
         name="lotka_volterra",
         vfield=vfield,
         streamlength=num_cells // 4,
@@ -62,7 +62,7 @@ def vfield_lotka_volterra(
 
 def vfield_flowers(
     num_cells: int,
-) -> VectorFieldDemo:
+) -> VectorFieldConfig:
     bounds_rows = (-10, 10)
     bounds_cols = (-10, 10)
     coords_row = numpy.linspace(bounds_rows[0], bounds_rows[1], num_cells)
@@ -71,7 +71,7 @@ def vfield_flowers(
     vcomp_rows = numpy.cos(0.5 * grid_x)
     vcomp_cols = numpy.cos(0.5 * grid_y)
     vfield = numpy.array([vcomp_rows, vcomp_cols])
-    return VectorFieldDemo(
+    return VectorFieldConfig(
         name="flowers",
         vfield=vfield,
         streamlength=num_cells // 4,
@@ -86,7 +86,7 @@ def vfield_swirls(
     num_cells: int,
     *,
     num_swirls: float = 1,
-) -> VectorFieldDemo:
+) -> VectorFieldConfig:
     bounds_rows = (-10, 10)
     bounds_cols = (-10, 10)
     coords_row = numpy.linspace(bounds_rows[0], bounds_rows[1], num_cells)
@@ -95,7 +95,7 @@ def vfield_swirls(
     vcomp_rows = numpy.sin(num_swirls * (grid_y + grid_x) / (2 * numpy.pi))
     vcomp_cols = numpy.cos(num_swirls * (grid_x - grid_y) / (2 * numpy.pi))
     vfield = numpy.array([vcomp_rows, vcomp_cols])
-    return VectorFieldDemo(
+    return VectorFieldConfig(
         name="swirls",
         vfield=vfield,
         streamlength=int(num_cells // (4 * num_swirls)),
@@ -108,7 +108,7 @@ def vfield_swirls(
 
 def vfield_orszag_tang(
     num_cells: int,
-) -> VectorFieldDemo:
+) -> VectorFieldConfig:
     bounds_rows = (0.0, 2 * numpy.pi)
     bounds_cols = (0.0, 2 * numpy.pi)
     coords_row = numpy.linspace(bounds_rows[0], bounds_rows[1], num_cells)
@@ -117,7 +117,7 @@ def vfield_orszag_tang(
     vcomp_rows = -numpy.sin(grid_y)
     vcomp_cols = numpy.sin(grid_x)
     vfield = numpy.array([vcomp_rows, vcomp_cols])
-    return VectorFieldDemo(
+    return VectorFieldConfig(
         name="orszag_tang",
         vfield=vfield,
         streamlength=num_cells // 4,
