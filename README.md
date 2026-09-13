@@ -61,6 +61,24 @@ uv run demos/demo-lic.py
 
 A small price to pay for sanity! Alternatively, you can activate the environment with source `.venv/bin/activate` and run `python3 demos/demo-lic.py`.
 
+#### 3. Use your local checkout from another project (optional):
+
+`uv sync` (step 2) already gives you an editable install inside this repo's own `.venv`, so edits are picked up immediately when you work from here. No extra step is needed for that.
+
+If you want a different project on your machine to import your local `vegtamr` checkout, with edits showing up there too, install it as an editable dependency from that project:
+
+```bash
+uv add --editable /path/to/vegtamr
+```
+
+or, in a plain virtual environment:
+
+```bash
+pip install -e /path/to/vegtamr
+```
+
+Either way, that other project always sees your latest local changes, with no reinstall and no waiting for a new PyPI release.
+
 ## Quick start
 
 `compute_lic_with_postprocessing` is the main entry point for generating LICs. It manages all the internal calls and offers optional postprocessing: filtering and intensity equalisation. In practice, this is the only function you’ll need to call!
