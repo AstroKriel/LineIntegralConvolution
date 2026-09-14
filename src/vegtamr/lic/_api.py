@@ -11,6 +11,7 @@
 ## third-party
 import numpy
 import rlic
+from scipy import ndimage as scipy_ndimage
 
 ##
 ## === PERFORM LIC ON ITS OWN
@@ -42,6 +43,7 @@ def compute_lic(
     streamlength: int | None = None,
     *,
     seed_sfield: int = 42,
+    seed_smoothing_sigma: float = 0.0,
     use_periodic_BCs: bool = True,
     run_in_parallel: bool = True,
 ) -> numpy.ndarray:
@@ -68,6 +70,8 @@ def compute_lic(
     if sfield_in is None:
         if seed_sfield is not None: numpy.random.seed(seed_sfield)
         sfield_in = numpy.random.rand(num_rows, num_cols).astype(numpy.float32)
+        if seed_smoothing_sigma > 0.0:
+            sfield_in = scipy_ndimage.gaussian_filter(sfield_in, seed_smoothing_sigma).astype(numpy.float32)
     if streamlength is None: streamlength = int(min(num_rows, num_cols) // 4)
     if run_in_parallel:
         return _parallel_by_row.compute_lic(
@@ -98,6 +102,7 @@ def compute_lic_with_postprocessing(
     streamlength: int | None = None,
     *,
     seed_sfield: int = 42,
+    seed_smoothing_sigma: float = 0.0,
     use_periodic_BCs: bool = True,
     num_lic_passes: int = 2,
     use_filter: bool = True,
@@ -128,6 +133,8 @@ def compute_lic_with_postprocessing(
     if sfield_in is None:
         if seed_sfield is not None: numpy.random.seed(seed_sfield)
         sfield_in = numpy.random.rand(*shape).astype(dtype)
+        if seed_smoothing_sigma > 0.0:
+            sfield_in = scipy_ndimage.gaussian_filter(sfield_in, seed_smoothing_sigma).astype(dtype)
     if streamlength is None: streamlength = int(min(shape) // 4)
     elif streamlength < 5: raise ValueError(f"`streamlength` must be at least 5 pixels; got `{streamlength}`.")
     sfield = numpy.array(sfield_in, copy=True)
@@ -148,6 +155,7 @@ def compute_lic_with_postprocessing(
                 sfield_in=sfield_in,
                 streamlength=streamlength,
                 seed_sfield=seed_sfield,
+                seed_smoothing_sigma=seed_smoothing_sigma,
                 use_periodic_BCs=False,
                 run_in_parallel=run_in_parallel,
             )
