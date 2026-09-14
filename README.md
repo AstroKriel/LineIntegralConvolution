@@ -117,6 +117,12 @@ There are a number of parameters for you to experiment with; the effect of `stre
 
 In practice you will want to choose a `streamlength` close to the correlation length (in cells) of the structures you are trying to highlight. Depending on the effect you're aiming for, you can also play around with turning on the highpass filter (`use_filter`), changing its size (`filter_sigma`; controls the thickness of tubes), and turning on intensity equalization (`use_equalize`).
 
+You can also control the width of the woven grooves by smoothing the seed field before it is convolved, via `seed_smoothing_sigma`; this is demonstrated by `demos/demo-seed-smoothing.py`, which produces the following image:
+
+<img src="https://raw.githubusercontent.com/AstroKriel/LineIntegralConvolutions/refs/heads/main/gallery/effect_of_seed_smoothing.png" width="100%" />
+
+By default `seed_smoothing_sigma` is `None`, which scales to 1/200 of the smallest domain dimension; pushing it too high starts to introduce artefacts near saddle points in the vector field.
+
 > **Note:** If you want a darker look without touching the underlying data, `plot_lic` also accepts `cmap_range`, e.g. `cmap_range=(0.0, 0.75)`; this restricts which portion of the colormap is used, so the full value range maps smoothly to the restricted color range without clipping.
 
 ## File structure
@@ -140,7 +146,8 @@ LineIntegralConvolutions/  # project root
 │           └── vfields.py  # example vector fields
 ├── demos/  # example scripts
 │   ├── demo-lic.py  # simple demo
-│   └── demo-streamlength.py  # demo of how streamlength and postprocessing affect LIC output
+│   ├── demo-streamlength.py  # demo of how streamlength and postprocessing affect LIC output
+│   └── demo-seed-smoothing.py  # demo of how seed_smoothing_sigma affects LIC output
 ├── gallery/  # reference images
 ├── pyproject.toml  # project metadata and dependencies
 ├── uv.lock  # lock file (used by uv to pin dependencies)
