@@ -9,9 +9,9 @@
 ##
 
 ## third-party
+import ahe
 import numpy
 from scipy import ndimage as scipy_ndimage
-from skimage import exposure as skimage_exposure
 
 ##
 ## === FUNCTIONS
@@ -27,37 +27,20 @@ def filter_highpass(
     return gauss_highpass
 
 
-def rescaled_equalize(
+def equalize_histogram(
     sfield: numpy.ndarray,
-    num_subregions_rows: int = 8,
-    num_subregions_cols: int = 8,
-    clip_intensity_gradient: float = 0.01,
-    num_intensity_bins: int = 150,
-    clip_negative_values: bool = True,
+    num_subregions_rows: int = 9,
+    num_subregions_cols: int = 9,
+    max_normalized_bincount: float = 0.01,
 ) -> numpy.ndarray:
-    min_val = sfield.min()
-    max_val = sfield.max()
-    is_rescale_needed = (max_val > 1.0) or (min_val < 0.0)
-    ## `equalize_adapthist` expects input already normalised to [0, 1]
-    if is_rescale_needed and clip_negative_values:
-        ## clip negative-valued texture to 0: flattens the background so structure stands out
-        sfield = numpy.clip(sfield, 0.0, None) / max_val
-    elif is_rescale_needed:
-        sfield = (sfield - min_val) / (max_val - min_val)
-    ## rescale values to enhance local contrast
-    ## note, output values are bound by [0, 1]
-    sfield = skimage_exposure.equalize_adapthist(
-        image=sfield,
-        kernel_size=(num_subregions_rows, num_subregions_cols),
-        clip_limit=clip_intensity_gradient,
-        nbins=num_intensity_bins,
+    return ahe.equalize_histogram(
+        sfield.astype(numpy.float64),
+        adaptive_strategy={
+            "kind": "sliding-tile",
+            "tile-size": (num_subregions_rows, num_subregions_cols),
+        },
+        max_normalized_bincount=max_normalized_bincount,
     )
-    ## rescale field back to its original value range
-    if is_rescale_needed and clip_negative_values:
-        sfield = sfield * max_val
-    elif is_rescale_needed:
-        sfield = sfield * (max_val - min_val) + min_val
-    return sfield
 
 
 ## } MODULE
