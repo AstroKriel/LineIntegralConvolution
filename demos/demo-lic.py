@@ -26,7 +26,7 @@ from vegtamr.utils import vfields, plots
 
 def main() -> None:
     print("Running demo script...")
-    num_cells = 500
+    num_cells = 1000
     vfield_config = vfields.vfield_swirls(num_cells=num_cells)
     vfield = vfield_config.vfield
     streamlength = vfield_config.streamlength
@@ -55,6 +55,7 @@ def main() -> None:
         sfield=sfield,
         vfield=vfield,
         cmap_name="pink",
+        cmap_range=(0.0, 0.75),
         bounds_rows=bounds_rows,
         bounds_cols=bounds_cols,
         overlay_streamlines=False,
