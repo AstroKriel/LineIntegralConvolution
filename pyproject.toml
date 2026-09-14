@@ -1,6 +1,6 @@
 [project]
 name = "line-integral-convolutions"
-version = "2.0.2"
+version = "2.1.0"
 description = "vegtamr: a line integral convolution library"
 readme = "README.md"
 authors = [
