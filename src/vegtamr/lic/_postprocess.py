@@ -37,6 +37,8 @@ def rescaled_equalize(
     min_val = sfield.min()
     max_val = sfield.max()
     is_rescale_needed = (max_val > 1.0) or (min_val < 0.0)
+    ## `equalize_adapthist` expects input already normalised to [0, 1]; it clips negative values instead of rescaling them
+    if is_rescale_needed: sfield = (sfield - min_val) / (max_val - min_val)
     ## rescale values to enhance local contrast
     ## note, output values are bound by [0, 1]
     sfield = skimage_exposure.equalize_adapthist(
