@@ -139,7 +139,7 @@ def main() -> None:
     )
     print("Saving figure...")
     script_dir = Path(__file__).parent
-    fig_path = script_dir / "effect_of_params.png"
+    fig_path = script_dir / "effect_of_streamlength.png"
     fig.savefig(
         fig_path,
         dpi=300,
