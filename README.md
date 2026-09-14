@@ -150,7 +150,7 @@ LineIntegralConvolutions/  # project root
 
 ## Acknowledgements
 
-The fast (pre-compiled Rust) backend option, which this repo uses by default, was implemented by Dr. Clément Robert ([@neutrinoceros](https://github.com/neutrinoceros); see [rLIC](https://github.com/neutrinoceros/rLIC)). Special thanks also go to Dr. James Beattie ([@AstroJames](https://github.com/AstroJames)) for highlighting how iteration, high-pass filtering, and histogram normalisation improve the final result. Finally, Dr. Philip Mocz ([@pmocz](https://github.com/pmocz)) provided lots of helpful suggestions in restructuring and improving the codebase.
+Both the fast (pre-compiled Rust) LIC backend, [rLIC](https://github.com/neutrinoceros/rLIC) (which this repo uses by default), and the histogram-equalization backend, [ahe](https://github.com/neutrinoceros/ahe), were implemented by Dr. Clément Robert ([@neutrinoceros](https://github.com/neutrinoceros)). Special thanks also go to Dr. James Beattie ([@AstroJames](https://github.com/AstroJames)) for highlighting how iteration, high-pass filtering, and histogram normalisation improve the final result. Finally, Dr. Philip Mocz ([@pmocz](https://github.com/pmocz)) provided lots of helpful suggestions in restructuring and improving the codebase.
 
 ## License
 
