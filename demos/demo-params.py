@@ -79,13 +79,20 @@ def main() -> None:
             )
             print(f"Plotting axs_grid[{row_index},{col_index}]")
             ax = axs_grid[row_index, col_index]
+            if row_index < num_rows - 1:
+                cmap_name = "twilight_shifted"
+                cmap_range = None
+            else:
+                cmap_name = "pink"
+                cmap_range = (0.0, 0.75)
             lic_image = plots.plot_lic(
                 ax=ax,
                 sfield=sfield,
                 vfield=vfield,
                 bounds_rows=bounds_rows,
                 bounds_cols=bounds_cols,
-                cmap_name="twilight_shifted" if (row_index < num_rows - 1) else "pink",
+                cmap_name=cmap_name,
+                cmap_range=cmap_range,
             )
             if col_index == num_cols - 1:
                 if row_index < num_rows - 1:
