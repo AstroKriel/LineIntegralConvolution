@@ -11,7 +11,6 @@
 ## third-party
 import numpy
 import rlic
-from scipy import ndimage as scipy_ndimage
 
 ##
 ## === PERFORM LIC ON ITS OWN
@@ -59,7 +58,7 @@ def compute_lic(
     - `sfield_in`:
         2D scalar field with shape `(num_rows, num_cols)` to seed the LIC; a random field is generated if `None`.
     """
-    from vegtamr.lic import _serial, _parallel_by_row
+    from vegtamr.lic import _serial, _parallel_by_row, _postprocess
     _ensure_valid_lic_inputs(
         vfield=vfield,
         sfield_in=sfield_in,
@@ -71,7 +70,7 @@ def compute_lic(
         if seed_sfield is not None: numpy.random.seed(seed_sfield)
         sfield_in = numpy.random.rand(num_rows, num_cols).astype(numpy.float32)
         if seed_smoothing_sigma > 0.0:
-            sfield_in = scipy_ndimage.gaussian_filter(sfield_in, seed_smoothing_sigma).astype(numpy.float32)
+            sfield_in = _postprocess.filter_lowpass(sfield_in, seed_smoothing_sigma).astype(numpy.float32)
     if streamlength is None: streamlength = int(min(num_rows, num_cols) // 4)
     if run_in_parallel:
         return _parallel_by_row.compute_lic(
@@ -134,7 +133,7 @@ def compute_lic_with_postprocessing(
         if seed_sfield is not None: numpy.random.seed(seed_sfield)
         sfield_in = numpy.random.rand(*shape).astype(dtype)
         if seed_smoothing_sigma > 0.0:
-            sfield_in = scipy_ndimage.gaussian_filter(sfield_in, seed_smoothing_sigma).astype(dtype)
+            sfield_in = _postprocess.filter_lowpass(sfield_in, seed_smoothing_sigma).astype(dtype)
     if streamlength is None: streamlength = int(min(shape) // 4)
     elif streamlength < 5: raise ValueError(f"`streamlength` must be at least 5 pixels; got `{streamlength}`.")
     sfield = numpy.array(sfield_in, copy=True)

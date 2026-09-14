@@ -17,15 +17,17 @@ from scipy import ndimage as scipy_ndimage
 ## === FUNCTIONS
 ##
 
+def filter_lowpass(
+    sfield: numpy.ndarray,
+    sigma: float = 3.0,
+) -> numpy.ndarray:
+    return scipy_ndimage.gaussian_filter(sfield, sigma)
 
 def filter_highpass(
     sfield: numpy.ndarray,
     sigma: float = 3.0,
 ) -> numpy.ndarray:
-    lowpass = scipy_ndimage.gaussian_filter(sfield, sigma)
-    gauss_highpass = sfield - lowpass
-    return gauss_highpass
-
+    return sfield - filter_lowpass(sfield, sigma)
 
 def equalize_histogram(
     sfield: numpy.ndarray,
