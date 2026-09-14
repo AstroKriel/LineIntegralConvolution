@@ -112,6 +112,7 @@ def add_cbar(
         fontsize=label_size,
         rotation=-90,
         va="bottom",
+        ha="center",
     )
     cbar.ax.yaxis.set_ticks_position("right")
     return cbar

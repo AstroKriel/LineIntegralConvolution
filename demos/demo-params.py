@@ -96,13 +96,13 @@ def main() -> None:
             )
             if col_index == num_cols - 1:
                 if row_index < num_rows - 1:
-                    label = r"a diverging cmap works best"
+                    label = format_for_latex("a diverging") + "\n" + format_for_latex("cmap works best")
                 else:
-                    label = r"a sequential cmap works best"
+                    label = format_for_latex("a dark skewed sequential") + "\n" + format_for_latex("cmap works best")
                 plots.add_cbar(
                     ax=ax,
                     mappable=lic_image,
-                    label=format_for_latex(label),
+                    label=label,
                 )
     for col_index, streamlength in enumerate(streamlengths):
         axs_grid[0, col_index].set_title(
@@ -125,7 +125,7 @@ def main() -> None:
         bbox=white_transparent_box,
     )
     axs_grid[0, 0].set_ylabel(
-        format_for_latex("no post-processing"),
+        format_for_latex("no post processing"),
         fontsize=10,
     )
     axs_grid[1, 0].set_ylabel(
