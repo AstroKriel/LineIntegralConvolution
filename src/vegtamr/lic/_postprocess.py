@@ -33,12 +33,17 @@ def rescaled_equalize(
     num_subregions_cols: int = 8,
     clip_intensity_gradient: float = 0.01,
     num_intensity_bins: int = 150,
+    clip_negative_values: bool = True,
 ) -> numpy.ndarray:
     min_val = sfield.min()
     max_val = sfield.max()
     is_rescale_needed = (max_val > 1.0) or (min_val < 0.0)
-    ## `equalize_adapthist` expects input already normalised to [0, 1]; it clips negative values instead of rescaling them
-    if is_rescale_needed: sfield = (sfield - min_val) / (max_val - min_val)
+    ## `equalize_adapthist` expects input already normalised to [0, 1]
+    if is_rescale_needed and clip_negative_values:
+        ## clip negative-valued texture to 0: flattens the background so structure stands out
+        sfield = numpy.clip(sfield, 0.0, None) / max_val
+    elif is_rescale_needed:
+        sfield = (sfield - min_val) / (max_val - min_val)
     ## rescale values to enhance local contrast
     ## note, output values are bound by [0, 1]
     sfield = skimage_exposure.equalize_adapthist(
@@ -48,7 +53,10 @@ def rescaled_equalize(
         nbins=num_intensity_bins,
     )
     ## rescale field back to its original value range
-    if is_rescale_needed: sfield = sfield * (max_val - min_val) + min_val
+    if is_rescale_needed and clip_negative_values:
+        sfield = sfield * max_val
+    elif is_rescale_needed:
+        sfield = sfield * (max_val - min_val) + min_val
     return sfield
 
 

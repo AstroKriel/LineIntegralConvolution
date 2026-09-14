@@ -103,6 +103,7 @@ def compute_lic_with_postprocessing(
     use_filter: bool = True,
     filter_sigma: float = 3.0,
     use_equalize: bool = True,
+    clip_negative_values: bool = True,
     backend: str = "rust",
     run_in_parallel: bool = True,
     verbose: bool = True,
@@ -153,7 +154,7 @@ def compute_lic_with_postprocessing(
             )
             sfield_in = sfield
         if use_filter: sfield = _postprocess.filter_highpass(sfield, sigma=filter_sigma)
-        if use_equalize: sfield = _postprocess.rescaled_equalize(sfield)
+        if use_equalize: sfield = _postprocess.rescaled_equalize(sfield, clip_negative_values=clip_negative_values)
         return sfield
     elif backend.lower() == "rust":
         if verbose:
@@ -177,7 +178,7 @@ def compute_lic_with_postprocessing(
         sfield /= numpy.max(numpy.abs(sfield))
         sfield_in = sfield
         if use_filter: sfield = _postprocess.filter_highpass(sfield, sigma=filter_sigma)
-        if use_equalize: sfield = _postprocess.rescaled_equalize(sfield)
+        if use_equalize: sfield = _postprocess.rescaled_equalize(sfield, clip_negative_values=clip_negative_values)
         return sfield
     else:
         raise ValueError(f"`backend` must be one of {{'python', 'rust'}}; got `{backend}`.")
