@@ -117,7 +117,7 @@ There are a number of parameters for you to experiment with; the effect of some 
 
 In practice you will want to choose a `streamlength` close to the correlation length (in cells) of the structures you are trying to highlight. Depending on the effect you're aiming for, you can also play around with turning on the highpass filter (`use_filter`), changing its size (`filter_sigma`; controls the thickness of tubes), and turning on intensity equalization (`use_equalize`).
 
-If you want a darker or lighter look without touching the underlying data, `plot_lic` also accepts `cmap_range`, e.g. `cmap_range=(0.0, 0.75)`; this restricts which portion of the colormap gets used, so the full value range still maps smoothly without any clipping.
+> **Note:** If you want a darker look without touching the underlying data, `plot_lic` also accepts `cmap_range`, e.g. `cmap_range=(0.0, 0.75)`; this restricts which portion of the colormap is used, so the full value range maps smoothly to the restricted color range without clipping.
 
 ## File structure
 
