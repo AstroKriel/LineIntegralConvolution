@@ -9,8 +9,9 @@
 ##
 
 ## third-party
-import numpy
+import matplotlib
 import matplotlib.colors as mpl_colors
+import numpy
 from matplotlib import axes as mpl_axes
 from matplotlib import rcParams as mpl_rcParams
 
@@ -21,12 +22,23 @@ mpl_rcParams["text.usetex"] = True
 ##
 
 
+def _subset_cmap(
+    *,
+    cmap_name: str,
+    cmap_range: tuple[float, float],
+) -> mpl_colors.Colormap:
+    base_cmap = matplotlib.colormaps[cmap_name]
+    sampled_colors = base_cmap(numpy.linspace(cmap_range[0], cmap_range[1], 256))
+    return mpl_colors.LinearSegmentedColormap.from_list(f"{cmap_name}_subset", sampled_colors, N=256)
+
+
 def plot_lic(
     ax: mpl_axes.Axes,
     *,
     sfield: numpy.ndarray,
     vfield: numpy.ndarray,
     cmap_name: str = "pink",
+    cmap_range: tuple[float, float] | None = None,
     bounds_rows: tuple[float, float] | None = None,
     bounds_cols: tuple[float, float] | None = None,
     overlay_streamlines: bool = False,
@@ -36,9 +48,11 @@ def plot_lic(
     """Plot an already-computed LIC image `sfield`, optionally overlaid with streamlines from `vfield`."""
     if bounds_rows is None: bounds_rows = (0.0, sfield.shape[0])
     if bounds_cols is None: bounds_cols = (0.0, sfield.shape[1])
+    cmap = cmap_name
+    if cmap_range is not None: cmap = _subset_cmap(cmap_name=cmap_name, cmap_range=cmap_range)
     lic_image = ax.imshow(
         sfield,
-        cmap=cmap_name,
+        cmap=cmap,
         origin="lower",
         extent=(
             bounds_cols[0],
