@@ -2,9 +2,9 @@
 
 | Platform | Name |
 |---|---|
-| GitHub | `LineIntegralConvolution` |
+| [GitHub](https://github.com/AstroKriel/LineIntegralConvolutions) | `LineIntegralConvolutions` |
+| [PyPI](https://pypi.org/project/line-integral-convolutions/) | `line-integral-convolutions` |
 | Python (import) | `vegtamr` (Odin's alias while wandering Hel) |
-| PyPI | `line-integral-convolutions` |
 
 Line Integral Convolutions (LICs) are an amazing way to visualise 2D vector fields, and are widely used in many different fields (e.g., weather modelling, plasma physics, etc.), however I couldn't find a simple, up-to-date implementation, so I wrote my own. I hope it can now also help you on your own vector field fueled journey!
 
@@ -13,14 +13,14 @@ Here is the LIC code applied to a couple of example vector fields:
 - Right: a swirling pattern
 
 <div style="display: flex; justify-content: space-between;">
-  <img src="https://raw.githubusercontent.com/AstroKriel/LineIntegralConvolution/refs/heads/main/gallery/lic_lotka_volterra.png" width="49%" />
-  <img src="https://raw.githubusercontent.com/AstroKriel/LineIntegralConvolution/refs/heads/main/gallery/lic_swirls.png" width="49%" />
+  <img src="https://raw.githubusercontent.com/AstroKriel/LineIntegralConvolutions/refs/heads/main/gallery/lic_lotka_volterra.png" width="49%" />
+  <img src="https://raw.githubusercontent.com/AstroKriel/LineIntegralConvolutions/refs/heads/main/gallery/lic_swirls.png" width="49%" />
 </div>
 
 
 ## Getting setup
 
-You can now install the LIC package directly from [PyPI](https://pypi.org/project/line-integral-convolutions/) or clone the [Github](https://github.com/AstroKriel/LineIntegralConvolution/) repository if you'd like to play around with the source code.
+You can now install the LIC package directly from [PyPI](https://pypi.org/project/line-integral-convolutions/) or clone the [Github](https://github.com/AstroKriel/LineIntegralConvolutions/) repository if you'd like to play around with the source code.
 
 ### Option 1: Install from PyPI (for general use)
 
@@ -30,7 +30,7 @@ If you only need to use the package, you can install it via `pip`:
 pip install line-integral-convolutions
 ```
 
-After installing, import the main LIC implementation as follows:
+After installing, import the library as follows:
 
 ```python
 from vegtamr import lic
@@ -38,15 +38,13 @@ from vegtamr import lic
 
 Inside this module, you will want to use the `lic.compute_lic_with_postprocessing` function. See below for details on how to get the most out of it.
 
-> **Note:** if you used this package before version 2.0.0 (as `line-integral-convolutions` on PyPI, imported as `line_integral_convolutions`), the import path has changed: `from line_integral_convolutions.lic import ...` is now `from vegtamr import lic`, and the package's internal layout moved from flat modules to nested subpackages (`vegtamr.lic.*`, `vegtamr.utils.*`).
-
 ### Option 2: Clone the GitHub repository (for development)
 
 #### 1. Clone the repo:
 
 ```bash
-git clone git@github.com:AstroKriel/LineIntegralConvolution.git
-cd LineIntegralConvolution
+git clone git@github.com:AstroKriel/LineIntegralConvolutions.git
+cd LineIntegralConvolutions
 ```
 
 #### 2. Create a development environment with uv:
@@ -67,21 +65,11 @@ A small price to pay for sanity! Alternatively, you can activate the environment
 
 #### 3. Use your local checkout from another project (optional):
 
-`uv sync` (step 2) already gives you an editable install inside this repo's own `.venv`, so edits are picked up immediately when you work from here. No extra step is needed for that.
-
-If you want a different project on your machine to import your local `vegtamr` checkout, with edits showing up there too, install it as an editable dependency from that project:
+`uv sync` (step 2) already gives you an editable install inside this repo's own `.venv`, so edits are picked up immediately when you work from here. If you want to use this edited clone in a different project, you will need to install it as an editable dependency from that project:
 
 ```bash
 uv add --editable /path/to/vegtamr
 ```
-
-or, in a plain virtual environment:
-
-```bash
-pip install -e /path/to/vegtamr
-```
-
-Either way, that other project always sees your latest local changes, with no reinstall and no waiting for a new PyPI release.
 
 ## Quick start
 
@@ -125,14 +113,14 @@ mpl_plot.show()
 
 There are a number of parameters for you to experiment with; the effect of some choices is demonstrated by `demos/demo-params.py`, which produces the following image:
 
-<img src="https://raw.githubusercontent.com/AstroKriel/LineIntegralConvolution/refs/heads/main/gallery/effect_of_params.png" width="100%" />
+<img src="https://raw.githubusercontent.com/AstroKriel/LineIntegralConvolutions/refs/heads/main/gallery/effect_of_params.png" width="100%" />
 
 In practice you will want to choose a `streamlength` close to the correlation length (in cells) of the structures you are trying to highlight. Depending on the effect you're aiming for, you can also play around with turning on the highpass filter (`use_filter`), changing its size (`filter_sigma`; controls the thickness of tubes), and turning on intensity equalization (`use_equalize`).
 
 ## File structure
 
 ```text
-LineIntegralConvolution/  # project root
+LineIntegralConvolutions/  # project root
 ├── src/
 │   └── vegtamr/  # package root (named after Odin's alias, "Wanderer")
 │       ├── __init__.py
